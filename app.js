@@ -17,7 +17,7 @@ bot.on('message', (message) => {
     };
 
     var sendDefault = (del, tts) => {
-        message.channel.send("" + getTargetString(targets) + " fortnite?", {
+        message.channel.send("" + getTargetString(targets) + "fortnite?", {
             tts: tts
         }).then((message) => {
             if (del)
@@ -40,7 +40,7 @@ bot.on('message', (message) => {
     };
     
     if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.05) {
-        message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + " fortnite?").then((message) => {
+        message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + "fortnite?").then((message) => {
                 message.delete(60000);
         });
     }
