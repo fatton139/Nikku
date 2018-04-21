@@ -76,7 +76,7 @@ bot.on('message', (message) => {
                 var selfMessages = messages.filter((messages) => (messages.author.bot));
                 var amount = selfMessages.array().length;
                 message.channel.bulkDelete(selfMessages);
-                message.channel.send("Deleted " + amount + " messages awooo >////< " + getTargetString(targets) + " wanna play fortnite?");
+                message.channel.send("Deleted " + amount + " messages ^__^ " + getTargetString(targets) + " wanna play fortnite?");
             });
         }
         else if (command == "help") {
