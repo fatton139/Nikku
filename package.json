@@ -4,6 +4,7 @@
   "description": "fortnite?",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "test"
   },
   "author": "aXises",
