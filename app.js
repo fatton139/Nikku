@@ -4,12 +4,12 @@ var moment = require("moment");
 var momentDuration = require("moment-duration-format");
 const authToken = "NDM3MTU1NDM1ODA0MzYwNzE0.DbyAfA.OmAW7R9t-342ic_QjMeQR2JYYoc";
 var bot = new Discord.Client();
-var channel = bot.channels.get("general");
-bot.login(authToken);
-bot.on('message', (message) => {
+var target = "<@121959865101975552>";
 
+bot.on('message', (message) => {
+    
     var sendDefault = (del, tts) => {
-        message.channel.send("<@121959865101975552> fortnite?", {
+        message.channel.send("" + target + " fortnite?", {
             tts: tts
         }).then((message) => {
             if (del)
@@ -21,7 +21,7 @@ bot.on('message', (message) => {
         var i = 0;
         function selfLoop () {
             setTimeout(function () {
-                sendDefault(false, false);
+                sendDefault(true, false);
                 i++;
                 if (i < amount) {
                    selfLoop();
@@ -32,10 +32,9 @@ bot.on('message', (message) => {
     };
     
     if (message.content.search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") {
-        message.channel.send("someone said fortnite? <@121959865101975552> fortnite?");
+        message.channel.send("someone said fortnite? " + target + " fortnite?");
     }
     
-
     if (message.content.startsWith("!fortnite")) {
         var command = message.content.split(" ")[1];
         if (!command) {
@@ -49,9 +48,13 @@ bot.on('message', (message) => {
             var time = message.content.split(" ")[3];
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
-            message.channel.send("Auto fortnite set. I will ping <@121959865101975552> every " + formattedTime + " for " + amount + " times").then((message) => {
+            message.channel.send("Auto fortnite set. I will ping " + target + "once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(30000);
             });
+        }
+        else if (command == "target") {
+            if (target)
+                target = message.content.split(" ")[2];
         }
         else {
             message.reply("usage: !fortnite auto {amount} {delay(ms)}").then((message) => {
@@ -60,4 +63,5 @@ bot.on('message', (message) => {
         }
     }
 });
-//bot.channels.get("leaderboards").send("test"); 
+
+bot.login(authToken);
