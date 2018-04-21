@@ -66,8 +66,17 @@ bot.on('message', (message) => {
                 targets = message.content.split(" ").splice(2);
                 message.channel.send("New targets set, don't be mad " + getTargetString(message.content.split(" ").splice(2)));
         }
+        else if (command == "help") {
+            message.channel.send("```OwO u wan halp?\n"
+            + "!fortnite - Asks your targets to play fortnite. >///<\n"
+            + "!fortnite tts - Asks your targets to play fortnite but more nicely. >/////<\n"
+            + "!fortnite target {@target1} {@target2} ... {@targetn} - Set new targets/friends :3\n"
+            + "!fortnite auto {amount} {delay(ms)} - Ask your friends many many manie times\n"
+            + "```"
+            );
+        }
         else {
-            message.reply("usage: !fortnite auto {amount} {delay(ms)}").then((message) => {
+            message.reply("no").then((message) => {
                 message.delete(10000);
             });
         }
