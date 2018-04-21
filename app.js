@@ -88,3 +88,6 @@ bot.on('message', (message) => {
 });
 
 bot.login(authToken);
+bot.on("ready", () => {
+    bot.user.setActivity("PLAYERUNKNOWN'S BATTLEGROUNDS");
+});
