@@ -7,13 +7,21 @@ var bot = new Discord.Client();
 var channel = bot.channels.get("general");
 bot.login(authToken);
 bot.on('message', (message) => {
-    var loop = function (amount, delay) {
+
+    var sendDefault = (del, tts) => {
+        message.channel.send("<@121959865101975552> fortnite?", {
+            tts: tts
+        }).then((message) => {
+            if (del)
+                message.delete(10000);
+        });
+    }
+
+    var loop = (amount, delay) => {
         var i = 0;
         function selfLoop () {
             setTimeout(function () {
-                message.channel.send("<@121959865101975552> fortnite?").then((message) => {
-                    message.delete(delay / 2);
-                });
+                sendDefault(false, false);
                 i++;
                 if (i < amount) {
                    selfLoop();
@@ -22,10 +30,19 @@ bot.on('message', (message) => {
         }
         selfLoop();
     };
+    
+    if (message.content.search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") {
+        message.channel.send("someone said fortnite? <@121959865101975552> fortnite?");
+    }
+    
+
     if (message.content.startsWith("!fortnite")) {
         var command = message.content.split(" ")[1];
         if (!command) {
-            message.channel.send("<@121959865101975552> fortnite?");
+            sendDefault(false, false);
+        }
+        else if (command == "tts") {
+            sendDefault(true, true);
         }
         else if (command == "auto") {
             var amount = message.content.split(" ")[2];
