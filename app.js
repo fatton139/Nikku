@@ -61,7 +61,7 @@ bot.on('message', (message) => {
             var time = message.content.split(" ")[3];
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
-            message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + "once every " + formattedTime + " for " + amount + " times").then((message) => {
+            message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(30000);
             });
         }
