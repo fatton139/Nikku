@@ -1,0 +1,14 @@
+{
+  "name": "fortniteBot",
+  "version": "1.0.0",
+  "description": "fortnite?",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "aXises",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.2.1"
+  }
+}
