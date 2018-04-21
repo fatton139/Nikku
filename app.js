@@ -24,7 +24,7 @@ bot.on('message', (message) => {
             tts: tts
         }).then((message) => {
             if (del)
-                message.delete(10000);
+                message.delete(86400000);
         });
     };
 
@@ -44,12 +44,13 @@ bot.on('message', (message) => {
     
     if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.05) {
         message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + " fortnite?").then((message) => {
-                message.delete(60000);
+                message.delete(86400000);
         });
     }
     
     if (message.content.startsWith("!fortnite")) {
-        var command = message.content.split(" ")[1];
+        var args = message.content.split(" ");
+        var command = args[1];
         if (!command) {
             sendDefault(false, false);
         }
@@ -57,18 +58,26 @@ bot.on('message', (message) => {
             sendDefault(true, true);
         }
         else if (command == "auto") {
-            var amount = message.content.split(" ")[2];
-            var time = message.content.split(" ")[3];
+            var amount = args[2];
+            var time = args[3];
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
-                message.delete(30000);
+                message.delete(86400000);
             });
         }
         else if (command == "target") {
             if (targets)
-                targets = message.content.split(" ").splice(2);
-                message.channel.send("New targets set, don't be mad " + getTargetString(message.content.split(" ").splice(2)));
+                targets = args.splice(2);
+                message.channel.send("New targets set, don't be mad " + getTargetString(args.splice(2)));
+        }
+        else if (command == "delete") {
+            message.channel.fetchMessages({limit: parseInt(args[2])}).then((messages) => {
+                var selfMessages = messages.filter((messages) => (messages.author.bot));
+                var amount = selfMessages.array().length;
+                message.channel.bulkDelete(selfMessages);
+                message.channel.send("Deleted " + amount + " messages awooo >////< " + getTargetString(targets) + " wanna play fortnite?");
+            });
         }
         else if (command == "help") {
             message.channel.send("```OwO u wan halp?\n"
@@ -76,12 +85,13 @@ bot.on('message', (message) => {
             + "!fortnite tts - Asks your targets to play fortnite but more nicely. >/////<\n"
             + "!fortnite target {@target1} {@target2} ... {@targetn} - Set new targets/friends :3\n"
             + "!fortnite auto {amount} {delay(ms)} - Ask your friends many many manie times\n"
+            + "!fortnite delete - Removes my nice messages ლ(´ڡ`ლ)"
             + "```"
             );
         }
         else {
             message.reply("no").then((message) => {
-                message.delete(10000);
+                message.delete(86400000);
             });
         }
     }
