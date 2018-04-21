@@ -4,12 +4,21 @@ var moment = require("moment");
 var momentDuration = require("moment-duration-format");
 const authToken = "NDM3MTU1NDM1ODA0MzYwNzE0.DbyAfA.OmAW7R9t-342ic_QjMeQR2JYYoc";
 var bot = new Discord.Client();
-var target = "<@121959865101975552>";
+var targets = ["<@121959865101975552>"];
 
 bot.on('message', (message) => {
-    
+
+    var getTargetString = (targets) => {
+        var targetString = "";
+        for (var i = 0; i < targets.length; i++) {
+            targetString += targets[i] + " ";
+        }
+        return targetString;
+    } 
+
     var sendDefault = (del, tts) => {
-        message.channel.send("" + target + " fortnite?", {
+
+        message.channel.send("" + getTargetString(targets) + " fortnite?", {
             tts: tts
         }).then((message) => {
             if (del)
@@ -32,7 +41,7 @@ bot.on('message', (message) => {
     };
     
     if (message.content.search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") {
-        message.channel.send("someone said fortnite? " + target + " fortnite?");
+        message.channel.send("someone said fortnite? " + getTargetString(targets) + " fortnite?");
     }
     
     if (message.content.startsWith("!fortnite")) {
@@ -48,13 +57,14 @@ bot.on('message', (message) => {
             var time = message.content.split(" ")[3];
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
-            message.channel.send("Auto fortnite set. I will ping " + target + "once every " + formattedTime + " for " + amount + " times").then((message) => {
+            message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + "once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(30000);
             });
         }
         else if (command == "target") {
-            if (target)
-                target = message.content.split(" ")[2];
+            if (targets)
+                targets = message.content.split(" ").splice(2);
+                message.channel.send("New targets set, don't be mad " + getTargetString(message.content.split(" ").splice(2)));
         }
         else {
             message.reply("usage: !fortnite auto {amount} {delay(ms)}").then((message) => {
