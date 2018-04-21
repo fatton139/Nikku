@@ -89,5 +89,5 @@ bot.on('message', (message) => {
 
 bot.login(authToken);
 bot.on("ready", () => {
-    bot.user.setActivity("PLAYERUNKNOWN'S BATTLEGROUNDS");
+    bot.user.setGame("PLAYERUNKNOWN'S BATTLEGROUNDS", "https://www.twitch.tv/yaxises");
 });
