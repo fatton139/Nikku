@@ -7,14 +7,14 @@ var bot = new Discord.Client();
 var targets = ["<@121959865101975552>"];
 
 bot.on('message', (message) => {
-
+    
     var getTargetString = (targets) => {
         var targetString = "";
         for (var i = 0; i < targets.length; i++) {
             targetString += targets[i] + " ";
         }
         return targetString;
-    } 
+    };
 
     var sendDefault = (del, tts) => {
         message.channel.send("" + getTargetString(targets) + " fortnite?", {
@@ -23,7 +23,7 @@ bot.on('message', (message) => {
             if (del)
                 message.delete(10000);
         });
-    }
+    };
 
     var loop = (amount, delay) => {
         var i = 0;
@@ -39,7 +39,7 @@ bot.on('message', (message) => {
         selfLoop();
     };
     
-    if (message.content.search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") {
+    if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.0005) {
         message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + " fortnite?").then((message) => {
                 message.delete(60000);
         });
