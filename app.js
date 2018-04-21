@@ -32,9 +32,9 @@ bot.on('message', (message) => {
             var time = message.content.split(" ")[3];
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
-            message.channel.send("Auto fortnite set. I will ping <@121959865101975552> " + amount + " times every " + formattedTime).then((message) => {
+            message.channel.send("Auto fortnite set. I will ping <@121959865101975552> every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(30000);
-            });;
+            });
         }
         else {
             message.reply("usage: !fortnite auto {amount} {delay(ms)}").then((message) => {
