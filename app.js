@@ -61,7 +61,7 @@ bot.on('message', (message) => {
             tts: tts
         }).then((message) => {
             if (del)
-                message.delete(360000);
+                message.delete(3600000);
         });
     };
 
@@ -81,7 +81,7 @@ bot.on('message', (message) => {
 
     if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
         message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is trash, Fortnite is better ^__^ " + getTargetString(targets) + " fortnite?").then((message) => {
-                message.delete(360000);
+                message.delete(3600000);
         });
     }
 
@@ -96,7 +96,7 @@ bot.on('message', (message) => {
             "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
         ]
         message.channel.send(messageStyles[randInt(0, messageStyles.length - 1)]).then((message) => {
-                message.delete(360000);
+                message.delete(3600000);
         });
     }
     
@@ -115,7 +115,7 @@ bot.on('message', (message) => {
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
-                message.delete(360000);
+                message.delete(3600000);
             });
         }
         else if (command == "target") {
@@ -143,7 +143,7 @@ bot.on('message', (message) => {
         }
         else {
             message.reply("no").then((message) => {
-                message.delete(360000);
+                message.delete(3600000);
             });
         }
     }
