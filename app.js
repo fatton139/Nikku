@@ -88,7 +88,7 @@ bot.on('message', (message) => {
         else if (command == "target") {
             if (targets)
                 targets = args.splice(2);
-                message.channel.send("New targets set, don't be mad " + getTargetString(args.splice(2)));
+                message.channel.send("New targets set, don't be mad " + getTargetString(targets));
         }
         else if (command == "delete") {
             message.channel.fetchMessages({limit: parseInt(args[2])}).then((messages) => {
