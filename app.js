@@ -135,7 +135,8 @@ bot.on('message', (message) => {
             + "!fortnite tts - Asks your targets to play fortnite but more nicely. >/////<\n"
             + "!fortnite target {@target1} {@target2} ... {@targetn} - Set new targets/friends :3\n"
             + "!fortnite auto {amount} {delay(ms)} - Ask your friends many many manie times\n"
-            + "!fortnite delete - Removes my nice messages ლ(´ڡ`ლ)"
+            + "!fortnite delete - Removes my nice messages ლ(´ڡ`ლ)\n"
+            + "!fortnite stop - stops any pings caused by !fortnite auto (may be delayed) ᕙ(⇀‸↼‶)ᕗ"
             + "```"
             );
         }
