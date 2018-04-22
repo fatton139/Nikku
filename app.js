@@ -85,7 +85,7 @@ bot.on('message', (message) => {
         });
     }
 
-    if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.025) {
+    if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1 || Math.random() < 0.025) && (!message.author.bot && message.content[0] != "!")) {
         var messageStyles = [
             "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
             "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
