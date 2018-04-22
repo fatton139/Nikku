@@ -42,7 +42,7 @@ bot.on('message', (message) => {
         selfLoop();
     };
     
-    if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.05) {
+    if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.025) {
         message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + " fortnite?").then((message) => {
                 message.delete(86400000);
         });
