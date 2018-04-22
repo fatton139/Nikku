@@ -78,7 +78,7 @@ bot.on('message', (message) => {
             "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
             "Someone said fortnite :3 " + getTargetString(targets) + " fortnite?",
             "Fortnite? " + getTargetString(targets) + " fortnite?",
-            "How do I draw trianges with vector transforms? " + getTargetString(targets) + " fortnite?",
+            "How do I draw triangles with vector transforms? " + getTargetString(targets) + " fortnite?",
             "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<",
             "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
         ]
