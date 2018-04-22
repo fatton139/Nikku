@@ -45,15 +45,22 @@ bot.on('message', (message) => {
         }
         selfLoop();
     };
-    
-    if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.025) {
+
+    if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
+        message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is trash, Fortnite is better ^__^ " + getTargetString(targets) + " fortnite?").then((message) => {
+                message.delete(360000);
+        });
+    }
+
+    if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.025) {
         var messageStyles = [
             "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
             "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
-            "Someone said fortnite :3" + getTargetString(targets) + " fortnite?",
+            "Someone said fortnite :3 " + getTargetString(targets) + " fortnite?",
             "Fortnite? " + getTargetString(targets) + " fortnite?",
             "How do I draw trianges with vector transforms? " + getTargetString(targets) + " fortnite?",
-            "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<"
+            "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<",
+            "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
         ]
         message.channel.send(messageStyles[randInt(0, messageStyles.length - 1)]).then((message) => {
                 message.delete(360000);
