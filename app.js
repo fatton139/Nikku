@@ -2,7 +2,7 @@
 var Discord = require("discord.js");
 var moment = require("moment");
 var momentDuration = require("moment-duration-format");
-const authToken = "NDM3MTU1NDM1ODA0MzYwNzE0.DbyAfA.OmAW7R9t-342ic_QjMeQR2JYYoc";
+const authToken = process.env.token;
 var bot = new Discord.Client();
 var targets = ["<@121959865101975552>"];
 
