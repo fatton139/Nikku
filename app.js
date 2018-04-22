@@ -6,6 +6,10 @@ const authToken = "NDM3MTU1NDM1ODA0MzYwNzE0.DbyAfA.OmAW7R9t-342ic_QjMeQR2JYYoc";
 var bot = new Discord.Client();
 var targets = ["<@121959865101975552>"];
 
+var randInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min) ) + min;
+};
+
 bot.on('message', (message) => {
     
     var getTargetString = (targets) => {
@@ -24,7 +28,7 @@ bot.on('message', (message) => {
             tts: tts
         }).then((message) => {
             if (del)
-                message.delete(86400000);
+                message.delete(360000);
         });
     };
 
@@ -43,8 +47,15 @@ bot.on('message', (message) => {
     };
     
     if ((message.content.replace(/\s/g, '').search("fortnite") != -1 && !message.author.bot && message.content[0] != "!") || Math.random() < 0.025) {
-        message.channel.send("OwO someone said fortnite? " + getTargetString(targets) + " fortnite?").then((message) => {
-                message.delete(86400000);
+        var messageStyles = [
+            "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
+            "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
+            "Someone said fortnite :3" + getTargetString(targets) + " fortnite?",
+            "Fortnite? " + getTargetString(targets) + " fortnite?",
+            "How do I draw trianges with vector transforms? " + getTargetString(targets) + " fortnite?"
+        ]
+        message.channel.send(messageStyles[randInt(0, messageStyles.length - 1)]).then((message) => {
+                message.delete(360000);
         });
     }
     
@@ -63,7 +74,7 @@ bot.on('message', (message) => {
             loop(parseInt(amount), parseInt(time));
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
-                message.delete(86400000);
+                message.delete(360000);
             });
         }
         else if (command == "target") {
@@ -91,7 +102,7 @@ bot.on('message', (message) => {
         }
         else {
             message.reply("no").then((message) => {
-                message.delete(86400000);
+                message.delete(360000);
             });
         }
     }
