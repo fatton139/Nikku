@@ -12,6 +12,39 @@ var randInt = (min, max) => {
 
 bot.on('message', (message) => {
     
+    class Loop {
+        constructor(amount, delay) {
+            this.amount = amount;
+            this.delay = delay;
+            this.interval = null;
+        }
+        sendMessage () {
+            if (this.amount <= 1) {
+                message.channel.send(getTargetString(targets) + " fortnite?").then((message) => {
+                    message.delete(3600000);
+                });
+                return;
+            }
+            message.channel.send(getTargetString(targets) + " fortnite? " + (this.amount - 1) + " left").then((message) => {
+                message.delete(3600000);
+            });
+        }
+        loop(self) {
+            self.sendMessage();
+            self.amount--;
+            self.interval = setTimeout(self.loop, self.delay, self);
+            if (self.amount < 1) {
+                self.stopLoop();
+            }
+        }
+        startLoop() {
+            this.interval = setTimeout(this.loop, this.delay, this);
+        }
+        stopLoop() {
+            clearTimeout(this.interval);
+        }
+    }
+
     var getTargetString = (targets) => {
         var targetString = "";
         for (var i = 0; i < targets.length; i++) {
