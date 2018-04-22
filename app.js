@@ -5,13 +5,14 @@ var momentDuration = require("moment-duration-format");
 const authToken = process.env.token;
 var bot = new Discord.Client();
 var targets = ["<@121959865101975552>"];
+var loop;
 
 var randInt = (min, max) => {
     return Math.floor(Math.random() * (max - min) ) + min;
 };
 
 bot.on('message', (message) => {
-    
+
     class Loop {
         constructor(amount, delay) {
             this.amount = amount;
@@ -65,20 +66,6 @@ bot.on('message', (message) => {
         });
     };
 
-    var loop = (amount, delay) => {
-        var i = 0;
-        function selfLoop () {
-            setTimeout(function () {
-                sendDefault(true, false);
-                i++;
-                if (i < amount) {
-                   selfLoop();
-                }
-             }, delay);
-        }
-        selfLoop();
-    };
-
     if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
         message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is trash, Fortnite is better ^__^ " + getTargetString(targets) + " fortnite?").then((message) => {
                 message.delete(3600000);
@@ -118,10 +105,16 @@ bot.on('message', (message) => {
                 return;
             }
             var amount = args[2];
+            loop = new Loop(parseInt(amount), parseInt(time));
+            loop.startLoop();
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(3600000);
             });
+
+        }
+        else if (command == "stop") {
+            loop.stopLoop();
         }
         else if (command == "target") {
             if (targets)
