@@ -110,9 +110,14 @@ bot.on('message', (message) => {
             sendDefault(true, true);
         }
         else if (command == "auto") {
-            var amount = args[2];
             var time = args[3];
-            loop(parseInt(amount), parseInt(time));
+            if (!args[3] || args[3] < 1000) {
+                message.reply("pls no").then((message) => {
+                    message.delete(3600000);
+                });
+                return;
+            }
+            var amount = args[2];
             var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(3600000);
