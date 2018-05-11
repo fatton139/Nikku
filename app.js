@@ -2,6 +2,7 @@
 let Discord = require("discord.js");
 let moment = require("moment");
 let Chatbot = require("cleverbot.io");
+let request = require("request");
 let momentDuration = require("moment-duration-format");
 const authToken = process.env.token;
 const chatApi = process.env.chatKey;
@@ -10,7 +11,6 @@ let targets = ["<@132448673710866432>"];
 let loop;
 let chatBot = new Chatbot(process.env.APIUser, process.env.APIKey);
 chatBot.setNick("KYkUKga0");
-
 
 let randInt = (min, max) => {
     return Math.floor(Math.random() * (max - min) ) + min;
@@ -81,14 +81,24 @@ bot.on('message', (message) => {
     ];
 
     if (Math.random() < 0.025) {
-        chatBot.create((err, session) => {
-            chatBot.ask(message.content, (err, res) => {
-                let response = res + " " + messageStyles[randInt(0, messageStyles.length - 1)];
+        if (Math.random < 0.5) {
+            chatBot.create((err, session) => {
+                chatBot.ask(message.content, (err, res) => {
+                    let response = res + " " + messageStyles[randInt(0, messageStyles.length - 1)];
+                    message.channel.send(response).then((message) => {
+                        message.delete(3600000);
+                    });
+                });
+            });
+        } else {
+            request("https://talaikis.com/api/quotes/random/", (err, res, body) => {
+                let quoteRes = JSON.parse(body);
+                let response = quoteRes.author + " said - " + quoteRes.quote.slice(0, quoteRes.quote.length - 1) + " and " + messageStyles[randInt(0, messageStyles.length - 1)];
                 message.channel.send(response).then((message) => {
                     message.delete(3600000);
                 });
             });
-        });
+        }
     }
 
     if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
