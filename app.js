@@ -112,7 +112,7 @@ bot.on('message', (message) => {
                         .slice(0, quoteRes.quote.length - 1) +
                         " and " + style.substr(0, 1).toLowerCase() +
                         style.substr(1);
-                response = quoteRes.author + " said - " + quoteRes.quote +
+                response = quoteRes.author + " said - " + quoteRes.quote + " " +
                     style;
                 message.channel.send(response).then((message) => {
                     message.delete(3600000);
@@ -191,11 +191,11 @@ bot.on('message', (message) => {
             message.channel.send("```OwO u wan halp?\n" +
             "!fortnite - Asks your targets to play fortnite. >///<\n" +
             "!fortnite tts - Asks your targets to play fortnite but more " +
-                " nicely. >/////<\n" +
+                "nicely. >/////<\n" +
             "!fortnite target {@target1} {@target2} ... {@targetn} - Set new " +
-                " targets/friends :3\n" +
+                "targets/friends :3\n" +
             "!fortnite auto {amount} {delay(ms)} - Ask your friends many " +
-                " many manie times\n" +
+                "many manie times\n" +
             "!fortnite delete - Removes my nice messages ლ(´ڡ`ლ)\n" +
             "!fortnite stop - stops any pings caused by !fortnite auto " +
                 " (may be delayed) ᕙ(⇀‸↼‶)ᕗ" +
