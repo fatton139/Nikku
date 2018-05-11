@@ -70,23 +70,17 @@ bot.on('message', (message) => {
         });
     };
 
-    if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
-        message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is trash, Fortnite is better ^__^ " + getTargetString(targets) + " fortnite?").then((message) => {
-                message.delete(3600000);
-        });
-    }
+    let messageStyles = [
+        "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
+        "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
+        "Someone said fortnite :3 " + getTargetString(targets) + " fortnite?",
+        "Fortnite? " + getTargetString(targets) + " fortnite?",
+        "How do I draw triangles with vector transforms? " + getTargetString(targets) + " fortnite?",
+        "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<",
+        "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
+    ];
 
-    if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1 || Math.random() < 0.025) && (!message.author.bot && message.content[0] != "!")) {
-        let messageStyles = [
-            "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
-            "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
-            "Someone said fortnite :3 " + getTargetString(targets) + " fortnite?",
-            "Fortnite? " + getTargetString(targets) + " fortnite?",
-            "How do I draw triangles with vector transforms? " + getTargetString(targets) + " fortnite?",
-            "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<",
-            "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
-        ];
-        
+    if (Math.random() < 0.025) {
         chatBot.create((err, session) => {
             chatBot.ask(message.content, (err, res) => {
                 let response = res + " " + messageStyles[randInt(0, messageStyles.length - 1)];
@@ -95,7 +89,19 @@ bot.on('message', (message) => {
                 });
             });
         });
+    }
 
+    if (message.content.replace(/\s/g, '').toLowerCase().search("pubg") != -1 && !message.author.bot && message.content[0] != "!") {
+        message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is trash, Fortnite is better ^__^ " + getTargetString(targets) + " fortnite?").then((message) => {
+                message.delete(3600000);
+        });
+    }
+
+    if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1) && (!message.author.bot && message.content[0] != "!")) {
+        let response = messageStyles[randInt(0, messageStyles.length - 1)];
+        message.channel.send(response).then((message) => {
+            message.delete(3600000);
+        });
     }
     
     if (message.content.startsWith("!fortnite")) {
