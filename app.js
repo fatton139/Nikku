@@ -1,18 +1,17 @@
 "use strict";
-var Discord = require("discord.js");
-var moment = require("moment");
-var momentDuration = require("moment-duration-format");
+let Discord = require("discord.js");
+let moment = require("moment");
+let momentDuration = require("moment-duration-format");
 const authToken = process.env.token;
-var bot = new Discord.Client();
-var targets = ["<@121959865101975552>"];
-var loop;
+let bot = new Discord.Client();
+let targets = ["<@121959865101975552>"];
+let loop;
 
-var randInt = (min, max) => {
+let randInt = (min, max) => {
     return Math.floor(Math.random() * (max - min) ) + min;
 };
 
 bot.on('message', (message) => {
-
     class Loop {
         constructor(amount, delay) {
             this.amount = amount;
@@ -46,9 +45,9 @@ bot.on('message', (message) => {
         }
     }
 
-    var getTargetString = (targets) => {
-        var targetString = "";
-        for (var i = 0; i < targets.length; i++) {
+    let getTargetString = (targets) => {
+        let targetString = "";
+        for (let i = 0; i < targets.length; i++) {
             if (i < targets.length - 1)
                 targetString += targets[i] + " ";
             else
@@ -57,7 +56,7 @@ bot.on('message', (message) => {
         return targetString;
     };
 
-    var sendDefault = (del, tts) => {
+    let sendDefault = (del, tts) => {
         message.channel.send(getTargetString(targets) + " fortnite?", {
             tts: tts
         }).then((message) => {
@@ -73,7 +72,7 @@ bot.on('message', (message) => {
     }
 
     if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != -1 || Math.random() < 0.025) && (!message.author.bot && message.content[0] != "!")) {
-        var messageStyles = [
+        let messageStyles = [
             "OwO someone said fortnite? " + getTargetString(targets) + " fortnite?",
             "AwoooooOOoo someone said fortnite? " + getTargetString(targets) + " fortnite?",
             "Someone said fortnite :3 " + getTargetString(targets) + " fortnite?",
@@ -88,8 +87,8 @@ bot.on('message', (message) => {
     }
     
     if (message.content.startsWith("!fortnite")) {
-        var args = message.content.split(" ");
-        var command = args[1];
+        let args = message.content.split(" ");
+        let command = args[1];
         if (!command) {
             sendDefault(false, false);
         }
@@ -97,17 +96,17 @@ bot.on('message', (message) => {
             sendDefault(true, true);
         }
         else if (command == "auto") {
-            var time = args[3];
+            let time = args[3];
             if (!args[3] || args[3] < 1000) {
                 message.reply("pls no").then((message) => {
                     message.delete(3600000);
                 });
                 return;
             }
-            var amount = args[2];
+            let amount = args[2];
             loop = new Loop(parseInt(amount), parseInt(time));
             loop.startLoop();
-            var formattedTime = moment.duration(parseInt(time), "milliseconds").format();
+            let formattedTime = moment.duration(parseInt(time), "milliseconds").format();
             message.channel.send("Auto fortnite set. I will ping " + getTargetString(targets) + " once every " + formattedTime + " for " + amount + " times").then((message) => {
                 message.delete(3600000);
             });
@@ -123,8 +122,8 @@ bot.on('message', (message) => {
         }
         else if (command == "delete") {
             message.channel.fetchMessages({limit: parseInt(args[2])}).then((messages) => {
-                var selfMessages = messages.filter((messages) => (messages.author.bot));
-                var amount = selfMessages.array().length;
+                let selfMessages = messages.filter((messages) => (messages.author.bot));
+                let amount = selfMessages.array().length;
                 message.channel.bulkDelete(selfMessages);
                 message.channel.send("Deleted " + amount + " messages ^__^ " + getTargetString(targets) + " wanna play fortnite?");
             });
