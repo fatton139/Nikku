@@ -90,7 +90,12 @@ bot.on('message', (message) => {
         } else {
             request("https://talaikis.com/api/quotes/random/", (err, res, body) => {
                 let quoteRes = JSON.parse(body);
-                let response = quoteRes.author + " said - " + quoteRes.quote.slice(0, quoteRes.quote.length - 1) + " and " + messageStyles[randInt(0, messageStyles.length - 1)];
+                let style = messageStyles[randInt(0, messageStyles.length - 1)];
+                let response;
+                if (quoteRes.quote.substr(quoteRes.quote.length - 1) == ".")
+                    response = quoteRes.author + " said - " + quoteRes.quote.slice(0, quoteRes.quote.length - 1) 
+                        + " and " + style.substr(0, 1).toLowerCase() + style.substr(1);
+                response = quoteRes.author + " said - " + quoteRes.quote + style;
                 message.channel.send(response).then((message) => {
                     message.delete(3600000);
                 });
