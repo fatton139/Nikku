@@ -112,8 +112,9 @@ bot.on('message', (message) => {
                         .slice(0, quoteRes.quote.length - 1) +
                         " and " + style.substr(0, 1).toLowerCase() +
                         style.substr(1);
-                response = quoteRes.author + " said - " + quoteRes.quote + " " +
-                    style;
+                else 
+                    response = quoteRes.author + " said - " + quoteRes.quote +
+                        " " + style;
                 message.channel.send(response).then((message) => {
                     message.delete(3600000);
                 });
