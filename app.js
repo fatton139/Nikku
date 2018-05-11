@@ -6,7 +6,7 @@ let momentDuration = require("moment-duration-format");
 const authToken = process.env.token;
 const chatApi = process.env.chatKey;
 let bot = new Discord.Client();
-let targets = ["<@121959865101975552>"];
+let targets = ["<@132448673710866432>"];
 let loop;
 let chatBot = new Chatbot(process.env.APIUser, process.env.APIKey);
 chatBot.setNick("KYkUKga0");
