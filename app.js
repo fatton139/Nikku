@@ -53,10 +53,7 @@ bot.on('message', (message) => {
     let getTargetString = (targets) => {
         let targetString = "";
         for (let i = 0; i < targets.length; i++) {
-            if (i < targets.length - 1)
-                targetString += targets[i] + " ";
-            else
-                targetString += targets[i];
+            targetString += i < targets.length - 1 ? targets[i] + " " : targets[i];
         }
         return targetString;
     };
