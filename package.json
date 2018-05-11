@@ -10,6 +10,7 @@
   "author": "aXises",
   "license": "ISC",
   "dependencies": {
+    "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2"

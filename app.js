@@ -1,11 +1,16 @@
 "use strict";
 let Discord = require("discord.js");
 let moment = require("moment");
+let Chatbot = require("cleverbot.io");
 let momentDuration = require("moment-duration-format");
 const authToken = process.env.token;
+const chatApi = process.env.chatKey;
 let bot = new Discord.Client();
 let targets = ["<@121959865101975552>"];
 let loop;
+let chatBot = new Chatbot(process.env.APIUser, process.env.APIKey);
+chatBot.setNick("KYkUKga0");
+
 
 let randInt = (min, max) => {
     return Math.floor(Math.random() * (max - min) ) + min;
@@ -80,10 +85,17 @@ bot.on('message', (message) => {
             "How do I draw triangles with vector transforms? " + getTargetString(targets) + " fortnite?",
             "Its..its not like I wan...want to play fortnite with " + getTargetString(targets) + " or anything >///<",
             "Notices fortnite, Owo whats this? " + getTargetString(targets) + " fortnite?"
-        ]
-        message.channel.send(messageStyles[randInt(0, messageStyles.length - 1)]).then((message) => {
-                message.delete(3600000);
+        ];
+        
+        chatBot.create((err, session) => {
+            chatBot.ask(message.content, (err, res) => {
+                let response = res + " " + messageStyles[randInt(0, messageStyles.length - 1)];
+                message.channel.send(response).then((message) => {
+                    message.delete(3600000);
+                });
+            });
         });
+
     }
     
     if (message.content.startsWith("!fortnite")) {
