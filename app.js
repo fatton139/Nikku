@@ -81,7 +81,13 @@ bot.on('message', (message) => {
         "Its..its not like I wan...want to play fortnite with " + 
             getTargetString(targets) + " or anything >///<",
         "Notices fortnite, Owo whats this? " + getTargetString(targets) + 
-            " fortnite?"
+            " fortnite?",
+        "Brad said to play fortnite." + getTargetString(targets) + " fortnite?",
+        "Nick said to play fortnite." + getTargetString(targets) + " fortnite?",
+        "Patty said to play fortnite." + getTargetString(targets) +
+            " fortnite?",
+        "Alex said to play fortnite." + getTargetString(targets) + " fortnite?",
+        "JZ said to play fortnite." + getTargetString(targets) + " fortnite?",
     ];
 
     if (Math.random() < 0.025) {
