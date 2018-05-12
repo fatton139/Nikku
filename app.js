@@ -96,9 +96,7 @@ bot.on('message', (message) => {
                 chatBot.ask(message.content, (err, res) => {
                     let response = res + " " + messageStyles[randInt(0, 
                         messageStyles.length - 1)];
-                    message.channel.send(response).then((message) => {
-                        message.delete(3600000);
-                    });
+                    message.channel.send(response);
                 });
             });
         } else {
@@ -115,9 +113,7 @@ bot.on('message', (message) => {
                 else 
                     response = quoteRes.author + " said - " + quoteRes.quote +
                         " " + style;
-                message.channel.send(response).then((message) => {
-                    message.delete(3600000);
-                });
+                message.channel.send(response);
             });
         }
     }
@@ -126,17 +122,13 @@ bot.on('message', (message) => {
          !message.author.bot && message.content[0] != "!") {
         message.channel.send("PUBG aka PlayerUnknown's Battle Grounds is " +
             "trash, Fortnite is better ^__^ " + getTargetString(targets) + 
-            " fortnite?").then((message) => {
-                message.delete(3600000);
-        });
+            " fortnite?");
     }
 
     if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != 
         -1) && (!message.author.bot && message.content[0] != "!")) {
         let response = messageStyles[randInt(0, messageStyles.length - 1)];
-        message.channel.send(response).then((message) => {
-            message.delete(3600000);
-        });
+        message.channel.send(response);
     }
     
     if (message.content.startsWith("!fortnite")) {
