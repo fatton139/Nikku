@@ -82,16 +82,16 @@ bot.on('message', (message) => {
             getTargetString(targets) + " or anything >///<",
         "Notices fortnite, Owo whats this? " + getTargetString(targets) + 
             " fortnite?",
-        "Brad said to play fortnite." + getTargetString(targets) + " fortnite?",
-        "Nick said to play fortnite." + getTargetString(targets) + " fortnite?",
-        "Patty said to play fortnite." + getTargetString(targets) +
+        "Brad said to play fortnite. " + getTargetString(targets) + " fortnite?",
+        "Nick said to play fortnite. " + getTargetString(targets) + " fortnite?",
+        "Patty said to play fortnite. " + getTargetString(targets) +
             " fortnite?",
-        "Alex said to play fortnite." + getTargetString(targets) + " fortnite?",
-        "JZ said to play fortnite." + getTargetString(targets) + " fortnite?",
+        "Alex said to play fortnite. " + getTargetString(targets) + " fortnite?",
+        "JZ said to play fortnite. " + getTargetString(targets) + " fortnite?",
     ];
 
     if (Math.random() < 0.025) {
-        if (Math.random < 0.5) {
+        if (Math.random() < 0.5) {
             chatBot.create((err, session) => {
                 chatBot.ask(message.content, (err, res) => {
                     let response = res + " " + messageStyles[randInt(0, 
