@@ -6,18 +6,15 @@ import { Command } from "../command/Command";
  */
 
 export class AutoTriggerCommand extends Command implements ICommand {
+    public name: string;
     public trigger: () => boolean;
-    public constructor(action: () => boolean, trigger: () => boolean) {
-        super(action, null);
+    public constructor(name: string, accessLevel: number, action: () => boolean,
+                       trigger: () => boolean) {
+        super(action, accessLevel, null);
+        this.name = name;
         this.trigger = trigger;
     }
     public tryTrigger(): boolean {
-        if (this.trigger) {
-            if (!this.executeAction()) {
-                throw new Error("Failed Command");
-            }
-            return true;
-        }
-        return false;
+        return this.trigger();
     }
 }
