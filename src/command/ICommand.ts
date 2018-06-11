@@ -1,4 +1,4 @@
 export interface ICommand {
-    command: string;
+    command?: string;
     action: () => boolean;
 }
