@@ -1,5 +1,7 @@
 import { Command } from "../command/Command";
 import { AutoTriggerCommand } from "./AutoTriggerCommand";
+import { User } from "../user/User";
+import { FortnightBotException } from "../exceptions/FortnightBotException";
 
 export class CommandManager {
     public commands: Command[];
@@ -16,22 +18,32 @@ export class CommandManager {
             this.addCommand(command);
         }
     }
-    public executeCommand(commandName: string): void {
+    public executeCommand(commandName: string, user: User): void {
         for (const command of this.commands) {
             if (commandName === command.commandString) {
-                command.executeAction();
+                try {
+                    command.executeAction(user);
+                } catch (e) {
+                    if (e instanceof FortnightBotException) {
+                        // Output
+                        return;
+                    }
+                }
             }
         }
     }
-    public triggerAction(): void {
+    public triggerAction(user: User): void {
         for (const command of this.commands) {
             if (command instanceof AutoTriggerCommand) {
-                try {
-                    if (command.tryTrigger()) {
-                        command.executeAction();
+                if (command.tryTrigger()) {
+                    try {
+                        command.executeAction(user);
+                    } catch (e) {
+                        if (e instanceof FortnightBotException) {
+                            // Output
+                            return;
+                        }
                     }
-                } catch (e) {
-                    console.log(e);
                 }
             }
         }
