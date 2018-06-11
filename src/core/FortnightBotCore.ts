@@ -1,23 +1,31 @@
 import * as Discord from "discord.js";
 
-import * as commandConfig from "../config/FortnightBotCommandConfig";
-import * as config from "../config/FortnightBotInitConfig";
+import { FortnightBotCommandConfig } from "../config/FortnightBotCommandConfig";
+import { FortnightBotInitConfig } from "../config/FortnightBotInitConfig";
+import { CommandManager } from "../command/CommandManager";
+
+import { defaultCommands } from "../command/DefaultCommands";
 
 export class FortnightBotCore {
-    private initConfig: config.FortnightBotInitConfig;
-    private prefix: commandConfig.FortnightBotCommandConfig;
+    private initConfig: FortnightBotInitConfig;
+    private prefix: FortnightBotCommandConfig;
     private bot: Discord.Client;
-    public constructor(initConfig: config.FortnightBotInitConfig) {
+    private commandManager: CommandManager;
+    public constructor(initConfig: FortnightBotInitConfig) {
         this.initConfig = initConfig;
-        this.prefix = new commandConfig.FortnightBotCommandConfig(
+        this.prefix = new FortnightBotCommandConfig(
             [
                 "!f",
                 "!fortnight"
             ]
         );
         this.bot = new Discord.Client();
+        this.commandManager = new CommandManager(defaultCommands);
     }
     public start(): void {
         this.bot.login(this.initConfig.botToken);
+        this.bot.on("message", (message) => {
+            this.commandManager.triggerAction();
+        });
     }
 }
