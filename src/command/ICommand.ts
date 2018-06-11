@@ -1,4 +1,4 @@
-export interface IFortnightBotCommand {
+export interface ICommand {
     command: string;
     action: () => boolean;
 }
