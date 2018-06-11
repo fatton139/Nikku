@@ -35,11 +35,15 @@ export class CommandManager {
         }
     }
     private commandExists(name: string): boolean {
-        for (const command of this.commands) {
-            if (command.commandString === name) {
-                return true;
+        if (Object.keys(this.commands).length > 1) {
+            for (const command of this.commands) {
+                if (command.commandString === name) {
+                    return true;
+                }
             }
+            return false;
+        } else {
+            return false;
         }
-        return false;
     }
 }
