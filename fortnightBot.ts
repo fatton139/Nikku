@@ -1,8 +1,8 @@
 import "discord.js";
 
-import * as core from "./src/core/FortnightBotCore";
-import * as commandConfig from "./src/config/FortnightBotCommandConfig";
-import * as config from "./src/config/FortnightBotInitConfig";
+import { FortnightBotCore } from "./src/core/FortnightBotCore";
+import { FortnightBotCommandConfig } from "./src/config/FortnightBotCommandConfig";
+import { FortnightBotInitConfig } from "./src/config/FortnightBotInitConfig";
 
 import "./temp";
 
@@ -12,7 +12,9 @@ const keys = {
     chatBotAPIKey: process.env.chatBotAPIKey
 };
 
-const initConfig = new config.FortnightBotInitConfig(keys.discordToken,
+const initConfig = new FortnightBotInitConfig(keys.discordToken,
     keys.chatBotUserId, keys.chatBotAPIKey);
 
-const fortnightBotCore = new core.FortnightBotCore(initConfig);
+const fortnightBotCore = new FortnightBotCore(initConfig);
+
+fortnightBotCore.start();
