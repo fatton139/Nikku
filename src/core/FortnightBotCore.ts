@@ -6,7 +6,7 @@ import * as config from "../config/FortnightBotInitConfig";
 export class FortnightBotCore {
     private initConfig: config.FortnightBotInitConfig;
     private prefix: commandConfig.FortnightBotCommandConfig;
-    private bot: object;
+    private bot: Discord.Client;
     public constructor(initConfig: config.FortnightBotInitConfig) {
         this.initConfig = initConfig;
         this.prefix = new commandConfig.FortnightBotCommandConfig(
@@ -17,7 +17,7 @@ export class FortnightBotCore {
         );
         this.bot = new Discord.Client();
     }
-    public start() {
-        return;
+    public start(): void {
+        this.bot.login(this.initConfig.botToken);
     }
 }

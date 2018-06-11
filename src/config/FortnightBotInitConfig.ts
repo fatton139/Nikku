@@ -1,7 +1,7 @@
 export class FortnightBotInitConfig {
-    private readonly botToken: string;
-    private readonly chatBotUserId: string;
-    private readonly chatBotAPIKey: string;
+    public readonly botToken: string;
+    public readonly chatBotUserId: string;
+    public readonly chatBotAPIKey: string;
     public constructor(botToken: string, charBotUserId: string,
                        chatBotAPIKey: string) {
         this.botToken = botToken;
