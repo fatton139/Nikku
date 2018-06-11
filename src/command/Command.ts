@@ -1,8 +1,10 @@
 import { ICommand } from "../command/ICommand";
+import { User } from "../user/User";
+import { UnauthorizedCommandException } from "../exceptions/UnauthorizedCommandException";
 
 export class Command implements ICommand {
     public commandString?: string;
-    public accessLevel: number;
+    public readonly accessLevel: number;
     public action: () => boolean;
     public constructor(action: () => boolean, accessLevel: number,
                        commandString: string) {
@@ -10,11 +12,11 @@ export class Command implements ICommand {
         this.accessLevel = accessLevel;
         this.commandString = commandString;
     }
-    public executeAction(): void {
-        try {
-            this.action();
-        } catch (e) {
-            console.log(e);
+    public executeAction(user: User): void {
+        if (user.accessLevel < this.accessLevel) {
+            throw new UnauthorizedCommandException("Unauthorized Execution of" +
+                "Command");
         }
+        this.action();
     }
 }
