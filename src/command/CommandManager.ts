@@ -23,11 +23,13 @@ export class CommandManager {
             }
         }
     }
-    public triggerCommand(): void {
+    public triggerAction(): void {
         for (const command of this.commands) {
             if (command instanceof AutoTriggerCommand) {
                 try {
-                    command.tryTrigger();
+                    if (command.tryTrigger()) {
+                        command.executeAction();
+                    }
                 } catch (e) {
                     console.log(e);
                 }
