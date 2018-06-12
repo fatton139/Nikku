@@ -10,7 +10,7 @@ export class AutoTriggerCommand extends Command implements ICommand {
     public trigger: () => boolean;
     public constructor(name: string, accessLevel: number, action: () => boolean,
                        trigger: () => boolean) {
-        super(action, accessLevel, null);
+        super(null, accessLevel, action);
         this.name = name;
         this.trigger = trigger;
     }
