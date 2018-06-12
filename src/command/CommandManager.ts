@@ -27,29 +27,42 @@ export class CommandManager {
         }
     }
     public attemptExecution(line: string, user: User): void {
-        console.log("attempting execution", line);
         this.triggerAction(user);
+        const commandString = this.extractCommand(line);
+        if (commandString === null) {
+            return;
+        }
         for (const s of this.prefix.getPrefix()) {
             if (line.startsWith(s)) {
-                this.executeCommand(this.extractCommand(line), user);
-                console.log("prefix allowed, commend executed");
+                for (const command of this.commands) {
+                    if (commandString === command.commandString) {
+                        try {
+                            if (command.action.argLength > 0) {
+                                const args = this.extractArguments(line,
+                                    command.action.argLength);
+                                if (args.length !== command.action.argLength) {
+                                    return;
+                                }
+                                command.args = args;
+                            }
+                            command.executeAction(user);
+                        } catch (e) {
+                            if (e instanceof FortniteBotException) {
+                                // Output
+                                return;
+                            }
+                        }
+                    }
+                }
                 break;
             }
         }
     }
-    public executeCommand(commandName: string, user: User): void {
-        for (const command of this.commands) {
-            if (commandName === command.commandString) {
-                try {
-                    command.executeAction(user);
-                } catch (e) {
-                    if (e instanceof FortniteBotException) {
-                        // Output
-                        return;
-                    }
-                }
-            }
-        }
+    public extractCommand(line: string): string {
+        return line.split(" ")[1];
+    }
+    public extractArguments(line: string, amount: number): string[] {
+        return line.split(" ").splice(2, amount);
     }
     public triggerAction(user: User): void {
         for (const command of this.commands) {
