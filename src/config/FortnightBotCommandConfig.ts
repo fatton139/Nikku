@@ -18,4 +18,7 @@ export class FortnightBotCommandConfig {
         }
         return false;
     }
+    public getPrefix(): string[] {
+        return this.prefix;
+    }
 }
