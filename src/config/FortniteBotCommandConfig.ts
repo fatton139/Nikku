@@ -1,4 +1,4 @@
-export class FortnightBotCommandConfig {
+export class FortniteBotCommandConfig {
     private prefix: string[];
     public constructor(prefix: string[]) {
         this.prefix = prefix;
