@@ -9,6 +9,6 @@ import "./temp";
 const initConfig = new FortniteBotInitConfig(keys.discordToken,
     keys.chatBotUserId, keys.chatBotAPIKey);
 
-const fortniteBotCore = new FortniteBotCore(initConfig);
+export const fortniteBotCore = new FortniteBotCore(initConfig);
 
 fortniteBotCore.start();
