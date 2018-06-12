@@ -1,18 +1,18 @@
-import { FortnightBotCommandConfig } from "../config/FortnightBotCommandConfig";
+import { FortniteBotCommandConfig } from "../config/FortniteBotCommandConfig";
 import { Command } from "../command/Command";
 import { AutoTriggerCommand } from "./AutoTriggerCommand";
 import { User } from "../user/User";
-import { FortnightBotException } from "../exceptions/FortnightBotException";
+import { FortniteBotException } from "../exceptions/FortniteBotException";
 
 export class CommandManager {
     public commands: Command[];
-    private prefix: FortnightBotCommandConfig;
+    private prefix: FortniteBotCommandConfig;
     public constructor(commands?: Command[]) {
         this.commands = commands;
-        this.prefix = new FortnightBotCommandConfig(
+        this.prefix = new FortniteBotCommandConfig(
             [
                 "!f",
-                "!fortnight"
+                "!fortnite"
             ]
         );
     }
@@ -27,10 +27,12 @@ export class CommandManager {
         }
     }
     public attemptExecution(line: string, user: User): void {
+        console.log("attempting execution", line);
         this.triggerAction(user);
         for (const s of this.prefix.getPrefix()) {
             if (line.startsWith(s)) {
                 this.executeCommand(this.extractCommand(line), user);
+                console.log("prefix allowed, commend executed");
                 break;
             }
         }
@@ -41,7 +43,7 @@ export class CommandManager {
                 try {
                     command.executeAction(user);
                 } catch (e) {
-                    if (e instanceof FortnightBotException) {
+                    if (e instanceof FortniteBotException) {
                         // Output
                         return;
                     }
@@ -56,7 +58,7 @@ export class CommandManager {
                     try {
                         command.executeAction(user);
                     } catch (e) {
-                        if (e instanceof FortnightBotException) {
+                        if (e instanceof FortniteBotException) {
                             // Output
                             return;
                         }

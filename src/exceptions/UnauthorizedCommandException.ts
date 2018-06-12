@@ -1,6 +1,6 @@
-import { FortnightBotException } from "./FortnightBotException";
+import { FortniteBotException } from "./FortniteBotException";
 
-export class UnauthorizedCommandException extends FortnightBotException {
+export class UnauthorizedCommandException extends FortniteBotException {
     constructor(message: string) {
         super(message);
     }

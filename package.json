@@ -2,9 +2,9 @@
   "name": "mrfortnight",
   "version": "2.0.0",
   "description": "fortnite?",
-  "main": "fortnightBot.js",
+  "main": "fortniteBot.js",
   "scripts": {
-    "start": "node fortnightBot.js",
+    "start": "node fortniteBot.js",
     "test": "test"
   },
   "author": "aXises",

@@ -1,4 +1,4 @@
-export class FortnightBotInitConfig {
+export class FortniteBotInitConfig {
     public readonly botToken: string;
     public readonly chatBotUserId: string;
     public readonly chatBotAPIKey: string;

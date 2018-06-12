@@ -1,5 +1,7 @@
 import { AutoTriggerCommand } from "../command/AutoTriggerCommand";
+import { DebugCommand } from "../command/DebugCommand";
 import { CommandManager } from "../command/CommandManager";
+import { FortnightBotCore } from "../core/FortnightBotCore";
 
 import { randInt } from "../utils/Random";
 
