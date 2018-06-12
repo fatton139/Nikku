@@ -11,7 +11,7 @@ import { User } from "../user/User";
 import { defaultCommands } from "../command/DefaultCommands";
 
 export class FortniteBotCore {
-    public botState: FortniteBotState;
+    private coreState: FortniteBotState;
     private initConfig: FortniteBotInitConfig;
     private bot: Discord.Client;
     private commandManager: CommandManager;
@@ -26,16 +26,22 @@ export class FortniteBotCore {
         this.bot.login(this.initConfig.botToken);
         this.bot.on("ready", () => {
             this.bot.on("message", (message) => {
+                this.coreState = new CommandExecutionState(message);
                 this.commandManager.attemptExecution(message.content,
                     new User("123", 3 , "test"));
                 const x = message.channel;
-                this.botState = new CommandExecutionState(message);
             });
         });
         return this;
     }
+    public setCoreState(coreState: FortniteBotState): void {
+        this.coreState = coreState;
+    }
+    public getCoreState(): FortniteBotState {
+        return this.coreState;
+    }
     public clearState(): void {
-        this.botState = null;
+        this.coreState = null;
     }
     public clearInitConfig(): void {
         this.initConfig = null;
@@ -45,5 +51,9 @@ export class FortniteBotCore {
         if (this.eventCore) {
             this.eventCore.clearClient();
         }
+    }
+    public coreToString(): string {
+        const x = JSON.stringify(this);
+        return x;
     }
 }

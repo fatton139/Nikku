@@ -5,6 +5,6 @@ export class FortniteBotTrigger extends FortniteBotAction {
         super(0, trigger);
     }
     public execute(): boolean {
-        return super.execute(null);
+        return super.execute(null, null);
     }
 }

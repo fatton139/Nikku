@@ -1,7 +1,10 @@
 import { ICommand } from "../command/ICommand";
 import { User } from "../user/User";
 import { UnauthorizedCommandException } from "../exceptions/UnauthorizedCommandException";
+import { FortniteBotCore } from "../core/FortniteBotCore";
 import { FortniteBotAction } from "../action/FortniteBotAction";
+import { FortniteBotState } from "../state/FortniteBotState";
+import { fortniteBotCore } from "../../fortniteBot";
 
 export class Command implements ICommand {
     public commandString?: string;
@@ -25,6 +28,6 @@ export class Command implements ICommand {
         if (!this.args) {
             this.args = [];
         }
-        this.action.execute(this.args);
+        this.action.execute(fortniteBotCore.getCoreState(), this.args);
     }
 }
