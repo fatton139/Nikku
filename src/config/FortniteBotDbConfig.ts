@@ -1,3 +1,3 @@
-export class FortnightBotDBConfig {
+export class FortniteBotDBConfig {
 
 }

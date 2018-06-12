@@ -12,7 +12,7 @@ export class AutoTriggerCommand extends Command implements ICommand {
     public trigger: FortniteBotTrigger;
     public constructor(name: string, accessLevel: number,
                        action: FortniteBotAction, trigger: FortniteBotTrigger) {
-        super(null, null, accessLevel, action);
+        super(null, accessLevel, action);
         this.name = name;
         this.trigger = trigger;
     }

@@ -7,8 +7,8 @@ import { FortniteBotAction } from "../action/FortniteBotAction";
  */
 
 export class ExecutableCommand extends Command implements ICommand {
-    public constructor(commandString: string, args: string[],
-                       accessLevel: number, action: FortniteBotAction) {
-        super(commandString, args, accessLevel, action);
+    public constructor(commandString: string, accessLevel: number,
+                       action: FortniteBotAction) {
+        super(commandString, accessLevel, action);
     }
 }
