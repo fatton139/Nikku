@@ -6,5 +6,8 @@ import { Command } from "../command/Command";
  */
 
 export class ExecutableCommand extends Command implements ICommand {
-
+    public constructor(commandString: string, accessLevel: number,
+                       action: () => boolean) {
+        super(commandString, accessLevel, action);
+    }
 }

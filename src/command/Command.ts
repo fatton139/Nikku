@@ -6,8 +6,8 @@ export class Command implements ICommand {
     public commandString?: string;
     public readonly accessLevel: number;
     public action: () => boolean;
-    public constructor(action: () => boolean, accessLevel: number,
-                       commandString: string) {
+    public constructor(commandString: string, accessLevel: number,
+                       action: () => boolean) {
         this.action = action;
         this.accessLevel = accessLevel;
         this.commandString = commandString;
