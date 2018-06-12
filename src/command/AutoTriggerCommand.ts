@@ -1,5 +1,7 @@
 import { ICommand } from "../command/ICommand";
 import { Command } from "../command/Command";
+import { FortniteBotAction } from "action/FortniteBotAction";
+import { FortniteBotTrigger } from "action/FortniteBotTrigger";
 
 /**
  * Commands which are auto triggered.
@@ -7,14 +9,14 @@ import { Command } from "../command/Command";
 
 export class AutoTriggerCommand extends Command implements ICommand {
     public name: string;
-    public trigger: () => boolean;
-    public constructor(name: string, accessLevel: number, action: () => boolean,
-                       trigger: () => boolean) {
-        super(null, accessLevel, action);
+    public trigger: FortniteBotTrigger;
+    public constructor(name: string, accessLevel: number,
+                       action: FortniteBotAction, trigger: FortniteBotTrigger) {
+        super(null, null, accessLevel, action);
         this.name = name;
         this.trigger = trigger;
     }
     public tryTrigger(): boolean {
-        return this.trigger();
+        return this.trigger.execute();
     }
 }
