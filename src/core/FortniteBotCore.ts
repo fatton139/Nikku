@@ -26,13 +26,19 @@ export class FortniteBotCore {
         this.bot.login(this.initConfig.botToken);
         this.bot.on("ready", () => {
             this.bot.on("message", (message) => {
-                this.coreState = new CommandExecutionState(message);
-                this.commandManager.attemptExecution(message.content,
-                    new User("123", 3 , "test"));
-                const x = message.channel;
+                this.coreState = new FortniteBotState(message);
+                if (!message.author.bot) { // will be part of user soon
+                    this.commandManager.attemptExecution(message.content,
+                        new User("123", 3 , "test"));
+                }
             });
         });
         return this;
+    }
+    public changeCoreState(coreState: FortniteBotState): void {
+        const newState = coreState;
+        newState.setHandle(this.getCoreState().getHandle());
+        this.setCoreState(newState);
     }
     public setCoreState(coreState: FortniteBotState): void {
         this.coreState = coreState;
