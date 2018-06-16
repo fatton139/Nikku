@@ -38,10 +38,10 @@ export class CommandManager {
                     if (commandString === command.commandString) {
                         try {
                             if (command.action.argLength > 0) {
-                                const args = this.extractArguments(line,
+                                let args = this.extractArguments(line,
                                     command.action.argLength);
                                 if (args.length !== command.action.argLength) {
-                                    return;
+                                    args = [];
                                 }
                                 command.args = args;
                             }
@@ -59,7 +59,7 @@ export class CommandManager {
         }
     }
     public extractCommand(line: string): string {
-        return line.split(" ")[1];
+        return line.split(" ")[1] ? line.split(" ")[1] : " ";
     }
     public extractArguments(line: string, amount: number): string[] {
         return line.split(" ").splice(2, amount);
