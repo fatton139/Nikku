@@ -2,26 +2,36 @@ import * as Discord from "discord.js";
 
 import { FortniteBotInitConfig } from "../config/FortniteBotInitConfig";
 import { FortniteBotException } from "../exceptions/FortniteBotException";
-import { FortniteBotEventCore } from "../core/FortniteBotEventCore";
+import { FortniteBotEventCore } from "./FortniteBotEventCore";
 import { FortniteBotState } from "../state/FortniteBotState";
+import { FortniteBotDbCore } from "./FortniteBotDbCore";
+import { fortniteBotDbConfig as DbConfig } from "../../fortniteBot";
 
 export class FortniteBotCore {
     public bot: Discord.Client;
     private coreState: FortniteBotState;
     private initConfig: FortniteBotInitConfig;
     private eventCore: FortniteBotEventCore;
-    private currentHandles: any;
+    private DbCore: FortniteBotDbCore;
     public constructor(initConfig: FortniteBotInitConfig) {
         this.initConfig = initConfig;
         this.bot = new Discord.Client();
         this.eventCore = new FortniteBotEventCore(this);
-        this.currentHandles = {};
+        this.DbCore = new FortniteBotDbCore(DbConfig);
     }
     public start(): FortniteBotCore {
-        this.bot.login(this.initConfig.botToken);
-        this.bot.on("ready", () => {
-            this.eventCore.listenMessages();
-        });
+        try {
+            this.DbCore.connectDb(() => {
+                this.bot.login(this.initConfig.botToken);
+                this.bot.on("ready", () => {
+                    this.eventCore.listenMessages();
+                });
+            });
+        } catch (error) {
+            if (error instanceof FortniteBotException) {
+                // custom err handler
+            }
+        }
         return this;
     }
     public getEventCore(): FortniteBotEventCore {
