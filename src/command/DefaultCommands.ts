@@ -11,6 +11,12 @@ import { PendingResponseState } from "state/PendingResponseState";
 import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
 
+const getId = (text: string): string => {
+    console.log(text);
+    return text.charAt(2) === "!" ?
+        text.slice(2, text.length - 1) : text.slice(3, text.length - 1);
+};
+
 const fortniteTextEvent = {
     trigger: new FortniteBotTrigger((state) => {
         const message = (state.getHandle() as Discord.Message);
@@ -108,10 +114,7 @@ const auto = {
 const addTarget = new FortniteBotAction(1,
     (state: PendingResponseState, args: string[]) => {
     const message = state.getHandle() as Discord.Message;
-    let id = args[0].slice(3, args[0].length - 1);
-    if (args[0].charAt(2) !== "!") {
-        id = args[0].slice(2, args[0].length - 1);
-    }
+    const id = getId(args[0]);
     if (args.length !== 1) {
         (state.getHandle() as Discord.Message).channel.send(
             "Usage:`!f target `@user``."
@@ -140,6 +143,13 @@ const addTarget = new FortniteBotAction(1,
         const m = activeCore.getCoreState().getHandle() as Discord.Message;
         if (m.content.toLowerCase() === "yes") {
             m.channel.send("Okey, adding you as a target.");
+            activeCore.getDbCore().GlobalCollection.addTarget(id, (res) => {
+                if (res) {
+                    m.channel.send("Added successfully.");
+                } else {
+                    m.channel.send("Failed to add as target.");
+                }
+            });
         } else if (m.content.toLowerCase() === "no") {
             m.channel.send("Okey.");
         }
@@ -149,6 +159,30 @@ const addTarget = new FortniteBotAction(1,
     return true;
 });
 
+const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
+    activeCore.getDbCore().GlobalCollection.getTargets((res) => {
+        const message = state.getHandle() as Discord.Message;
+        let userlist = "```Current Targets: (" + res.length + ")\n";
+        for (const id of res) {
+            userlist += "- " +
+            message.guild.client.users.get(id).username + "\n";
+        }
+        userlist += "```";
+        message.channel.send(userlist);
+    });
+    return true;
+});
+
+const removeTarget = new FortniteBotAction(0, (state: FortniteBotState) => {
+    const message = state.getHandle() as Discord.Message;
+    const id = message.author.id;
+    activeCore.getDbCore().GlobalCollection.removeTarget(id, (res) => {
+        if (res) {
+            message.channel.send("Removed successfully.");
+        } else {
+            message.channel.send("Failed to remove.");
+        }
+    });
     return true;
 });
 
@@ -161,4 +195,7 @@ export const defaultCommands = [
     new ExecutableCommand("help", 0, showHelp),
     new ExecutableCommand("auto", 0, auto.start),
     new ExecutableCommand("stop", 0, auto.stop),
+    new ExecutableCommand("targetlist", 0, getTargetList),
+    new ExecutableCommand("removeself", 0, removeTarget),
+    new RequireResponseCommand("target", 0, addTarget)
 ];
