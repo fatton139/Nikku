@@ -1,5 +1,7 @@
+import * as Discord from "discord.js";
+
 export class FortniteBotState {
-    public handle: object;
+    private handle: object;
     constructor(handle: object) {
         this.handle = handle;
     }
