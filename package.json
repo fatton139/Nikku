@@ -10,12 +10,14 @@
   "author": "aXises",
   "license": "MIT",
   "dependencies": {
+    "@types/mongodb": "^3.0.20",
     "@types/node": "^10.3.2",
     "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
     "ffmpeg-binaries": "^3.2.2-3",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
+    "mongodb": "^3.0.10",
     "request": "^2.85.0"
   }
 }
