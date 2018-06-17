@@ -26,6 +26,7 @@ export class FortniteBotCore {
                 this.bot.on("ready", () => {
                     this.eventCore.listenMessages();
                 });
+                const db = this.DbCore.getDb();
             });
         } catch (error) {
             if (error instanceof FortniteBotException) {
@@ -36,6 +37,9 @@ export class FortniteBotCore {
     }
     public getEventCore(): FortniteBotEventCore {
         return this.eventCore;
+    }
+    public getDbCore(): FortniteBotDbCore {
+        return this.DbCore;
     }
     public changeCoreState(coreState: FortniteBotState): void {
         const newState = coreState;
