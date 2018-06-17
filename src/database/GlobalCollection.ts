@@ -7,7 +7,7 @@ import { ICollection } from "./ICollection";
 export class GlobalCollection extends FrotniteBotCollection implements ICollection {
     private localDb: any;
     private dbId: MongoDb.ObjectId;
-    constructor(localDb: MongoDb.Db) {
+    constructor(localDb: any) {
         super();
         this.localDb = localDb;
         this.dbId = new MongoDb.ObjectId("5b253b8cb43a095ddc7ff9a7");

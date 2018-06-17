@@ -56,7 +56,6 @@ const randomTextEvent = {
 };
 
 const pong = new FortniteBotAction(0, (state: FortniteBotState, args) => {
-    console.log(args);
     (state.getHandle() as Discord.Message).channel.send("pong");
     return true;
 });
@@ -126,7 +125,7 @@ const addTarget = new FortniteBotAction(1,
         );
         return;
     }
-    activeCore.getDbCore().GlobalCollection.get((res: any[]) => {
+    activeCore.getDbCore().collections.global.get((res: any[]) => {
         if (res[0].targets.indexOf(id) !== -1) {
             message.channel.send("User is already a Target");
             return;
@@ -147,7 +146,7 @@ const addTarget = new FortniteBotAction(1,
             const m = activeCore.getCoreState().getHandle() as Discord.Message;
             if (m.content.toLowerCase() === "yes") {
                 m.channel.send("Okey, adding you as a target.");
-                activeCore.getDbCore().GlobalCollection.add(id,
+                activeCore.getDbCore().collections.global.add(id,
                     (c: boolean) => {
                     if (c) {
                         m.channel.send("Added successfully.");
@@ -166,9 +165,9 @@ const addTarget = new FortniteBotAction(1,
 });
 
 const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
-    activeCore.getDbCore().GlobalCollection.get((res: any[]) => {
+    activeCore.getDbCore().collections.global.get((res) => {
         const message = state.getHandle() as Discord.Message;
-        let userlist = "```Current Targets: (" + res.length + ")\n";
+        let userlist = "```Current Targets: (" + res[0].targets.length + ")\n";
         for (const id of res[0].targets) {
             userlist += "- " +
             message.guild.client.users.get(id).username + "\n";
@@ -182,7 +181,7 @@ const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
 const removeTarget = new FortniteBotAction(0, (state: FortniteBotState) => {
     const message = state.getHandle() as Discord.Message;
     const id = message.author.id;
-    activeCore.getDbCore().GlobalCollection.removeTarget(id, (res) => {
+    activeCore.getDbCore().collections.global.removeTarget(id, (res) => {
         if (res) {
             message.channel.send("Removed successfully.");
         } else {
