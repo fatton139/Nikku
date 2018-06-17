@@ -6,15 +6,12 @@ import { User } from "../user/User";
 
 export class UserCollection extends FrotniteBotCollection implements ICollection {
     private localDb: any;
-    private dbId: MongoDb.ObjectId;
     constructor(localDb: any) {
         super();
         this.localDb = localDb;
-        this.dbId = new MongoDb.ObjectId("5b2649da3627be241cb38b03");
     }
     public add(user: User, callback: (res: boolean) => void): void {
-        this.db.collection("user").updateOne({_id: this.dbId},
-            {$push: { users: user }}, (err) => {
+        this.db.collection("user").insert(user, (err) => {
             if (err) {
                 callback(false);
                 throw new DatabaseException(err);
@@ -25,6 +22,28 @@ export class UserCollection extends FrotniteBotCollection implements ICollection
     public get(callback: (res: any[]) => void): void {
         this.db.collection("user").find({}).toArray().then((res: any) => {
             callback(res);
+        });
+    }
+    public update(userId: string, field: string, value: any,
+                  callback: (res: boolean) => void): void {
+        const set = {field: value};
+        set[field] = value;
+        this.db.collection("user").update({id: userId},
+            {$set: set}, (err) => {
+            if (err) {
+                callback(false);
+                throw new DatabaseException(err);
+            }
+            callback(true);
+        });
+    }
+    public removeUser(userId: string, callback: (res: boolean) => void): void {
+        this.db.collection("user").deleteOne({id: userId}, (err) => {
+            if (err) {
+                callback(false);
+                throw new DatabaseException(err);
+            }
+            callback(true);
         });
     }
 }
