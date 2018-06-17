@@ -3,6 +3,7 @@ import { Command } from "../command/Command";
 import { AutoTriggerCommand } from "./AutoTriggerCommand";
 import { User } from "../user/User";
 import { FortniteBotException } from "../exceptions/FortniteBotException";
+import { fortniteBotCore as activeCore } from "../../fortniteBot";
 
 export class CommandManager {
     public commands: Command[];
@@ -26,8 +27,8 @@ export class CommandManager {
             this.addCommand(command);
         }
     }
-    public attemptExecution(line: string, user: User): void {
-        this.triggerAction(user);
+    public attemptExecution(line: string, id: string): void {
+        this.triggerAction(id);
         const commandString = this.extractCommand(line);
         if (commandString === null) {
             return;
@@ -45,7 +46,21 @@ export class CommandManager {
                                 }
                                 command.args = args;
                             }
-                            command.executeAction(user);
+                            activeCore.getDbCore().collections.user
+                            .get((res) => {
+                                const users = res[0].users;
+                                const index = users.findIndex(
+                                    (user) => user.id === id);
+                                if (index === -1) {
+                                    command.executeAction(new User(null, 0));
+                                } else {
+                                    command.executeAction(
+                                        new User(users[index].id,
+                                            users[index].accessLevel
+                                        ));
+                                }
+                            });
+
                         } catch (e) {
                             if (e instanceof FortniteBotException) {
                                 // Output
@@ -64,12 +79,12 @@ export class CommandManager {
     public extractArguments(line: string, amount: number): string[] {
         return line.split(" ").splice(2, amount);
     }
-    public triggerAction(user: User): void {
+    public triggerAction(id: string): void {
         for (const command of this.commands) {
             if (command instanceof AutoTriggerCommand) {
                 if (command.tryTrigger()) {
                     try {
-                        command.executeAction(user);
+                        command.executeAction(null);
                     } catch (e) {
                         if (e instanceof FortniteBotException) {
                             // Output
