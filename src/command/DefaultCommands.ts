@@ -126,43 +126,50 @@ const addTarget = new FortniteBotAction(1,
         );
         return;
     }
-    message.channel.send(args[0] +
-        ", Would you like to be added as a target? \n" +
-        "`yes` or `no`"
-    );
-    message.channel.awaitMessages(() => {
-        const m = activeCore.getEventCore()
-        .getHandles().message as Discord.Message;
-        return m.author.id === id;
-    }, {
-        max: 1,
-        time: 300000,
-        errors: ["time"]
-    }).then(() => {
-        const m = activeCore.getCoreState().getHandle() as Discord.Message;
-        if (m.content.toLowerCase() === "yes") {
-            m.channel.send("Okey, adding you as a target.");
-            activeCore.getDbCore().GlobalCollection.addTarget(id, (res) => {
-                if (res) {
-                    m.channel.send("Added successfully.");
-                } else {
-                    m.channel.send("Failed to add as target.");
-                }
-            });
-        } else if (m.content.toLowerCase() === "no") {
-            m.channel.send("Okey.");
+    activeCore.getDbCore().GlobalCollection.get((res: any[]) => {
+        if (res[0].targets.indexOf(id) !== -1) {
+            message.channel.send("User is already a Target");
+            return;
         }
-    }).catch(() => {
-        message.channel.send("User did not respond in time.");
+        message.channel.send(args[0] +
+            ", Would you like to be added as a target? \n" +
+            "`yes` or `no`"
+        );
+        message.channel.awaitMessages(() => {
+            const m = activeCore.getEventCore()
+            .getHandles().message as Discord.Message;
+            return m.author.id === id;
+        }, {
+            max: 1,
+            time: 300000,
+            errors: ["time"]
+        }).then(() => {
+            const m = activeCore.getCoreState().getHandle() as Discord.Message;
+            if (m.content.toLowerCase() === "yes") {
+                m.channel.send("Okey, adding you as a target.");
+                activeCore.getDbCore().GlobalCollection.add(id,
+                    (c: boolean) => {
+                    if (c) {
+                        m.channel.send("Added successfully.");
+                    } else {
+                        m.channel.send("Failed to add as target.");
+                    }
+                });
+            } else if (m.content.toLowerCase() === "no") {
+                m.channel.send("Okey.");
+            }
+        }).catch(() => {
+            message.channel.send("User did not respond in time.");
+        });
     });
     return true;
 });
 
 const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
-    activeCore.getDbCore().GlobalCollection.getTargets((res) => {
+    activeCore.getDbCore().GlobalCollection.get((res: any[]) => {
         const message = state.getHandle() as Discord.Message;
         let userlist = "```Current Targets: (" + res.length + ")\n";
-        for (const id of res) {
+        for (const id of res[0].targets) {
             userlist += "- " +
             message.guild.client.users.get(id).username + "\n";
         }
