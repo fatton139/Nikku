@@ -12,8 +12,7 @@ import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
 
 const getId = (text: string): string => {
-    console.log(text);
-    return text.charAt(2) === "!" ?
+    return text.charAt(2) !== "!" ?
         text.slice(2, text.length - 1) : text.slice(3, text.length - 1);
 };
 
