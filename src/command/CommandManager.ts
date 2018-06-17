@@ -48,15 +48,14 @@ export class CommandManager {
                             }
                             activeCore.getDbCore().collections.user
                             .get((res) => {
-                                const users = res[0].users;
-                                const index = users.findIndex(
+                                const index = res.findIndex(
                                     (user) => user.id === id);
                                 if (index === -1) {
                                     command.executeAction(new User(null, 0));
                                 } else {
                                     command.executeAction(
-                                        new User(users[index].id,
-                                            users[index].accessLevel
+                                        new User(res[index].id,
+                                            res[index].accessLevel
                                         ));
                                 }
                             });

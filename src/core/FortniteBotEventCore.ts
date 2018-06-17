@@ -3,6 +3,7 @@ import { FortniteBotCore } from "./FortniteBotCore";
 import { FortniteBotState } from "../state/FortniteBotState";
 import { CommandManager } from "../command/CommandManager";
 import { defaultCommands } from "../command/DefaultCommands";
+import { userCommands } from "../command/UserCommands";
 import { User } from "../user/User";
 
 export class FortniteBotEventCore {
@@ -14,6 +15,7 @@ export class FortniteBotEventCore {
         this.core = core;
         this.client = core.bot;
         this.commandManager = new CommandManager(defaultCommands);
+        this.commandManager.addBulkCommand(userCommands);
         this.currentHandles = {};
     }
     public listenMessages(): void {
@@ -22,7 +24,7 @@ export class FortniteBotEventCore {
             this.core.setCoreState(new FortniteBotState(message));
             if (!message.author.bot) {
                 this.commandManager.attemptExecution(message.content,
-                    new User("123", 3 , "test"));
+                message.author.id);
             }
         });
     }
