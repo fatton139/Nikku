@@ -31,7 +31,7 @@ export class Command implements ICommand {
                 "Command access level: **" + this.accessLevel + "**"
             );
             throw new UnauthorizedCommandException("Unauthorized Execution of " +
-                "Command");
+                "Command of " + this.commandString);
         }
         if (!this.args) {
             this.args = [];

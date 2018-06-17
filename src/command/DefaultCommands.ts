@@ -198,7 +198,7 @@ export const defaultCommands = [
     new ExecutableCommand("ping", 0, pong),
     new ExecutableCommand(" ", 0, pingTargets),
     new ExecutableCommand("help", 0, showHelp),
-    new ExecutableCommand("auto", 0, auto.start),
+    new ExecutableCommand("auto", 1, auto.start),
     new ExecutableCommand("stop", 0, auto.stop),
     new ExecutableCommand("targetlist", 0, getTargetList),
     new ExecutableCommand("removeself", 0, removeTarget),
