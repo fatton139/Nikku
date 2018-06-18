@@ -43,7 +43,7 @@ const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
                                             args: any[]) => {
     const m = (state.getHandle() as Discord.Message);
     if (args.length !== 2 || isNaN(args[1])) {
-        m.channel.send("Usage: !f setaccess `@user` `accessLevel`");
+        m.channel.send("Usage: !f -setaccess `@user` `accessLevel`");
         return;
     }
     const id = getId(args[0]);
@@ -76,7 +76,7 @@ const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
                                              args: any[]) => {
     const m = state.getHandle() as Discord.Message;
     if (args.length !== 1) {
-        m.channel.send("Usage: !f removeuser `@user`");
+        m.channel.send("Usage: !f -removeuser `@user`");
         return;
     }
     const id = getId(args[0]);
