@@ -10,6 +10,7 @@ import { fortniteBotCore as activeCore } from "../../fortniteBot";
 import { PendingResponseState } from "state/PendingResponseState";
 import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
+import { User } from "../user/User";
 
 const getId = (text: string): string => {
     return text.charAt(2) !== "!" ?
@@ -18,13 +19,20 @@ const getId = (text: string): string => {
 
 const sendDefaultText = (state: FortniteBotState): void => {
     const db = activeCore.getDbCore();
+    const m = (state.getHandle() as Discord.Message);
     let targetString = "OwO someone said fornite? ";
     db.collections.global.get((res) => {
         for (const target of res[0].targets) {
             targetString += "<@!" + target + "> ";
+            db.collections.user.incrementCoin(target, "DotmaCoin", 1,
+            (c: boolean) => {
+                if (!c) {
+                    m.reply("DB Error.");
+                }
+            });
         }
         targetString += " fortnite?";
-        (state.getHandle() as Discord.Message).channel.send(targetString);
+        m.channel.send(targetString);
     });
 };
 
@@ -91,6 +99,7 @@ const auto = {
     start: new FortniteBotAction(2, (state: PendingResponseState,
                                      args: any[]) => {
         let m = (state.getHandle() as Discord.Message);
+        const id = m.author.id;
         if (isNaN(args[0]) || isNaN(args[1])) {
             m.channel.send(
                 "Usage: !f auto `amount` `delay (seconds)`"
@@ -104,9 +113,19 @@ const auto = {
             return;
         }
         const self = this;
-        activeCore.getDbCore().collections.global.get((res: any[]) => {
-            const price =
-                Math.ceil(Math.pow(Number(args[0]), 1.1));
+        const db = activeCore.getDbCore();
+        db.collections.user.get((res: any[]) => {
+            const price = Math.ceil(Math.pow(Number(args[0]), 1.1));
+            const index = res.findIndex((user: User) => user.id === id);
+            const u = (res[index] as User);
+            if (u.currency.DotmaCoin < price) {
+                m.reply(
+                    "You do not have enough **DotmaCoin** for this operation.\n"
+                    + "Operation Cost: **" + price + "**.\n" +
+                    "You have: **" + u.currency.DotmaCoin + "**."
+                );
+                return;
+            }
             m.reply("You requested auto pinging, this will cost **" + price +
                 " DotmaCoins**.\nStart? " +
                 "`yes` or `no`."
@@ -114,7 +133,7 @@ const auto = {
             m.channel.awaitMessages(() => {
                 const message = activeCore.getEventCore()
                 .getHandles().message as Discord.Message;
-                return message.author.id === m.author.id;
+                return message.author.id === id;
             }, {
                 max: 1,
                 time: 300000,
@@ -122,12 +141,21 @@ const auto = {
             }).then(() => {
                 m = activeCore.getCoreState().getHandle() as Discord.Message;
                 if (m.content.toLowerCase() === "yes") {
-                    self.loop = new Loop(args[0], Number(args[1] * 1000),
-                    (amount: number) => {
+                    db.collections.user.incrementCoin(id, "DotmaCoin", -price,
+                    (c: boolean) => {
+                        if (!c) {
+                            m.channel.send("DB Error.");
+                            return;
+                        }
                         sendDefaultText(state);
+                        self.loop = new Loop(args[0], Number(args[1] * 1000),
+                        (amount: number) => {
+                            sendDefaultText(state);
+                        });
+                        self.loop.startLoop();
+                        self.looping = true;
                     });
-                    self.loop.startLoop();
-                    self.looping = true;
+
                 } else if (m.content.toLowerCase() === "no") {
                     m.channel.send("Okey.");
                 }
