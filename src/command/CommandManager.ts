@@ -83,7 +83,7 @@ export class CommandManager {
             if (command instanceof AutoTriggerCommand) {
                 if (command.tryTrigger()) {
                     try {
-                        command.executeAction(null);
+                        command.executeAction(new User(null, 0));
                     } catch (e) {
                         if (e instanceof FortniteBotException) {
                             // Output
