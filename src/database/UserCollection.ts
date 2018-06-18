@@ -26,7 +26,7 @@ export class UserCollection extends FrotniteBotCollection implements ICollection
     }
     public update(userId: string, field: string, value: any,
                   callback: (res: boolean) => void): void {
-        const set = {field: value};
+        const set = {};
         set[field] = value;
         this.db.collection("user").update({id: userId},
             {$set: set}, (err) => {

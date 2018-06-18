@@ -20,7 +20,6 @@ const sendDefaultText = (state: FortniteBotState): void => {
     const db = activeCore.getDbCore();
     let targetString = "OwO someone said fornite? ";
     db.collections.global.get((res) => {
-        console.log(res[0].targets);
         for (const target of res[0].targets) {
             targetString += "<@!" + target + "> ";
         }

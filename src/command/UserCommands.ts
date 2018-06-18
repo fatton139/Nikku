@@ -115,10 +115,54 @@ const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
     return true;
 });
 
+const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
+                                          args: any[]) => {
+    const m = (state.getHandle() as Discord.Message);
+    if (args.length !== 3 || isNaN(args[2])) {
+        m.channel.send("Usage: !f addcoin `@user` `coinType` `Amount`");
+        return;
+    }
+    const id = getId(args[0]);
+    if (!m.guild.client.users.get(id)) {
+        (state.getHandle() as Discord.Message).channel.send(
+            "You must specifiy a user."
+        );
+        return;
+    }
+    const db = activeCore.getDbCore();
+    db.collections.user.get((res: User[]) => {
+        const index = res.findIndex((user: User) => user.id === id);
+        if (index === -1) {
+            m.reply(
+                "Target not a registered user."
+            );
+            return;
+        }
+        for (const field of Object.keys(new User(null, 0).currency)) {
+            if (args[1] === field) {
+                db.collections.user.update(id, "currency." + field,
+                    res[index].currency[field] + Number(args[2]),
+                    (c: boolean) => {
+                        if (c) {
+                            m.channel.send("Updated successfully");
+                        } else {
+                            m.channel.send("Fail to update user");
+                        }
+                        return true;
+                });
+                return;
+            }
+        }
+        m.channel.send("Not a valid coinType.");
+    });
+    return true;
+});
+
 export const userCommands = [
     new ExecutableCommand("register", 0, register),
     new ExecutableCommand("profile", 0, profile),
     new DebugCommand("setaccess", setAccess),
     new DebugCommand("userlist", listUsers),
-    new DebugCommand("removeuser", removeUser)
+    new DebugCommand("removeuser", removeUser),
+    new DebugCommand("addcoin", addCoin)
 ];
