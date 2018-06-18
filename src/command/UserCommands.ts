@@ -176,9 +176,46 @@ const removeCoin = new FortniteBotAction(3, (state: FortniteBotState,
     return true;
 });
 
+const getDaily = new FortniteBotAction(0, (state: FortniteBotState) => {
+    const m = (state.getHandle() as Discord.Message);
+    const db = activeCore.getDbCore();
+    db.collections.user.get((res: User[]) => {
+        const index = res.findIndex((user: User) => user.id === m.author.id);
+        if (index === -1) {
+            return;
+        }
+        const u: User = res[index];
+        const d = (new Date() as any) - (u.daily.lastUpdate.DotmaCoin as any);
+        const hour = d / (1000 * 60 * 60);
+        if (hour > 24) {
+            db.collections.user.update(m.author.id,
+                "daily.lastUpdate.DotmaCoin", new Date(), (c1: boolean) => {
+                if (!c1) {
+                    // TODO
+                }
+                db.collections.user.incrementCoin(m.author.id,
+                    "DotmaCoin", 100, (c2: boolean) => {
+                        if (!c2) {
+                            // TODO
+                        }
+                        m.reply("You got 100 **DotmaCoins**™©!");
+                });
+            });
+            return;
+        }
+        const hourRem = Math.floor(24 - hour);
+        const minRem = Math.floor(((24 - hour) - Math.floor(24 - hour)) * 60);
+        m.reply("Try again in **" + hourRem + " Hours and "
+            + minRem + " Minutes**."
+        );
+    });
+    return true;
+});
+
 export const userCommands = [
     new ExecutableCommand("register", 0, register),
-    new ExecutableCommand("profile", 0, profile),
+    new ExecutableCommand("profile", 1, profile),
+    new ExecutableCommand("daily", 1, getDaily),
     new DebugCommand("-setaccess", setAccess),
     new DebugCommand("-userlist", listUsers),
     new DebugCommand("-removeuser", removeUser),
