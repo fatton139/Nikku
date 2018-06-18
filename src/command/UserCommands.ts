@@ -18,21 +18,21 @@ const getId = (text: string): string => {
 };
 
 const register = new FortniteBotAction(0, (state: FortniteBotState) => {
-    const message = state.getHandle() as Discord.Message;
-    const id = message.author.id;
+    const m = state.getHandle() as Discord.Message;
+    const id = m.author.id;
     const db = activeCore.getDbCore();
     db.collections.user.get((res) => {
-        if (res.findIndex((user) => user.id === id) !== -1) {
-            message.reply("You are already registered.");
+        if (res.findIndex((user: User) => user.id === id) !== -1) {
+            m.reply("You are already registered.");
             return;
         }
         db.collections.user.add(new User(id, 1), (c: boolean) => {
             if (c) {
-                message.channel.send("Successfully registered!" +
+                m.channel.send("Successfully registered!" +
                 " You now have access to **Level 1** Commands"
                 );
             } else {
-                message.channel.send("Failed to register");
+                m.channel.send("Failed to register");
             }
         });
     });
@@ -91,9 +91,34 @@ const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
     return true;
 });
 
+const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
+    const m = state.getHandle() as Discord.Message;
+    const db = activeCore.getDbCore();
+    db.collections.user.get((res) => {
+        const id = m.author.id;
+        const index = res.findIndex((user: User) => user.id === id);
+        if (index === -1) {
+            m.reply(
+                "You are not a registered user. Register with `!f register`"
+            );
+            return;
+        }
+        const u: User = res[index];
+        m.reply("```" + m.guild.client.users.get(id).username
+            + " - " + u.title + "\n"
+            + "Access Level: " + u.accessLevel + "\n"
+            + "Currency:" + "\n"
+            + "\t" + "DotmaCoin: " + u.currency.DotmaCoin + "\n"
+            + "\t" + "BradCoin: " + u.currency.BradCoin + "\n"
+        + "```");
+    });
+    return true;
+});
+
 export const userCommands = [
     new ExecutableCommand("register", 0, register),
+    new ExecutableCommand("profile", 0, profile),
     new DebugCommand("setaccess", setAccess),
-    new DebugCommand("listusers", listUsers),
+    new DebugCommand("userlist", listUsers),
     new DebugCommand("removeuser", removeUser)
 ];

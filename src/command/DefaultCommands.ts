@@ -16,6 +16,19 @@ const getId = (text: string): string => {
         text.slice(2, text.length - 1) : text.slice(3, text.length - 1);
 };
 
+const sendDefaultText = (state: FortniteBotState): void => {
+    const db = activeCore.getDbCore();
+    let targetString = "OwO someone said fornite? ";
+    db.collections.global.get((res) => {
+        console.log(res[0].targets);
+        for (const target of res[0].targets) {
+            targetString += "<@!" + target + "> ";
+        }
+        targetString += " fortnite?";
+        (state.getHandle() as Discord.Message).channel.send(targetString);
+    });
+};
+
 const fortniteTextEvent = {
     trigger: new FortniteBotTrigger((state) => {
         const message = (state.getHandle() as Discord.Message);
@@ -23,9 +36,7 @@ const fortniteTextEvent = {
             && message.content[0] !== "!";
     }),
     action: new FortniteBotAction(1, (state: FortniteBotState) => {
-        (state.getHandle() as Discord.Message).channel.send(
-            "OwO someone said fornite? (this is a sample)"
-        );
+        sendDefaultText(state);
         return true;
     })
 };
@@ -61,9 +72,7 @@ const pong = new FortniteBotAction(0, (state: FortniteBotState, args) => {
 });
 
 const pingTargets = new FortniteBotAction(0, (state: FortniteBotState) => {
-    (state.getHandle() as Discord.Message).channel.send(
-        "Pinging!"
-    );
+    sendDefaultText(state);
     return true;
 });
 
@@ -95,9 +104,7 @@ const auto = {
             return;
         }
         this.loop = new Loop(args[0], args[1], (amount: number) => {
-            (state.getHandle() as Discord.Message).channel.send(
-                "Pinging!"
-            );
+            sendDefaultText(state);
         });
         this.loop.startLoop();
         this.looping = true;
