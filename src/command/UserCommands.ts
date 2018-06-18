@@ -115,11 +115,14 @@ const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
     return true;
 });
 
-const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
-                                          args: any[]) => {
+const addRemoveCoin = (state: FortniteBotState, args: any[], add: boolean) => {
     const m = (state.getHandle() as Discord.Message);
     if (args.length !== 3 || isNaN(args[2])) {
-        m.channel.send("Usage: !f addcoin `@user` `coinType` `Amount`");
+        if (!add) {
+            m.channel.send("Usage: !f -removecoin `@user` `coinType` `Amount`");
+            return;
+        }
+        m.channel.send("Usage: !f -addcoin `@user` `coinType` `Amount`");
         return;
     }
     const id = getId(args[0]);
@@ -140,8 +143,12 @@ const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
         }
         for (const field of Object.keys(new User(null, 0).currency)) {
             if (args[1] === field) {
-                db.collections.user.update(id, "currency." + field,
-                    res[index].currency[field] + Number(args[2]),
+                let newVal = res[index].currency[field] + Number(args[2]);
+                if (!add) {
+                    newVal = (res[index].currency[field] - Number(args[2]) > 0)
+                        ? res[index].currency[field] - Number(args[2]) : 0;
+                }
+                db.collections.user.update(id, "currency." + field, newVal,
                     (c: boolean) => {
                         if (c) {
                             m.channel.send("Updated successfully");
@@ -155,14 +162,26 @@ const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
         }
         m.channel.send("Not a valid coinType.");
     });
+};
+
+const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
+                                          args: any[]) => {
+    addRemoveCoin(state, args, true);
+    return true;
+});
+
+const removeCoin = new FortniteBotAction(3, (state: FortniteBotState,
+                                             args: any[]) => {
+    addRemoveCoin(state, args, false);
     return true;
 });
 
 export const userCommands = [
     new ExecutableCommand("register", 0, register),
     new ExecutableCommand("profile", 0, profile),
-    new DebugCommand("setaccess", setAccess),
-    new DebugCommand("userlist", listUsers),
-    new DebugCommand("removeuser", removeUser),
-    new DebugCommand("addcoin", addCoin)
+    new DebugCommand("-setaccess", setAccess),
+    new DebugCommand("-userlist", listUsers),
+    new DebugCommand("-removeuser", removeUser),
+    new DebugCommand("-addcoin", addCoin),
+    new DebugCommand("-removecoin", removeCoin)
 ];
