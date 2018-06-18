@@ -88,25 +88,54 @@ const showHelp = new FortniteBotAction(0, (state: FortniteBotState) => {
 
 const auto = {
     loop: null,
-    start: new FortniteBotAction(2, (state: FortniteBotState,
+    start: new FortniteBotAction(2, (state: PendingResponseState,
                                      args: any[]) => {
+        let m = (state.getHandle() as Discord.Message);
         if (isNaN(args[0]) || isNaN(args[1])) {
-            (state.getHandle() as Discord.Message).channel.send(
-                "Usage: !f auto `amount` `delay`"
+            m.channel.send(
+                "Usage: !f auto `amount` `delay (seconds)`"
             );
             return;
         }
-        if (Number(args[1]) < 1000) {
-            (state.getHandle() as Discord.Message).channel.send(
-                "Delay must be over 1000ms"
+        if (Number(args[1]) < 1) {
+            m.channel.send(
+                "Delay must be over 1s"
             );
             return;
         }
-        this.loop = new Loop(args[0], args[1], (amount: number) => {
-            sendDefaultText(state);
+        const self = this;
+        activeCore.getDbCore().collections.global.get((res: any[]) => {
+            const price =
+                Math.ceil(Math.pow(Number(args[0]), 1.1));
+            m.reply("You requested auto pinging, this will cost **" + price +
+                " DotmaCoins**.\nStart? " +
+                "`yes` or `no`."
+            );
+            m.channel.awaitMessages(() => {
+                const message = activeCore.getEventCore()
+                .getHandles().message as Discord.Message;
+                return message.author.id === m.author.id;
+            }, {
+                max: 1,
+                time: 300000,
+                errors: ["time"]
+            }).then(() => {
+                m = activeCore.getCoreState().getHandle() as Discord.Message;
+                if (m.content.toLowerCase() === "yes") {
+                    self.loop = new Loop(args[0], Number(args[1] * 1000),
+                    (amount: number) => {
+                        sendDefaultText(state);
+                    });
+                    self.loop.startLoop();
+                    self.looping = true;
+                } else if (m.content.toLowerCase() === "no") {
+                    m.channel.send("Okey.");
+                }
+
+            }).catch(() => {
+                m.reply("Operation cancelled.");
+            });
         });
-        this.loop.startLoop();
-        this.looping = true;
         return true;
     }),
     stop: new FortniteBotAction(0, (state: FortniteBotState) => {
@@ -138,7 +167,7 @@ const addTarget = new FortniteBotAction(1,
         }
         message.channel.send(args[0] +
             ", Would you like to be added as a target? \n" +
-            "`yes` or `no`"
+            "`yes` or `no`."
         );
         message.channel.awaitMessages(() => {
             const m = activeCore.getEventCore()
@@ -204,7 +233,7 @@ export const defaultCommands = [
     new ExecutableCommand("ping", 0, pong),
     new ExecutableCommand(" ", 0, pingTargets),
     new ExecutableCommand("help", 0, showHelp),
-    new ExecutableCommand("auto", 1, auto.start),
+    new RequireResponseCommand("auto", 1, auto.start),
     new ExecutableCommand("stop", 0, auto.stop),
     new ExecutableCommand("targetlist", 0, getTargetList),
     new ExecutableCommand("removeself", 0, removeTarget),
