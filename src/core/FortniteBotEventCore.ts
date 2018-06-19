@@ -5,6 +5,7 @@ import { CommandManager } from "../command/CommandManager";
 import { defaultCommands } from "../command/DefaultCommands";
 import { userCommands } from "../command/UserCommands";
 import { User } from "../user/User";
+import { shopCommands } from "../command/ShopCommand";
 
 export class FortniteBotEventCore {
     private core: FortniteBotCore;
@@ -16,6 +17,7 @@ export class FortniteBotEventCore {
         this.client = core.bot;
         this.commandManager = new CommandManager(defaultCommands);
         this.commandManager.addBulkCommand(userCommands);
+        this.commandManager.addBulkCommand(shopCommands);
         this.currentHandles = {};
     }
     public listenMessages(): void {
