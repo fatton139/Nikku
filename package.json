@@ -5,7 +5,8 @@
   "main": "fortniteBot.js",
   "scripts": {
     "start": "node fortniteBot.js",
-    "test": "test"
+    "test": "test",
+    "postinstall": "tsc"
   },
   "author": "aXises",
   "license": "MIT",
