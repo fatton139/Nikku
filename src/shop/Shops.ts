@@ -2,8 +2,8 @@ import { Shop } from "./Shop";
 import { Item } from "./Item";
 
 export const Shops = [
-    new Shop("Title Shop", "DotmaCoin", "Buy titles for your profile."),
-    new Shop("Brad Shop", "BradCoin", "Some fat kid sells stuff here.")
+    new Shop("Title Shop", "DotmaCoin", true, "Buy titles for your profile."),
+    new Shop("Brad Shop", "BradCoin", false, "Some fat kid sells stuff here.")
 ];
 
 Shops[0].addItems([
@@ -21,4 +21,3 @@ Shops[0].addItems([
     new Item("The Brad", 5, "BradCoin"),
     new Item("YOUR CUSTOM TITLE", 50, "BradCoin")
 ]);
-
