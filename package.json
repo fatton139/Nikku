@@ -2,8 +2,8 @@
   "name": "mrfortnight",
   "version": "2.0.0",
   "description": "fortnite?",
-  "engines" : {
-    "node" : "10.4"
+  "engines": {
+    "node": "10.4"
   },
   "main": "fortniteBot.js",
   "scripts": {
@@ -22,6 +22,7 @@
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
     "mongodb": "^3.0.10",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "typescript": "^2.9.2"
   }
 }
