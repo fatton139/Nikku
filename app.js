@@ -135,12 +135,14 @@ bot.on('message', (message) => {
         let args = message.content.split(" ");
         let command = args[1];
         if (!command) {
-            sendDefault(false, false);
+            message.channel.send("Depreciated command, did you mean `!f`?");
         }
         else if (command == "tts") {
-            sendDefault(true, true);
+            message.channel.send("Depreciated command, did you mean `!f`?");
         }
         else if (command == "auto") {
+            message.channel.send("Depreciated command, did you mean `!f auto?`");
+            return;
             let time = args[3];
             if (!args[3] || args[3] < 1000) {
                 message.reply("pls no").then((message) => {
@@ -161,9 +163,13 @@ bot.on('message', (message) => {
 
         }
         else if (command == "stop") {
+            message.channel.send("Depreciated command, did you mean `!f stop`?");
+            return;
             loop.stopLoop();
         }
         else if (command == "target") {
+            message.channel.send("Depreciated command, did you mean `!f target`?");
+            return;
             if (targets)
                 targets = args.splice(2);
                 message.channel.send("New targets set, don't be mad " +
