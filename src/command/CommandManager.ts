@@ -37,14 +37,13 @@ export class CommandManager {
                 for (const command of this.commands) {
                     if (commandString === command.commandString) {
                         try {
-                            if (command.action.argLength > 0) {
-                                let args = this.extractArguments(line,
-                                    command.action.argLength);
-                                if (args.length !== command.action.argLength) {
-                                    args = [];
-                                }
-                                command.args = args;
+                            let args = this.extractArguments(line,
+                                command.action.argLength);
+                            if (args.length !== (line.split(" ").length - 2) &&
+                                command.action.argLength !== 0) {
+                                args = [];
                             }
+                            command.args = args;
                             activeCore.getDbCore().collections.user
                             .get((res) => {
                                 const index = res.findIndex(
@@ -75,7 +74,9 @@ export class CommandManager {
         return line.split(" ")[1] ? line.split(" ")[1] : " ";
     }
     public extractArguments(line: string, amount: number): string[] {
-        return line.split(" ").splice(2, amount);
+        return amount === 0 ?
+            line.split(" ").splice(2, line.split(" ").length) :
+            line.split(" ").splice(2, amount);
     }
     public triggerAction(id: string): void {
         for (const command of this.commands) {
