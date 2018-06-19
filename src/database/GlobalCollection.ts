@@ -27,6 +27,19 @@ export class GlobalCollection extends FrotniteBotCollection implements ICollecti
             callback(res);
         });
     }
+    public update(field: string, value: any,
+                  callback: (res: boolean) => void): void {
+        const set = {};
+        set[field] = value;
+        this.db.collection("global").update({_id: this.dbId},
+            {$set: set}, (err) => {
+            if (err) {
+                callback(false);
+                throw new DatabaseException(err);
+            }
+            callback(true);
+        });
+    }
     public removeTarget(id: string, callback: (res: boolean) => void): void {
         this.db.collection("global").updateOne({_id: this.dbId},
             {$pull: { targets: id }}, (err) => {
