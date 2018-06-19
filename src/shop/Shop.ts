@@ -3,11 +3,13 @@ import { randInt } from "../utils/Random";
 
 export class Shop {
     public inventory: Item[];
-    private name: string;
+    public name: string;
+    public description?: string;
     private coinType: string;
-    constructor(name: string, coinType: string) {
+    constructor(name: string, coinType: string, description?: string) {
         this.name = name;
         this.coinType = coinType;
+        this.description = description;
         this.inventory = [];
     }
     public addItems(items: Item[]): void {
@@ -45,12 +47,11 @@ export class Shop {
         let text = this.name + "\n";
         let i = 0;
         for (const item of this.inventory) {
-            text += i + ". " + item.getPrice() + " " + item.cost.coinType + " - " + item.name;
-
+            text += i + ". " + item.getPrice() + " " + item.cost.coinType +
+                " - " + item.name;
             if (item.discountPercent > 0) {
                 text += " (" + item.discountPercent + "% off!)";
             }
-
             text += "\n";
             i++;
         }
