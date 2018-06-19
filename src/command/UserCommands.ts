@@ -195,10 +195,10 @@ const getDaily = new FortniteBotAction(0, (state: FortniteBotState) => {
                 }
                 db.collections.user.incrementCoin(m.author.id,
                     "DotmaCoin", 100, (c2: boolean) => {
-                        if (!c2) {
-                            // TODO
-                        }
-                        m.reply("You got 100 **DotmaCoins**™©!");
+                    if (!c2) {
+                        // TODO
+                    }
+                    m.reply("You got 100 **DotmaCoins**™©!");
                 });
             });
             return;
