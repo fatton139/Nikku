@@ -30,7 +30,7 @@ export class FortniteBotCore {
             });
         } catch (error) {
             if (error instanceof FortniteBotException) {
-                // custom err handler
+                // console.log(error);
             }
         }
         return this;
@@ -63,9 +63,5 @@ export class FortniteBotCore {
         if (this.eventCore) {
             this.eventCore.clearClient();
         }
-    }
-    public coreToString(): string {
-        const x = JSON.stringify(this);
-        return x;
     }
 }

@@ -40,7 +40,6 @@ export class FortniteBotDbCore {
     public getDb(): MongoDb.Db {
         return this.db;
     }
-
     public closeDb(): void {
         this.database.close();
     }

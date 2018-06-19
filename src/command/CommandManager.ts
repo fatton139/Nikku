@@ -12,8 +12,7 @@ export class CommandManager {
         this.commands = commands;
         this.prefix = new FortniteBotCommandConfig(
             [
-                "!f",
-                "!fortnite"
+                "!f"
             ]
         );
     }

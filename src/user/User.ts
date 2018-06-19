@@ -13,6 +13,8 @@ export class User implements IUser {
         }
     };
     public title;
+    public equipment;
+    public skills;
     constructor(id: string, accessLevel: number) {
         this.id = id;
         this.accessLevel = accessLevel;
