@@ -2,6 +2,9 @@
   "name": "mrfortnight",
   "version": "2.0.0",
   "description": "fortnite?",
+  "engines" : {
+    "node" : "10.4"
+  },
   "main": "fortniteBot.js",
   "scripts": {
     "start": "node fortniteBot.js",
