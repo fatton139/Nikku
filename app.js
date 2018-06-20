@@ -135,13 +135,13 @@ bot.on('message', (message) => {
         let args = message.content.split(" ");
         let command = args[1];
         if (!command) {
-            message.channel.send("Depreciated command, did you mean `!f`?");
+            message.channel.send("Deprecated command, did you mean `!f`?");
         }
         else if (command == "tts") {
-            message.channel.send("Depreciated command, did you mean `!f`?");
+            message.channel.send("Deprecated command, did you mean `!f`?");
         }
         else if (command == "auto") {
-            message.channel.send("Depreciated command, did you mean `!f auto?`");
+            message.channel.send("Deprecated command, did you mean `!f auto?`");
             return;
             let time = args[3];
             if (!args[3] || args[3] < 1000) {
@@ -163,12 +163,12 @@ bot.on('message', (message) => {
 
         }
         else if (command == "stop") {
-            message.channel.send("Depreciated command, did you mean `!f stop`?");
+            message.channel.send("Deprecated command, did you mean `!f stop`?");
             return;
             loop.stopLoop();
         }
         else if (command == "target") {
-            message.channel.send("Depreciated command, did you mean `!f target`?");
+            message.channel.send("Deprecated command, did you mean `!f target`?");
             return;
             if (targets)
                 targets = args.splice(2);
