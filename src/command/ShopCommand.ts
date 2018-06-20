@@ -13,6 +13,8 @@ import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { Shop } from "../shop/Shop";
 import { Shops } from "../shop/Shops";
+import { Item } from "../shop/Item";
+import { getId } from "../utils/CommandUtil";
 
 const shopList = new FortniteBotAction(0, (state: FortniteBotState,
                                            args: string[]) => {

@@ -11,11 +11,7 @@ import { PendingResponseState } from "state/PendingResponseState";
 import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
-
-const getId = (text: string): string => {
-    return text.charAt(2) !== "!" ?
-        text.slice(2, text.length - 1) : text.slice(3, text.length - 1);
-};
+import { getId } from "../utils/CommandUtil";
 
 const register = new FortniteBotAction(0, (state: FortniteBotState) => {
     const m = state.getHandle() as Discord.Message;
@@ -105,7 +101,7 @@ const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
         }
         const u: User = res[index];
         m.reply("```" + m.guild.client.users.get(id).username
-            + " - " + u.title + "\n"
+            + " - " + u.title.active + "\n"
             + "Access Level: " + u.accessLevel + "\n"
             + "Currency:" + "\n"
             + "\t" + "DotmaCoin: " + u.currency.DotmaCoin + "\n"

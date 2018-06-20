@@ -11,16 +11,12 @@ import { PendingResponseState } from "state/PendingResponseState";
 import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
-
-const getId = (text: string): string => {
-    return text.charAt(2) !== "!" ?
-        text.slice(2, text.length - 1) : text.slice(3, text.length - 1);
-};
+import { getId } from "../utils/CommandUtil";
 
 const sendDefaultText = (state: FortniteBotState): void => {
     const db = activeCore.getDbCore();
     const m = (state.getHandle() as Discord.Message);
-    let targetString = "OwO someone said fornite? ";
+    let targetString = "OwO someone said fortnite? ";
     db.collections.global.get((res) => {
         for (const target of res[0].targets) {
             targetString += "<@!" + target + "> ";
