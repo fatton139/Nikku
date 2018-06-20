@@ -1,5 +1,5 @@
 import { Shop } from "./Shop";
-import { Item } from "./Item";
+import { Title } from "./Title";
 
 export const Shops = [
     new Shop("Title Shop", "DotmaCoin", true, "Buy titles for your profile."),
@@ -7,17 +7,21 @@ export const Shops = [
 ];
 
 Shops[0].addItems([
-    new Item("The Knight", 150),
-    new Item("The Baron", 150),
-    new Item("The Egg", 300),
-    new Item("The Dum kid", 300),
-    new Item("The Apple Employee", 500),
-    new Item("The Maccas Employee", 500),
-    new Item("The QUT kid", 700),
-    new Item("The UQ kid", 1000),
-    new Item("The King", 1500),
-    new Item("The Boss", 1500),
-    new Item("The Fat kid", 5, "BradCoin"),
-    new Item("The Brad", 5, "BradCoin"),
-    new Item("YOUR CUSTOM TITLE", 50, "BradCoin")
+    new Title("The Knight", 1500),
+    new Title("The Baron", 1500),
+    new Title("The Egg", 3000),
+    new Title("The Dum kid", 3000),
+    new Title("The Apple Employee", 5000),
+    new Title("The Maccas Employee", 5000),
+    new Title("The QUT kid", 7000),
+    new Title("The UQ kid", 10000),
+    new Title("The King", 15000),
+    new Title("The Boss", 15000),
+    new Title("The Chad", 15000)
+]);
+
+Shops[1].addItems([
+    new Title("The Fat kid", 5, "BradCoin"),
+    new Title("The Brad", 5, "BradCoin"),
+    new Title("YOUR CUSTOM TITLE", 50, "BradCoin")
 ]);

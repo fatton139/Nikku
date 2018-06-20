@@ -1,10 +1,13 @@
-export class Item {
+import { IItem } from "./IItem";
+
+export class Item implements IItem {
     public name: string;
     public cost: {
         coinType: string,
         value: number
     };
     public discountPercent: number;
+    public type: string;
     constructor(name: string, value: number, coinType?: string) {
         this.name = name;
         this.cost = {

@@ -66,7 +66,7 @@ const viewShop = new FortniteBotAction(0, (state: FortniteBotState,
     }
     updateDiscounts((c: boolean) => {
         if (c) {
-            m.channel.send("```" + Shops[0].getInventory() + "```");
+            m.channel.send("```" + Shops[index].getInventory() + "```");
         } else {
             m.channel.send("Getting shop data failed :(");
             return false;
