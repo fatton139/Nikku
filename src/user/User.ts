@@ -12,7 +12,10 @@ export class User implements IUser {
             DotmaCoin: Date;
         }
     };
-    public title;
+    public title: {
+        active: string
+        list: string[]
+    };
     public equipment;
     public skills;
     constructor(id: string, accessLevel: number) {
@@ -29,6 +32,9 @@ export class User implements IUser {
                 DotmaCoin: date
             }
         };
-        this.title = "The Untitled";
+        this.title = {
+            active: "The Untitled",
+            list: ["The Untitled"]
+        };
     }
 }
