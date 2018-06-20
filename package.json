@@ -18,6 +18,7 @@
     "@types/node": "^10.3.2",
     "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
+    "dotenv": "^6.0.0",
     "ffmpeg-binaries": "^3.2.2-3",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
