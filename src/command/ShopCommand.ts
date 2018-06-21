@@ -63,7 +63,7 @@ const viewShop = new FortniteBotAction(0, (state: FortniteBotState,
         shop.name.replace(/\s/g, "").toLowerCase() ===
             shopName.replace(/\s/g, "").toLowerCase());
     if (index === -1) {
-        m.channel.send("Shop not found");
+        m.channel.send("Shop not found.");
         return;
     }
     updateDiscounts((c: boolean) => {
@@ -78,7 +78,107 @@ const viewShop = new FortniteBotAction(0, (state: FortniteBotState,
     return true;
 });
 
+const buy = new FortniteBotAction(0,
+    (state: PendingResponseState, args: string[]) => {
+    let m: Discord.Message = state.getHandle();
+    if (args.length < 3) {
+        (state.getHandle() as Discord.Message).channel.send(
+            "Usage:!f buy `index/item` from `shopname`."
+        );
+        return;
+    }
+    const shopName = args.join(" ").split("from")[1];
+    const itemName: any = args.join(" ").split("from")[0];
+    const shopIndex = Shops.findIndex((shop: Shop) =>
+        shop.name.replace(/\s/g, "").toLowerCase() ===
+        shopName.replace(/\s/g, "").toLowerCase()
+    );
+    if (shopIndex === -1) {
+        m.channel.send("Shop not found.");
+        return;
+    }
+    updateDiscounts((c: boolean) => {
+        if (!c) {
+            m.channel.send("Getting shop data failed :(");
+            return false;
+        }
+        const inventory: Item[] = Shops[shopIndex].inventory;
+        let selectedItem: Item;
+        if (!isNaN(itemName)) {
+            if (inventory[Number(itemName)]) {
+                selectedItem = inventory[Number(itemName)];
+            } else {
+                m.reply("Item not found.");
+                return;
+            }
+        } else {
+            const itemIndex = inventory.findIndex((item: Item) =>
+                item.name.replace(/\s/g, "").toLowerCase() ===
+                itemName.replace(/\s/g, "").toLowerCase()
+            );
+            if (itemIndex !== -1) {
+                selectedItem = inventory[itemIndex];
+            } else {
+                m.reply("Item not found.");
+                return;
+            }
+        }
+        const db = activeCore.getDbCore();
+        db.collections.user.getUser(m.author.id, (res: User) => {
+            console.log(res);
+            if (!res) {
+                return false;
+            }
+            if (res.currency[selectedItem.cost.coinType] <
+                selectedItem.cost.value) {
+                m.reply("You do not have enough **" +
+                    selectedItem.cost.coinType + "**."
+                );
+                return;
+            }
+            m.reply("You selected **" + selectedItem.name + "**. Buy?\n" +
+                "`yes` or `no`."
+            );
+            m.channel.awaitMessages(() => {
+                return state.updateHandle().author.id === m.author.id;
+            }, {
+                max: 1,
+                time: 300000,
+                errors: ["time"]
+            }).then(() => {
+                m = state.updateHandle();
+                if (m.content.toLowerCase() === "yes") {
+                    m.channel.send("Buying...");
+                    db.collections.user.getUser(m.author.id, (u: User) => {
+                        if (!u) {
+                            return false;
+                        }
+                        const a = new User(m.author.id, 4);
+                        a.currency.DotmaCoin = u.currency.DotmaCoin -
+                            selectedItem.cost.value;
+                        a.title.active = selectedItem.name;
+                        a.title.list.push(selectedItem.name);
+                        db.collections.user.replace(a, (res1: boolean) => {
+                            if (!res1) {
+                                return false;
+                            }
+                            m.channel.send("Purchase Complete!");
+                        });
+                    });
+                } else if (m.content.toLowerCase() === "no") {
+                    m.channel.send("Okey.");
+                }
+            }).catch(() => {
+                m.reply("You did not respond in time.");
+            });
+        });
+    });
+
+    return true;
+});
+
 export const shopCommands = [
     new ExecutableCommand("shoplist", 0, shopList),
-    new ExecutableCommand("viewshop", 0, viewShop)
+    new ExecutableCommand("viewshop", 0, viewShop),
+    new RequireResponseCommand("buy", 1, buy)
 ];
