@@ -1,4 +1,5 @@
 import * as Discord from "discord.js";
+import * as Chatbot from "cleverbot.io";
 import { AutoTriggerCommand } from "../command/AutoTriggerCommand";
 import { DebugCommand } from "../command/DebugCommand";
 import { randInt } from "../utils/Random";
@@ -12,6 +13,23 @@ import { FortniteBotState } from "state/FortniteBotState";
 import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
+import { config as dotenvConfig } from "dotenv";
+dotenvConfig();
+const chatBot = new Chatbot(process.env.chatBotUserId,
+    process.env.chatBotApiKey);
+chatBot.setNick("KYkUKga0");
+
+const askChatBot = (state: FortniteBotState) => {
+    const m: Discord.Message = state.getHandle();
+    chatBot.create((err1, session) => {
+        chatBot.ask(m.content, (err2, res) => {
+            if (err1 || err2) {
+                return;
+            }
+            m.channel.send(res);
+        });
+    });
+};
 
 const sendDefaultText = (state: FortniteBotState): void => {
     const db = activeCore.getDbCore();
@@ -35,11 +53,26 @@ const sendDefaultText = (state: FortniteBotState): void => {
 const fortniteTextEvent = {
     trigger: new FortniteBotTrigger((state) => {
         const m: Discord.Message = state.getHandle();
-        return m.content.replace(/\s/g, "").toLowerCase().search("fortnite") !== -1
+        return m.content.replace(/\s/g, "").toLowerCase()
+                .search("fortnite") !== -1
+            && m.content.replace(/\s/g, "").toLowerCase()
+                .search("mrfortnite") === -1
             && m.content[0] !== "!";
     }),
     action: new FortniteBotAction(1, (state: FortniteBotState) => {
         sendDefaultText(state);
+        return true;
+    })
+};
+
+const replyEvent = {
+    trigger: new FortniteBotTrigger((state) => {
+        const m: Discord.Message = state.getHandle();
+        return m.content.replace(/\s/g, "").toLowerCase()
+                .search("mrfortnite") !== -1;
+    }),
+    action: new FortniteBotAction(1, (state: FortniteBotState) => {
+        askChatBot(state);
         return true;
     })
 };
@@ -62,9 +95,7 @@ const randomTextEvent = {
         return randInt(0, 100) < 5;
     }),
     action: new FortniteBotAction(1, (state: FortniteBotState) => {
-        (state.getHandle() as Discord.Message).channel.send(
-            "This message only has a 1/25 chance of appearing"
-        );
+        askChatBot(state);
         return true;
     })
 };
@@ -250,6 +281,7 @@ export const defaultCommands = [
     new AutoTriggerCommand(0, randomTextEvent.action, randomTextEvent.trigger),
     new AutoTriggerCommand(0, fortniteTextEvent.action, fortniteTextEvent.trigger),
     new AutoTriggerCommand(0, pubgTextEvent.action, pubgTextEvent.trigger),
+    new AutoTriggerCommand(0, replyEvent.action, replyEvent.trigger),
     new ExecutableCommand("ping", 0, pong),
     new ExecutableCommand(" ", 0, pingTargets),
     new ExecutableCommand("help", 0, showHelp),
