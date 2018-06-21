@@ -83,7 +83,7 @@ const buy = new FortniteBotAction(0,
     let m: Discord.Message = state.getHandle();
     if (args.length < 3) {
         (state.getHandle() as Discord.Message).channel.send(
-            "Usage:!f buy `index/item` from `shopname`."
+            "Usage: !f buy `index/item` from `shopname`."
         );
         return;
     }
@@ -153,7 +153,7 @@ const buy = new FortniteBotAction(0,
                         if (!u) {
                             return false;
                         }
-                        const a = new User(m.author.id, 4);
+                        const a = new User(u.id, u.accessLevel);
                         a.currency.DotmaCoin = u.currency.DotmaCoin -
                             selectedItem.cost.value;
                         a.title.active = selectedItem.name;
