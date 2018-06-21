@@ -14,7 +14,7 @@ import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
 
 const register = new FortniteBotAction(0, (state: FortniteBotState) => {
-    const m = state.getHandle() as Discord.Message;
+    const m: Discord.Message = state.getHandle();
     const id = m.author.id;
     const db = activeCore.getDbCore();
     db.collections.user.get((res) => {
@@ -37,7 +37,7 @@ const register = new FortniteBotAction(0, (state: FortniteBotState) => {
 
 const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
                                             args: any[]) => {
-    const m = (state.getHandle() as Discord.Message);
+    const m: Discord.Message = state.getHandle();
     if (args.length !== 2 || isNaN(args[1])) {
         m.channel.send("Usage: !f -setaccess `@user` `accessLevel`");
         return;
@@ -50,7 +50,6 @@ const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
         return;
     }
     const db = activeCore.getDbCore();
-    console.log(id, Number(args[1]));
     db.collections.user.update(id, "accessLevel", Number(args[1]), (res) => {
         if (res) {
             m.channel.send("Updated successfully");
@@ -70,7 +69,7 @@ const listUsers = new FortniteBotAction(2, (state: FortniteBotState,
 
 const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
                                              args: any[]) => {
-    const m = state.getHandle() as Discord.Message;
+    const m: Discord.Message = state.getHandle();
     if (args.length !== 1) {
         m.channel.send("Usage: !f -removeuser `@user`");
         return;
@@ -88,7 +87,7 @@ const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
 });
 
 const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
-    const m = state.getHandle() as Discord.Message;
+    const m: Discord.Message = state.getHandle();
     const db = activeCore.getDbCore();
     db.collections.user.get((res) => {
         const id = m.author.id;
@@ -112,7 +111,7 @@ const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
 });
 
 const addRemoveCoin = (state: FortniteBotState, args: any[], add: boolean) => {
-    const m = (state.getHandle() as Discord.Message);
+    const m: Discord.Message = state.getHandle();
     if (args.length !== 3 || isNaN(args[2])) {
         if (!add) {
             m.channel.send("Usage: !f -removecoin `@user` `coinType` `Amount`");
@@ -173,7 +172,7 @@ const removeCoin = new FortniteBotAction(3, (state: FortniteBotState,
 });
 
 const getDaily = new FortniteBotAction(0, (state: FortniteBotState) => {
-    const m = (state.getHandle() as Discord.Message);
+    const m: Discord.Message = state.getHandle();
     const db = activeCore.getDbCore();
     db.collections.user.get((res: User[]) => {
         const index = res.findIndex((user: User) => user.id === m.author.id);

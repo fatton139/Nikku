@@ -15,7 +15,7 @@ import { getId } from "../utils/CommandUtil";
 
 const sendDefaultText = (state: FortniteBotState): void => {
     const db = activeCore.getDbCore();
-    const m = (state.getHandle() as Discord.Message);
+    const m: Discord.Message = state.getHandle();
     let targetString = "OwO someone said fortnite? ";
     db.collections.global.get((res) => {
         for (const target of res[0].targets) {
@@ -34,9 +34,9 @@ const sendDefaultText = (state: FortniteBotState): void => {
 
 const fortniteTextEvent = {
     trigger: new FortniteBotTrigger((state) => {
-        const message = (state.getHandle() as Discord.Message);
-        return message.content.replace(/\s/g, "").toLowerCase().search("fortnite") !== -1
-            && message.content[0] !== "!";
+        const m: Discord.Message = state.getHandle();
+        return m.content.replace(/\s/g, "").toLowerCase().search("fortnite") !== -1
+            && m.content[0] !== "!";
     }),
     action: new FortniteBotAction(1, (state: FortniteBotState) => {
         sendDefaultText(state);
@@ -46,8 +46,8 @@ const fortniteTextEvent = {
 
 const pubgTextEvent = {
     trigger: new FortniteBotTrigger((state) => {
-        const message = (state.getHandle() as Discord.Message);
-        return message.content.replace(/\s/g, "").toLowerCase().search("pubg") !== -1;
+        const m: Discord.Message = state.getHandle();
+        return m.content.replace(/\s/g, "").toLowerCase().search("pubg") !== -1;
     }),
     action: new FortniteBotAction(1, (state: FortniteBotState) => {
         (state.getHandle() as Discord.Message).channel.send(
@@ -94,7 +94,7 @@ const auto = {
     loop: null,
     start: new FortniteBotAction(2, (state: PendingResponseState,
                                      args: any[]) => {
-        let m = (state.getHandle() as Discord.Message);
+        const m: Discord.Message = state.getHandle();
         const id = m.author.id;
         if (isNaN(args[0]) || isNaN(args[1])) {
             m.channel.send(
@@ -127,15 +127,12 @@ const auto = {
                 "`yes` or `no`."
             );
             m.channel.awaitMessages(() => {
-                const message = activeCore.getEventCore()
-                .getHandles().message as Discord.Message;
-                return message.author.id === id;
+                return state.updateHandle().author.id === id;
             }, {
                 max: 1,
                 time: 300000,
                 errors: ["time"]
             }).then(() => {
-                m = activeCore.getCoreState().getHandle() as Discord.Message;
                 if (m.content.toLowerCase() === "yes") {
                     db.collections.user.incrementCoin(id, "DotmaCoin", -price,
                     (c: boolean) => {
@@ -170,39 +167,36 @@ const auto = {
 
 const addTarget = new FortniteBotAction(1,
     (state: PendingResponseState, args: string[]) => {
-    const message = state.getHandle() as Discord.Message;
+    const m: Discord.Message = state.getHandle();
     const id = getId(args[0]);
     if (args.length !== 1) {
-        (state.getHandle() as Discord.Message).channel.send(
+        m.channel.send(
             "Usage:`!f target `@user``."
         );
         return;
     }
-    if (!message.guild.client.users.get(id)) {
-        (state.getHandle() as Discord.Message).channel.send(
+    if (!m.guild.client.users.get(id)) {
+        m.channel.send(
             "Target must be a user."
         );
         return;
     }
     activeCore.getDbCore().collections.global.get((res: any[]) => {
         if (res[0].targets.indexOf(id) !== -1) {
-            message.channel.send("User is already a Target");
+            m.channel.send("User is already a Target");
             return;
         }
-        message.channel.send(args[0] +
+        m.channel.send(args[0] +
             ", Would you like to be added as a target? \n" +
             "`yes` or `no`."
         );
-        message.channel.awaitMessages(() => {
-            const m = activeCore.getEventCore()
-            .getHandles().message as Discord.Message;
-            return m.author.id === id;
+        m.channel.awaitMessages(() => {
+            return state.updateHandle().author.id === id;
         }, {
-            max: 1,
+            max: 5,
             time: 300000,
             errors: ["time"]
         }).then(() => {
-            const m = activeCore.getCoreState().getHandle() as Discord.Message;
             if (m.content.toLowerCase() === "yes") {
                 m.channel.send("Okey, adding you as a target.");
                 activeCore.getDbCore().collections.global.add(id,
@@ -217,7 +211,7 @@ const addTarget = new FortniteBotAction(1,
                 m.channel.send("Okey.");
             }
         }).catch(() => {
-            message.channel.send("User did not respond in time.");
+            m.channel.send("User did not respond in time.");
         });
     });
     return true;
@@ -225,26 +219,28 @@ const addTarget = new FortniteBotAction(1,
 
 const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
     activeCore.getDbCore().collections.global.get((res) => {
-        const message = state.getHandle() as Discord.Message;
+        const m: Discord.Message = state.getHandle();
         let userlist = "```Current Targets: (" + res[0].targets.length + ")\n";
         for (const id of res[0].targets) {
-            userlist += "- " +
-            message.guild.client.users.get(id).username + "\n";
+            if (m.guild.client.users.get(id)) {
+                userlist += "- " +
+                m.guild.client.users.get(id).username + "\n";
+            }
         }
         userlist += "```";
-        message.channel.send(userlist);
+        m.channel.send(userlist);
     });
     return true;
 });
 
 const removeTarget = new FortniteBotAction(0, (state: FortniteBotState) => {
-    const message = state.getHandle() as Discord.Message;
-    const id = message.author.id;
+    const m: Discord.Message = state.getHandle();
+    const id = m.author.id;
     activeCore.getDbCore().collections.global.removeTarget(id, (res) => {
         if (res) {
-            message.channel.send("Removed successfully.");
+            m.channel.send("Removed successfully.");
         } else {
-            message.channel.send("Failed to remove.");
+            m.channel.send("Failed to remove.");
         }
     });
     return true;
