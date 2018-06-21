@@ -24,6 +24,21 @@ export class UserCollection extends FrotniteBotCollection implements ICollection
             callback(res);
         });
     }
+    public getUser(id: string, callback: (user: User) => void): void {
+        this.get((res: User[]) => {
+            const index = res.findIndex((user: User) => user.id === id);
+            if (index === -1) {
+                callback(null);
+                return;
+            }
+            callback(res[index]);
+        });
+    }
+    public updateUser(id: string, user: User,
+                      callback: (res: boolean) => void) {
+
+        return;
+    }
     public update(userId: string, field: string, value: any,
                   callback: (res: boolean) => void): void {
         const set = {};
@@ -52,6 +67,15 @@ export class UserCollection extends FrotniteBotCollection implements ICollection
     }
     public removeUser(userId: string, callback: (res: boolean) => void): void {
         this.db.collection("user").deleteOne({id: userId}, (err) => {
+            if (err) {
+                callback(false);
+                throw new DatabaseException(err);
+            }
+            callback(true);
+        });
+    }
+    public replace(user: User, callback: (res: boolean) => void) {
+        this.db.collection("user").update({id: user.id}, user, (err) => {
             if (err) {
                 callback(false);
                 throw new DatabaseException(err);
