@@ -1,11 +1,11 @@
 import * as Discord from "discord.js";
-
+import { config as dotenvConfig } from "dotenv";
 import { FortniteBotInitConfig } from "../config/FortniteBotInitConfig";
 import { FortniteBotException } from "../exceptions/FortniteBotException";
 import { FortniteBotEventCore } from "./FortniteBotEventCore";
 import { FortniteBotState } from "../state/FortniteBotState";
 import { FortniteBotDbCore } from "./FortniteBotDbCore";
-import { fortniteBotDbConfig as DbConfig } from "../../fortniteBot";
+import { FortniteBotDbConfig } from "../config/FortniteBotDbConfig";
 
 export class FortniteBotCore {
     public bot: Discord.Client;
@@ -14,10 +14,12 @@ export class FortniteBotCore {
     private eventCore: FortniteBotEventCore;
     private DbCore: FortniteBotDbCore;
     public constructor(initConfig: FortniteBotInitConfig) {
+        dotenvConfig();
         this.initConfig = initConfig;
         this.bot = new Discord.Client();
         this.eventCore = new FortniteBotEventCore(this);
-        this.DbCore = new FortniteBotDbCore(DbConfig);
+        const dbConfig = new FortniteBotDbConfig(process.env.dbIp);
+        this.DbCore = new FortniteBotDbCore(dbConfig);
     }
     public start(): FortniteBotCore {
         try {

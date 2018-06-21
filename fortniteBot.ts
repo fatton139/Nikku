@@ -1,11 +1,9 @@
 import "discord.js";
-import { config } from "dotenv";
+import { config as dotenvConfig } from "dotenv";
 import { FortniteBotCore } from "./src/core/FortniteBotCore";
-import { FortniteBotCommandConfig } from "./src/config/FortniteBotCommandConfig";
 import { FortniteBotInitConfig } from "./src/config/FortniteBotInitConfig";
-import { FortniteBotDbConfig } from "./src/config/FortniteBotDbConfig";
 
-config();
+dotenvConfig();
 
 const keys = {
     discordToken: process.env.discordToken,
@@ -16,7 +14,6 @@ const keys = {
 const initConfig = new FortniteBotInitConfig(keys.discordToken,
     keys.chatBotUserId, keys.chatBotAPIKey);
 
-export const fortniteBotDbConfig = new FortniteBotDbConfig(process.env.dbIp);
 export const fortniteBotCore = new FortniteBotCore(initConfig);
 
 fortniteBotCore.start();
