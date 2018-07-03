@@ -1,19 +1,29 @@
 {
-  "name": "fortniteBot",
-  "version": "1.0.0",
+  "name": "mrfortnight",
+  "version": "2.0.0",
   "description": "fortnite?",
-  "main": "app.js",
+  "engines": {
+    "node": "10.4"
+  },
+  "main": "fortniteBot.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "test"
+    "start": "node fortniteBot.js",
+    "test": "test",
+    "postinstall": "tsc"
   },
   "author": "aXises",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "@types/mongodb": "^3.0.20",
+    "@types/node": "^10.3.2",
     "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
+    "dotenv": "^6.0.0",
+    "ffmpeg-binaries": "^3.2.2-3",
     "moment": "^2.22.1",
     "moment-duration-format": "^2.2.2",
-    "request": "^2.85.0"
+    "mongodb": "^3.0.10",
+    "request": "^2.85.0",
+    "typescript": "^2.9.2"
   }
 }
