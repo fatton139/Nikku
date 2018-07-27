@@ -121,7 +121,26 @@ const doNothing = new FortniteBotAction(0, (state: FortniteBotState) => {
 
 const showHelp = new FortniteBotAction(0, (state: FortniteBotState) => {
     (state.getHandle() as Discord.Message).channel.send(
-        "``` help response ```"
+        "``` Standard Commands\n" +
+        "!f - Asks your targets to play fortnite.\n" +
+        "!f ping - Check for response.\n" +
+        "!f help - Displays help message.\n" +
+        "!f target @target - Adds target to the targetlist.\n" +
+        "!f targetlist - Shows the current targets.\n" +
+        "!f removeself - Removes yourself from the targetlist.\n" +
+        "!f auto amount delay(s) - Automatically ping the targets a set amount of times with an delay.\n" +
+        "\n" +
+        "User Commands\n" +
+        "!f register - Registers yourself.\n" +
+        "!f profile - Check your profile.\n" +
+        "!f daily - Grab daily rewards.\n" +
+        "\n" +
+        "Shop Commands\n" +
+        "!f shoplist - Displays all available shops.\n" +
+        "!f viewshop shopname - View a shop.\n" +
+        "!f buy index/itemname from shopname - Buy an item from a shop.\n" +
+        "\n" +
+        "...More coming soon. Contribute here! at https://github.com/aXises/fortniteBot```"
     );
     return true;
 });
