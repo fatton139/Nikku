@@ -14,6 +14,11 @@ import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
 import { config as dotenvConfig } from "dotenv";
+
+/**
+ * Default commands ported over from v1.
+ */
+
 dotenvConfig();
 const chatBot = new Chatbot(process.env.chatBotUserId,
     process.env.chatBotApiKey);

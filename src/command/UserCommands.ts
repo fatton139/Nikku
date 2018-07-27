@@ -13,6 +13,10 @@ import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
 
+/**
+ * Commands which deal with the user.
+ */
+
 const register = new FortniteBotAction(0, (state: FortniteBotState) => {
     const m: Discord.Message = state.getHandle();
     const id = m.author.id;

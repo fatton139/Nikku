@@ -16,6 +16,10 @@ import { Shops } from "../shop/Shops";
 import { Item } from "../shop/Item";
 import { getId } from "../utils/CommandUtil";
 
+/**
+ * Commands which deal with shop interfaces.
+ */
+
 const shopList = new FortniteBotAction(0, (state: FortniteBotState,
                                            args: string[]) => {
     const m = (state.getHandle() as Discord.Message);
