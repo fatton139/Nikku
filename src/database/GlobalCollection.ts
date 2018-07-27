@@ -29,12 +29,7 @@ export class GlobalCollection extends FortniteBotCollection implements ICollecti
      * Sets up the required fields for operation.
      */
     public createSchema(): void {
-        this.db.collection("global").insertOne({targets: []}, (err) => {
-            if (err) {
-                throw new DatabaseException(err);
-            }
-        });
-        this.db.collection("global").insertOne({lastUpdate: new Date()}, (err) => {
+        this.db.collection("global").insertOne({targets: [], shops: { lastUpdate: new Date() }}, (err) => {
             if (err) {
                 throw new DatabaseException(err);
             }
