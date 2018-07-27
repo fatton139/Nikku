@@ -8,11 +8,11 @@ dotenvConfig();
 const keys = {
     discordToken: process.env.discordToken,
     chatBotUserId: process.env.chatBotUserId,
-    chatBotAPIKey: process.env.chatBotAPIKey
+    chatBotApiKey: process.env.chatBotApiKey
 };
 
 const initConfig = new FortniteBotInitConfig(keys.discordToken,
-    keys.chatBotUserId, keys.chatBotAPIKey);
+    keys.chatBotUserId, keys.chatBotApiKey);
 
 export const fortniteBotCore = new FortniteBotCore(initConfig);
 
