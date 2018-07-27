@@ -163,8 +163,8 @@ const auto = {
                 max: 1,
                 time: 300000,
                 errors: ["time"]
-            }).then(() => {
-                if (m.content.toLowerCase() === "yes") {
+            }).then((response) => {
+                if (response.first().content === "yes") {
                     db.collections.user.incrementCoin(id, "DotmaCoin", -price,
                     (c: boolean) => {
                         if (!c) {
@@ -179,8 +179,7 @@ const auto = {
                         self.loop.startLoop();
                         self.looping = true;
                     });
-
-                } else if (m.content.toLowerCase() === "no") {
+                } else if (response.first().content === "no") {
                     m.channel.send("Okey.");
                 }
 
@@ -224,11 +223,11 @@ const addTarget = new FortniteBotAction(1,
         m.channel.awaitMessages(() => {
             return state.updateHandle().author.id === id;
         }, {
-            max: 5,
+            max: 1,
             time: 300000,
             errors: ["time"]
-        }).then(() => {
-            if (m.content.toLowerCase() === "yes") {
+        }).then((response) => {
+            if (response.first().content === "yes") {
                 m.channel.send("Okey, adding you as a target.");
                 activeCore.getDbCore().collections.global.add(id,
                     (c: boolean) => {
@@ -238,7 +237,7 @@ const addTarget = new FortniteBotAction(1,
                         m.channel.send("Failed to add as target.");
                     }
                 });
-            } else if (m.content.toLowerCase() === "no") {
+            } else if (response.first().content === "no") {
                 m.channel.send("Okey.");
             }
         }).catch(() => {
@@ -250,6 +249,7 @@ const addTarget = new FortniteBotAction(1,
 
 const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
     activeCore.getDbCore().collections.global.get((res) => {
+        console.log(res);
         const m: Discord.Message = state.getHandle();
         let userlist = "```Current Targets: (" + res[0].targets.length + ")\n";
         for (const id of res[0].targets) {

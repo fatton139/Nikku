@@ -10,7 +10,14 @@ export class GlobalCollection extends FrotniteBotCollection implements ICollecti
     constructor(localDb: any) {
         super();
         this.localDb = localDb;
-        this.dbId = new MongoDb.ObjectId("5b253b8cb43a095ddc7ff9a7");
+        this.dbId = new MongoDb.ObjectId("5b5adfbcfe69061b34ba342c");
+    }
+    public createSchema(): void {
+        this.db.collection("global").insertOne({targets: []}, (err) => {
+            if (err) {
+                throw new DatabaseException(err);
+            }
+        });
     }
     public add(id: string, callback: (res: boolean) => void): void {
         this.db.collection("global").updateOne({_id: this.dbId},

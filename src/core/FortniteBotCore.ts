@@ -27,7 +27,7 @@ export class FortniteBotCore {
                 this.bot.login(this.initConfig.botToken);
                 this.bot.on("ready", () => {
                     this.eventCore.listenMessages();
-                    this.bot.user.setGame("Brad's Weight: 214.23kg");
+                    this.bot.user.setActivity("Brad's Weight: 214.23kg");
                 });
                 const db = this.DbCore.getDb();
             });
