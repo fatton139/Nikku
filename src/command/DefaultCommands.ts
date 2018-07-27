@@ -45,7 +45,7 @@ const sendDefaultText = (state: FortniteBotState): void => {
                 }
             });
         }
-        targetString += " fortnite?";
+        targetString += res[0].targets.length === 0 ? "<@!458602122540220416> fortnite?" : "fortnite?";
         m.channel.send(targetString);
     });
 };
