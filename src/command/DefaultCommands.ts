@@ -121,7 +121,9 @@ const doNothing = new FortniteBotAction(0, (state: FortniteBotState) => {
 
 const showHelp = new FortniteBotAction(0, (state: FortniteBotState) => {
     (state.getHandle() as Discord.Message).channel.send(
-        "``` Standard Commands\n" +
+        "```OwO you wan halp? >///<\n" +
+        "\n" +
+        "Standard Commands\n" +
         "!f - Asks your targets to play fortnite.\n" +
         "!f ping - Check for response.\n" +
         "!f help - Displays help message.\n" +
