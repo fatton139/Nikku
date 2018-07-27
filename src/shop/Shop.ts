@@ -5,10 +5,11 @@ export class Shop {
     public inventory: Item[];
     public name: string;
     public description?: string;
-    public allowDiscounts: boolean;
+    public welcomeMessage?: string;
+    public allowDiscounts?: boolean;
     private coinType: string;
     constructor(name: string, coinType: string, allowDiscounts?: boolean,
-                description?: string) {
+                description?: string, welcomeMessage?: string) {
         this.name = name;
         this.coinType = coinType;
         this.description = description;
