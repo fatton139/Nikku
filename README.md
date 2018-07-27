@@ -10,8 +10,7 @@ Standard Commands
 !f target @target - Adds target to the targetlist.
 !f targetlist - Shows the current targets.
 !f removeself - Removes yourself from the targetlist.
-!f auto amount delay(ms) - Ask your friends many times
-!f stop - Deletes all messages sent by  the bot.
+!f auto amount delay(s) - Automatically ping the targets a set amount of times with an delay.
 
 User Commands
 !f register - Registers yourself.
@@ -19,7 +18,7 @@ User Commands
 !f daily - Grab daily rewards.
 
 Shop Commands
-!f shoplist - Displays all avaliable shops.
+!f shoplist - Displays all available shops.
 !f viewshop shopname - View a shop.
 !f buy index/itemname from shopname - Buy an item from a shop.
 
