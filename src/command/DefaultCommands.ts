@@ -50,7 +50,7 @@ const sendDefaultText = (state: FortniteBotState): void => {
                 }
             });
         }
-        targetString += res[0].targets.length === 0 ? "<@!458602122540220416> fortnite?" : "fortnite?";
+        targetString += res[0].targets.length === 0 ? "<@!455679698610159616> fortnite?" : "fortnite?";
         m.channel.send(targetString);
     });
 };
@@ -275,7 +275,6 @@ const addTarget = new FortniteBotAction(1,
 
 const getTargetList = new FortniteBotAction(0, (state: FortniteBotState) => {
     activeCore.getDbCore().collections.global.get((res) => {
-        console.log(res);
         const m: Discord.Message = state.getHandle();
         let userlist = "```Current Targets: (" + res[0].targets.length + ")\n";
         for (const id of res[0].targets) {

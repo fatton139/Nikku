@@ -22,7 +22,8 @@ export class GlobalCollection extends FortniteBotCollection implements ICollecti
     constructor(localDb: any) {
         super();
         this.localDb = localDb;
-        this.dbId = new MongoDb.ObjectId("5b5adfbcfe69061b34ba342c");
+        // Separate in to multiple collection later.
+        this.dbId = new MongoDb.ObjectId("5b5b09dbf0c94f161827b2cb");
     }
 
     /**
