@@ -1,6 +1,6 @@
 import { FortniteBotCommandConfig } from "../config/FortniteBotCommandConfig";
 import { Command } from "../command/Command";
-import { AutoTriggerCommand } from "./AutoTriggerCommand";
+import { AutoTriggerCommand } from "../command/AutoTriggerCommand";
 import { User } from "../user/User";
 import { FortniteBotException } from "../exceptions/FortniteBotException";
 import { fortniteBotCore as activeCore } from "../../fortniteBot";
@@ -18,10 +18,9 @@ export class CommandManager {
 
     /**
      * @classdesc Class to handle import and execution of commands.
-     * @param commands - Set of initial commands to be loaded in to memory.
      */
-    public constructor(commands?: Command[]) {
-        this.commands = commands;
+    public constructor() {
+        this.commands = [];
         this.prefix = new FortniteBotCommandConfig(
             [
                 "!f"
@@ -147,6 +146,9 @@ export class CommandManager {
      * @returns true if commands exists, false otherwise.
      */
     private commandExists(name: string): boolean {
+        if (!name) {
+            return false;
+        }
         if (Object.keys(this.commands).length > 1) {
             for (const command of this.commands) {
                 if (command.commandString === name) {

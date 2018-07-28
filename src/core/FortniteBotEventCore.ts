@@ -35,7 +35,8 @@ export class FortniteBotEventCore {
     public constructor(core: FortniteBotCore) {
         this.core = core;
         this.client = core.bot;
-        this.commandManager = new CommandManager(defaultCommands);
+        this.commandManager = new CommandManager();
+        this.commandManager.addBulkCommand(defaultCommands);
         this.commandManager.addBulkCommand(userCommands);
         this.commandManager.addBulkCommand(shopCommands);
         this.currentHandles = {};
@@ -68,5 +69,13 @@ export class FortniteBotEventCore {
      */
     public clearClient(): void {
         this.client = null;
+    }
+
+    /**
+     * Gets the current CommandManager Object.
+     * @returns The current CommandManager Object.
+     */
+    public getCommandManager(): CommandManager {
+        return this.commandManager;
     }
 }
