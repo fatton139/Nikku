@@ -14,6 +14,11 @@ import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
 import { config as dotenvConfig } from "dotenv";
+
+/**
+ * Default commands ported over from v1.
+ */
+
 dotenvConfig();
 const chatBot = new Chatbot(process.env.chatBotUserId,
     process.env.chatBotApiKey);
@@ -26,7 +31,10 @@ const askChatBot = (state: FortniteBotState) => {
             if (err1 || err2) {
                 return;
             }
-            m.channel.send(res);
+            // Todo: Allow tts toggle.
+            m.channel.send(res, {
+                tts: true
+            });
         });
     });
 };
@@ -45,7 +53,7 @@ const sendDefaultText = (state: FortniteBotState): void => {
                 }
             });
         }
-        targetString += " fortnite?";
+        targetString += res[0].targets.length === 0 ? "<@!455679698610159616> fortnite?" : "fortnite?";
         m.channel.send(targetString);
     });
 };
@@ -116,7 +124,28 @@ const doNothing = new FortniteBotAction(0, (state: FortniteBotState) => {
 
 const showHelp = new FortniteBotAction(0, (state: FortniteBotState) => {
     (state.getHandle() as Discord.Message).channel.send(
-        "``` help response ```"
+        "```OwO you wan halp? >///<\n" +
+        "\n" +
+        "Standard Commands\n" +
+        "!f - Asks your targets to play fortnite.\n" +
+        "!f ping - Check for response.\n" +
+        "!f help - Displays help message.\n" +
+        "!f target @target - Adds target to the targetlist.\n" +
+        "!f targetlist - Shows the current targets.\n" +
+        "!f removeself - Removes yourself from the targetlist.\n" +
+        "!f auto amount delay(s) - Automatically ping the targets a set amount of times with an delay.\n" +
+        "\n" +
+        "User Commands\n" +
+        "!f register - Registers yourself.\n" +
+        "!f profile - Check your profile.\n" +
+        "!f daily - Grab daily rewards.\n" +
+        "\n" +
+        "Shop Commands\n" +
+        "!f shoplist - Displays all available shops.\n" +
+        "!f viewshop shopname - View a shop.\n" +
+        "!f buy index/itemname from shopname - Buy an item from a shop.\n" +
+        "\n" +
+        "...More coming soon. Contribute here! at https://github.com/aXises/fortniteBot```"
     );
     return true;
 });
@@ -163,8 +192,8 @@ const auto = {
                 max: 1,
                 time: 300000,
                 errors: ["time"]
-            }).then(() => {
-                if (m.content.toLowerCase() === "yes") {
+            }).then((response) => {
+                if (response.first().content === "yes") {
                     db.collections.user.incrementCoin(id, "DotmaCoin", -price,
                     (c: boolean) => {
                         if (!c) {
@@ -179,8 +208,7 @@ const auto = {
                         self.loop.startLoop();
                         self.looping = true;
                     });
-
-                } else if (m.content.toLowerCase() === "no") {
+                } else if (response.first().content === "no") {
                     m.channel.send("Okey.");
                 }
 
@@ -224,11 +252,11 @@ const addTarget = new FortniteBotAction(1,
         m.channel.awaitMessages(() => {
             return state.updateHandle().author.id === id;
         }, {
-            max: 5,
+            max: 1,
             time: 300000,
             errors: ["time"]
-        }).then(() => {
-            if (m.content.toLowerCase() === "yes") {
+        }).then((response) => {
+            if (response.first().content === "yes") {
                 m.channel.send("Okey, adding you as a target.");
                 activeCore.getDbCore().collections.global.add(id,
                     (c: boolean) => {
@@ -238,7 +266,7 @@ const addTarget = new FortniteBotAction(1,
                         m.channel.send("Failed to add as target.");
                     }
                 });
-            } else if (m.content.toLowerCase() === "no") {
+            } else if (response.first().content === "no") {
                 m.channel.send("Okey.");
             }
         }).catch(() => {

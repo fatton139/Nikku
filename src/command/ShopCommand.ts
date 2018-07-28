@@ -16,6 +16,10 @@ import { Shops } from "../shop/Shops";
 import { Item } from "../shop/Item";
 import { getId } from "../utils/CommandUtil";
 
+/**
+ * Commands which deal with shop interfaces.
+ */
+
 const shopList = new FortniteBotAction(0, (state: FortniteBotState,
                                            args: string[]) => {
     const m = (state.getHandle() as Discord.Message);
@@ -145,9 +149,9 @@ const buy = new FortniteBotAction(0,
                 max: 1,
                 time: 300000,
                 errors: ["time"]
-            }).then(() => {
+            }).then((response) => {
                 m = state.updateHandle();
-                if (m.content.toLowerCase() === "yes") {
+                if (response.first().content === "yes") {
                     m.channel.send("Buying...");
                     db.collections.user.getUser(m.author.id, (u: User) => {
                         if (!u) {
@@ -165,7 +169,7 @@ const buy = new FortniteBotAction(0,
                             m.channel.send("Purchase Complete!");
                         });
                     });
-                } else if (m.content.toLowerCase() === "no") {
+                } else if (response.first().content === "no") {
                     m.channel.send("Okey.");
                 }
             }).catch(() => {

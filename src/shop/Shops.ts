@@ -1,6 +1,10 @@
 import { Shop } from "./Shop";
 import { Title } from "./Title";
 
+/**
+ * Shop items and shop data.
+ */
+
 export const Shops = [
     new Shop("Title Shop", "DotmaCoin", true, "Buy titles for your profile."),
     new Shop("Brad Shop", "BradCoin", false, "Some fat kid sells stuff here.")

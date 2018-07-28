@@ -8,21 +8,52 @@ import { fortniteBotCore } from "../../fortniteBot";
 import { fortniteBotCore as activeCore } from "../../fortniteBot";
 
 export class Command implements ICommand {
+    /**
+     * The string required to execute this command.
+     */
     public commandString?: string;
+
+    /**
+     * The required access level to execute this command.
+     */
     public readonly accessLevel: number;
+
+    /**
+     * An action to execute.
+     */
     public action: FortniteBotAction;
+
+    /**
+     * Arguments to execute the action with.
+     */
     public args: string[];
+
+    /**
+     * @classdesc Base command class for the bot.
+     * @param commandString - The string required to execute this command.
+     * @param accessLevel - The required access level to execute this command.
+     * @param action - The action to execute.
+     */
     public constructor(commandString: string, accessLevel: number,
                        action: FortniteBotAction) {
         this.action = action;
         this.accessLevel = accessLevel;
         this.commandString = commandString;
     }
+
+    /**
+     * Changes the arguments of the command.
+     * @param args - New arguments for the command.
+     */
     public setArgs(args: string[]): void {
         this.args = args;
     }
-    public executeAction(user: User): void {
 
+    /**
+     * Execute the action provided by this command.
+     * @param user - The user attempting to execute this command.
+     */
+    public executeAction(user: User): void {
         if (user.accessLevel < this.accessLevel) {
             const m = activeCore.getCoreState().getHandle() as Discord.Message;
             m.reply(

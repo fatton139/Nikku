@@ -6,14 +6,29 @@ import { GlobalCollection } from "../database/GlobalCollection";
 import { UserCollection } from "../database/UserCollection";
 
 export class FortniteBotDbCore {
+    /**
+     * Collections which store other forms of data.
+     */
     public collections: {
         global: GlobalCollection;
         user: UserCollection;
     };
-    public GlobalCollection: GlobalCollection;
+
+    /**
+     * Database configurations.
+     */
     private readonly config: FortniteBotDbConfig;
+
+    /**
+     * Database object to interact with.
+     */
     private database: MongoDb.MongoClient;
     private db: MongoDb.Db;
+
+    /**
+     * @classdesc Class for handling important database methods.
+     * @param config - Initial database configurations.
+     */
     constructor(config: FortniteBotDbConfig) {
         this.config = config;
         this.collections = {
@@ -21,6 +36,11 @@ export class FortniteBotDbCore {
             user: null
         };
     }
+
+    /**
+     * Attempts to connect to the host.
+     * @param callback - callback when database has been connected.
+     */
     public connectDb(callback: () => void): void {
         MongoClient.connect(this.config.url, (err, database) => {
             if (err) {
@@ -34,12 +54,20 @@ export class FortniteBotDbCore {
             this.db.collection("user").find().toArray().then((res) => {
                 this.collections.user = new UserCollection(res);
             });
-            callback();
+            callback(); // Todo async.parallel
         });
     }
+
+    /**
+     * Gets the current database.
+     */
     public getDb(): MongoDb.Db {
         return this.db;
     }
+
+    /**
+     * Closes connection to the host of the db.
+     */
     public closeDb(): void {
         this.database.close();
     }
