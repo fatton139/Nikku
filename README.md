@@ -1,5 +1,6 @@
 # Fortnite Bot
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e12d96ca6dfd4a80a4063eb97cd24837)](https://app.codacy.com/app/aXises/fortniteBot?utm_source=github.com&utm_medium=referral&utm_content=aXises/fortniteBot&utm_campaign=badger)
 ![CodeFactor](https://www.codefactor.io/repository/github/axises/fortnitebot/badge) [![codecov](https://codecov.io/gh/aXises/fortniteBot/branch/master/graph/badge.svg)](https://codecov.io/gh/aXises/fortniteBot)
 [![Maintainability](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/maintainability)](https://codeclimate.com/github/aXises/fortniteBot/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/test_coverage)](https://codeclimate.com/github/aXises/fortniteBot/test_coverage)
