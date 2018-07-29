@@ -33,7 +33,7 @@ const askChatBot = (state: FortniteBotState) => {
             }
             // Todo: Allow tts toggle.
             m.channel.send(res, {
-                tts: true
+                tts: false
             });
         });
     });
