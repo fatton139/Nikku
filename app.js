@@ -126,7 +126,8 @@ bot.on('message', (message) => {
     }
 
     if ((message.content.replace(/\s/g, '').toLowerCase().search("fortnite") != 
-        -1) && (!message.author.bot && message.content[0] != "!")) {
+        -1) && (!message.author.bot && message.content[0] != "!") &&
+        m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1) {
         let response = messageStyles[randInt(0, messageStyles.length - 1)];
         message.channel.send(response);
     }
