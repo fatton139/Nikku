@@ -47,7 +47,7 @@ const testCommandAction = new FortniteBotAction(1, (state, args) => {
         return false; // Command failed.
     }
     m.channel.send(args[0]);
-n    return true; // Command was successfully executed.
+    return true; // Command was successfully executed.
 });
 
 // To execute the command, call '!f testcommand'. Anyone with access level 0 can execute this command.
@@ -104,9 +104,6 @@ Shop Commands
 !f shoplist - Displays all available shops.
 !f viewshop shopname - View a shop.
 !f buy index/itemname from shopname - Buy an item from a shop.
-!f fuck off - tells tony to fuck off
-!f API Key - gives api key
-!f spellmistoke - cant spell recommended
 ...More coming soon.
 ```
 
