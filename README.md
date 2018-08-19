@@ -104,12 +104,11 @@ Shop Commands
 !f shoplist - Displays all available shops.
 !f viewshop shopname - View a shop.
 !f buy index/itemname from shopname - Buy an item from a shop.
-
 ...More coming soon.
 ```
 
 ## Contributing
-All contribtions are welcome. Adhering to tslint style is recommeded.
+All contribtions are welcome. Adhering to tslint style is recommended.
 
 ## Disclaimer
 I do not play nor have any affiliation with Fortnite. This application is a simple tool to ~~spam~~ ask your friends/server members.
