@@ -105,6 +105,9 @@ Shop Commands
 !f viewshop shopname - View a shop.
 !f buy index/itemname from shopname - Buy an item from a shop.
 ...More coming soon.
+Coming soon:
+!f thieve @target - Thieves coins - percentage and amount based on thieving level.
+!f thieving level - Checks current thieving level and progress left until next level.
 ```
 
 ## Contributing
