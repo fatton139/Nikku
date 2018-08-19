@@ -4,7 +4,7 @@ import { FortniteBotCore } from "./src/core/FortniteBotCore";
 import { FortniteBotInitConfig } from "./src/config/FortniteBotInitConfig";
 
 dotenvConfig();
-// We waz kangs
+
 const keys = {
     discordToken: process.env.discordToken,
     chatBotUserId: process.env.chatBotUserId,
