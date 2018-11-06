@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/mongodb": "^3.0.20",
     "@types/node": "^10.3.2",
+    "audit": "0.0.6",
     "cleverbot.io": "^1.0.4",
     "discord.js": "^11.2.1",
     "dotenv": "^6.0.0",
