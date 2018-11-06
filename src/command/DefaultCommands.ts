@@ -27,6 +27,9 @@ chatBot.setNick("KYkUKga0");
 const askChatBot = (state: FortniteBotState) => {
     const m: Discord.Message = state.getHandle();
     chatBot.create((err1, session) => {
+        if (m.content.replace(/\s/g, "").toLowerCase().startsWith("mrfortnite")) {
+            m.content = m.content.substring("Mr Fortnite ".length);
+        }
         chatBot.ask(m.content, (err2, res) => {
             if (err1 || err2) {
                 return;
