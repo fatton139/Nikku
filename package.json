@@ -14,17 +14,17 @@
   "author": "aXises",
   "license": "MIT",
   "dependencies": {
-    "@types/mongodb": "^3.0.20",
-    "@types/node": "^10.3.2",
+    "@types/mongodb": "^3.1.14",
+    "@types/node": "^10.12.9",
     "audit": "0.0.6",
     "cleverbot.io": "^1.0.4",
-    "discord.js": "^11.2.1",
-    "dotenv": "^6.0.0",
-    "ffmpeg-binaries": "^3.2.2-3",
-    "moment": "^2.22.1",
+    "discord.js": "^11.4.2",
+    "dotenv": "^6.1.0",
+    "ffmpeg-binaries": "^3.2.2",
+    "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
-    "mongodb": "^3.0.10",
-    "request": "^2.85.0",
+    "mongodb": "^3.1.10",
+    "request": "^2.88.0",
     "typescript": "^2.9.2"
   }
 }
