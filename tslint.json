@@ -8,7 +8,6 @@
         "newline-before-return": false,
         "no-parameter-properties": false,
         "no-parameter-reassignment": true,
-        "no-unused-variable": true,
         "comment-format": [
             true,
             "check-space"
@@ -19,20 +18,14 @@
             "allow-declarations",
             "allow-named-functions"
         ],
-        "no-bom": true,
-        "no-double-space": true,
-        "no-in-operator": true,
-        "no-increment-decrement": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-null-keyword": true,
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": [true, "ignore-template-strings"],
-        "no-type-assertion-whitespace": true,
         "no-unnecessary-qualifier": true,
         "no-var-keyword": true,
         "object-literal-shorthand": true,
-        "object-literal-surrounding-space": true,
         "triple-equals": [true, "allow-undefined-check"],
         "one-line": [true,
             "check-open-brace",
@@ -43,23 +36,16 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": [true, "always", "ignore-bound-class-methods"],
+        "semicolon": [true, "always"],
         "space-within-parens": true,
-        "type-operator-spacing": true,
-    
         "ban": [true,
           ["describe", "only"],
           ["it", "only"]
         ],
-    
         "interface-name": false,
         "max-classes-per-file": false,
         "max-line-length": [true, 140],
-        "member-ordering": [true,
-          "public-before-private",
-          "static-before-instance",
-          "variables-before-functions"
-        ],
+        "member-ordering": true,
         "newline-per-chained-call": false,
         "no-console": {
           "options": ["log"]
@@ -81,6 +67,7 @@
             "check-separator",
             "check-type"
         ],
-        "ordered-imports": false
+        "ordered-imports": false,
+        "no-namespace": false
       }
 }
