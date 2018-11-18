@@ -1,11 +1,11 @@
 import * as MongoDb from "mongodb";
 import { MongoClient } from "mongodb";
-import { FortniteBotDbConfig } from "../config/FortniteBotDbConfig";
 import { DatabaseException } from "../exceptions/DatabaseException";
 import { GlobalCollection } from "../database/GlobalCollection";
 import { UserCollection } from "../database/UserCollection";
+import { Config } from "config/Config";
 
-export class FortniteBotDbCore {
+export class DatabaseCore {
     /**
      * Collections which store other forms of data.
      */
@@ -14,11 +14,7 @@ export class FortniteBotDbCore {
         user: UserCollection;
     };
 
-    /**
-     * Database configurations.
-     */
-    private readonly config: FortniteBotDbConfig;
-
+    private readonly URL: string;
     /**
      * Database object to interact with.
      */
@@ -27,25 +23,17 @@ export class FortniteBotDbCore {
 
     /**
      * @classdesc Class for handling important database methods.
-     * @param config - Initial database configurations.
      */
-    constructor(config: FortniteBotDbConfig) {
-        this.config = config;
-        this.collections = {
-            global: null,
-            user: null
-        };
+    public constructor(url: string) {
+        this.URL = url;
     }
 
     /**
      * Attempts to connect to the host.
      * @param callback - callback when database has been connected.
      */
-    public connectDb(callback: () => void): void {
-        MongoClient.connect(this.config.url, (err, database) => {
-            if (err) {
-                throw new DatabaseException(err);
-            }
+    public async connectDb(): Promise<void> {
+        MongoClient.connect(this.URL).then((database) => {
             this.db = database.db("fortniteBotDb");
             this.database = database;
             this.db.collection("global").find().toArray().then((res) => {
@@ -54,7 +42,8 @@ export class FortniteBotDbCore {
             this.db.collection("user").find().toArray().then((res) => {
                 this.collections.user = new UserCollection(res);
             });
-            callback(); // Todo async.parallel
+        }).catch((err) => {
+            throw new DatabaseException(err);
         });
     }
 
