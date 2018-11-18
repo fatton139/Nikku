@@ -3,7 +3,7 @@ import { ICommand } from "./ICommand";
 import { User } from "../user/User";
 import { FortniteBotAction } from "../action/FortniteBotAction";
 import { PendingResponseState } from "../state/PendingResponseState";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 
 export class RequireResponseCommand
 extends ExecutableCommand implements ICommand {
@@ -23,7 +23,7 @@ extends ExecutableCommand implements ICommand {
      * @param user - The user attempting to execute this command.
      */
     public executeAction(user: User): void {
-        activeCore.changeCoreState(new PendingResponseState(null));
+        // core.changeCoreState(new PendingResponseState(undefined));
         super.executeAction(user);
     }
 }

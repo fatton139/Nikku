@@ -1,8 +1,8 @@
 import { Message } from "discord.js";
 
-import { FortniteBotState } from "./FortniteBotState";
+import { CoreState } from "state/CoreState";
 
-export class CommandExecutionState extends FortniteBotState {
+export class CommandExecutionState extends CoreState {
     /**
      * @classdesc State for when a command is being executed.
      * @param message - Discord message handler.

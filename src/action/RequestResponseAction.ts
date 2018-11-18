@@ -1,5 +1,5 @@
-import { FortniteBotState } from "../state/FortniteBotState";
-import { FortniteBotAction } from "./FortniteBotAction";
+import { CoreState } from "state/CoreState";
+import { FortniteBotAction } from "action/FortniteBotAction";
 
 export class RequestResponseAction extends FortniteBotAction {
     /**
@@ -8,7 +8,7 @@ export class RequestResponseAction extends FortniteBotAction {
      * @param action - An action to invoke.
      */
     public constructor(argLength: number,
-                       action: (stateHandle: FortniteBotState,
+                       action: (stateHandle: CoreState,
                                 args: string[]) => boolean) {
         super(argLength, action);
     }

@@ -6,9 +6,9 @@ import { FortniteBotAction } from "../action/FortniteBotAction";
 import { FortniteBotTrigger } from "../action/FortniteBotTrigger";
 import { ExecutableCommand } from "../command/ExecutableCommand";
 import { RequireResponseCommand } from "../command/RequireResponseCommand";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 import { PendingResponseState } from "state/PendingResponseState";
-import { FortniteBotState } from "state/FortniteBotState";
+import { CoreState } from "state/CoreState";
 import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { getId } from "../utils/CommandUtil";
@@ -17,10 +17,10 @@ import { getId } from "../utils/CommandUtil";
  * Commands which deal with the user.
  */
 
-const register = new FortniteBotAction(0, (state: FortniteBotState) => {
+const register = new FortniteBotAction(0, (state: CoreState) => {
     const m: Discord.Message = state.getHandle();
     const id = m.author.id;
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.get((res) => {
         if (res.findIndex((user: User) => user.id === id) !== -1) {
             m.reply("You are already registered.");
@@ -29,7 +29,7 @@ const register = new FortniteBotAction(0, (state: FortniteBotState) => {
         db.collections.user.add(new User(id, 1), (c: boolean) => {
             if (c) {
                 m.channel.send("Successfully registered!" +
-                " You now have access to **Level 1** Commands"
+                    " You now have access to **Level 1** Commands",
                 );
             } else {
                 m.channel.send("Failed to register");
@@ -39,7 +39,7 @@ const register = new FortniteBotAction(0, (state: FortniteBotState) => {
     return true;
 });
 
-const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
+const setAccess = new FortniteBotAction(2, (state: CoreState,
                                             args: any[]) => {
     const m: Discord.Message = state.getHandle();
     if (args.length !== 2 || isNaN(args[1])) {
@@ -53,7 +53,7 @@ const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
         );
         return;
     }
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.update(id, "accessLevel", Number(args[1]), (res) => {
         if (res) {
             m.channel.send("Updated successfully");
@@ -62,16 +62,16 @@ const setAccess = new FortniteBotAction(2, (state: FortniteBotState,
     return true;
 });
 
-const listUsers = new FortniteBotAction(2, (state: FortniteBotState,
+const listUsers = new FortniteBotAction(2, (state: CoreState,
                                             args: any[]) => {
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.get((res) => {
-        console.log(res);
+        // console.log(res);
     });
     return true;
 });
 
-const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
+const removeUser = new FortniteBotAction(1, (state: CoreState,
                                              args: any[]) => {
     const m: Discord.Message = state.getHandle();
     if (args.length !== 1) {
@@ -79,7 +79,7 @@ const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
         return;
     }
     const id = getId(args[0]);
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.removeUser(id, (c) => {
         if (c) {
             m.channel.send("User removed.");
@@ -90,9 +90,9 @@ const removeUser = new FortniteBotAction(1, (state: FortniteBotState,
     return true;
 });
 
-const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
+const profile = new FortniteBotAction(0, (state: CoreState) => {
     const m: Discord.Message = state.getHandle();
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.get((res) => {
         const id = m.author.id;
         const index = res.findIndex((user: User) => user.id === id);
@@ -114,7 +114,7 @@ const profile = new FortniteBotAction(0, (state: FortniteBotState) => {
     return true;
 });
 
-const addRemoveCoin = (state: FortniteBotState, args: any[], add: boolean) => {
+const addRemoveCoin = (state: CoreState, args: any[], add: boolean) => {
     const m: Discord.Message = state.getHandle();
     if (args.length !== 3 || isNaN(args[2])) {
         if (!add) {
@@ -131,7 +131,7 @@ const addRemoveCoin = (state: FortniteBotState, args: any[], add: boolean) => {
         );
         return;
     }
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.get((res: User[]) => {
         const index = res.findIndex((user: User) => user.id === id);
         if (index === -1) {
@@ -163,21 +163,21 @@ const addRemoveCoin = (state: FortniteBotState, args: any[], add: boolean) => {
     });
 };
 
-const addCoin = new FortniteBotAction(3, (state: FortniteBotState,
+const addCoin = new FortniteBotAction(3, (state: CoreState,
                                           args: any[]) => {
     addRemoveCoin(state, args, true);
     return true;
 });
 
-const removeCoin = new FortniteBotAction(3, (state: FortniteBotState,
+const removeCoin = new FortniteBotAction(3, (state: CoreState,
                                              args: any[]) => {
     addRemoveCoin(state, args, false);
     return true;
 });
 
-const getDaily = new FortniteBotAction(0, (state: FortniteBotState) => {
+const getDaily = new FortniteBotAction(0, (state: CoreState) => {
     const m: Discord.Message = state.getHandle();
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.user.get((res: User[]) => {
         const index = res.findIndex((user: User) => user.id === m.author.id);
         if (index === -1) {
@@ -219,5 +219,5 @@ export const userCommands = [
     new DebugCommand("-userlist", listUsers),
     new DebugCommand("-removeuser", removeUser),
     new DebugCommand("-addcoin", addCoin),
-    new DebugCommand("-removecoin", removeCoin)
+    new DebugCommand("-removecoin", removeCoin),
 ];

@@ -1,7 +1,6 @@
-import * as Discord from "discord.js";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 
-export class FortniteBotState {
+export class CoreState {
     /**
      * Hander for the state.
      */
@@ -35,6 +34,6 @@ export class FortniteBotState {
      */
     public updateHandle(): any {
         // Todo.
-        return activeCore.getCoreState().getHandle();
+        return core.getCoreState().getHandle();
     }
 }

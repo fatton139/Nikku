@@ -1,11 +1,10 @@
 import * as Discord from "discord.js";
-import { ICommand } from "../command/ICommand";
-import { User } from "../user/User";
-import { UnauthorizedCommandException } from "../exceptions/UnauthorizedCommandException";
-import { FortniteBotAction } from "../action/FortniteBotAction";
-import { FortniteBotException } from "../exceptions/FortniteBotException";
-import { fortniteBotCore } from "../../fortniteBot";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { ICommand } from "command/ICommand";
+import { User } from "user/User";
+import { UnauthorizedCommandException } from "exceptions/UnauthorizedCommandException";
+import { FortniteBotAction } from "action/FortniteBotAction";
+import { FortniteBotException } from "exceptions/FortniteBotException";
+import { core } from "core/NikkuCore";
 
 export class Command implements ICommand {
     /**
@@ -55,19 +54,18 @@ export class Command implements ICommand {
      */
     public executeAction(user: User): void {
         if (user.accessLevel < this.accessLevel) {
-            const m = activeCore.getCoreState().getHandle() as Discord.Message;
+            const m = core.getCoreState().getHandle() as Discord.Message;
             m.reply(
                 "You do not have the required access level to this command.\n" +
                 "Your access level: **" + user.accessLevel + "**\n" +
-                "Command access level: **" + this.accessLevel + "**"
-            );
+                "Command access level: **" + this.accessLevel + "**");
             throw new UnauthorizedCommandException("Unauthorized Execution of " +
                 "Command of " + this.commandString);
         }
         if (!this.args) {
             this.args = [];
         }
-        if (!this.action.execute(fortniteBotCore.getCoreState(), this.args)) {
+        if (!this.action.execute(core.getCoreState(), this.args)) {
             throw new FortniteBotException("Failed Execution");
         }
     }

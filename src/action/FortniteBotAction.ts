@@ -1,4 +1,4 @@
-import { FortniteBotState } from "../state/FortniteBotState";
+import { CoreState } from "state/CoreState";
 
 export class FortniteBotAction {
     /**
@@ -9,16 +9,14 @@ export class FortniteBotAction {
     /**
      * An action to invoke.
      */
-    public action: (stateHandle: FortniteBotState, args: string[]) => boolean;
+    public action: (stateHandle: CoreState, args: string[]) => boolean;
 
     /**
      * @classdesc Base class for a standard action executed by the bot.
      * @param argLength - Number of arguments the action requires.
      * @param action - An action to invoke.
      */
-    public constructor(argLength: number,
-                       action: (stateHandle: FortniteBotState,
-                                args: string[]) => boolean) {
+    public constructor(argLength: number, action: (stateHandle: CoreState, args: string[]) => boolean) {
         this.argLength = argLength;
         this.action = action;
     }
@@ -29,7 +27,7 @@ export class FortniteBotAction {
      * @param args - Arguments to execute the action with.
      * @returns true if the command was successfully executed.
      */
-    public execute(state: FortniteBotState, args: string[]): boolean {
+    public execute(state: CoreState, args: string[]): boolean {
         return this.action(state, args);
     }
 }

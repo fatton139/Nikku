@@ -2,7 +2,7 @@ import { ICommand } from "../command/ICommand";
 import { Command } from "../command/Command";
 import { FortniteBotAction } from "action/FortniteBotAction";
 import { FortniteBotTrigger } from "action/FortniteBotTrigger";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 
 export class AutoTriggerCommand extends Command implements ICommand {
     /**
@@ -18,7 +18,7 @@ export class AutoTriggerCommand extends Command implements ICommand {
      */
     public constructor(accessLevel: number,
                        action: FortniteBotAction, trigger: FortniteBotTrigger) {
-        super(null, accessLevel, action);
+        super(undefined, accessLevel, action);
         this.trigger = trigger;
     }
 
@@ -27,6 +27,6 @@ export class AutoTriggerCommand extends Command implements ICommand {
      * @returns true if conditions of the trigger has been met.
      */
     public tryTrigger(): boolean {
-        return this.trigger.execute(activeCore.getCoreState());
+        return this.trigger.execute(core.getCoreState());
     }
 }

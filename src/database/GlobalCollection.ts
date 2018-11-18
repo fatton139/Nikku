@@ -1,5 +1,5 @@
 import * as MongoDb from "mongodb";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 import { DatabaseException } from "../exceptions/DatabaseException";
 import { FortniteBotCollection } from "./FortniteBotCollection";
 import { ICollection } from "./ICollection";

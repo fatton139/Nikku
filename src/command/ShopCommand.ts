@@ -6,9 +6,9 @@ import { FortniteBotAction } from "../action/FortniteBotAction";
 import { FortniteBotTrigger } from "../action/FortniteBotTrigger";
 import { ExecutableCommand } from "../command/ExecutableCommand";
 import { RequireResponseCommand } from "../command/RequireResponseCommand";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 import { PendingResponseState } from "state/PendingResponseState";
-import { FortniteBotState } from "state/FortniteBotState";
+import { CoreState } from "state/CoreState";
 import { Loop } from "../utils/Loop";
 import { User } from "../user/User";
 import { Shop } from "../shop/Shop";
@@ -20,7 +20,7 @@ import { getId } from "../utils/CommandUtil";
  * Commands which deal with shop interfaces.
  */
 
-const shopList = new FortniteBotAction(0, (state: FortniteBotState,
+const shopList = new FortniteBotAction(0, (state: CoreState,
                                            args: string[]) => {
     const m = (state.getHandle() as Discord.Message);
     let text = "```" + Shops.length + " Shops are avaliable." +
@@ -36,7 +36,7 @@ const shopList = new FortniteBotAction(0, (state: FortniteBotState,
 });
 
 const updateDiscounts = (callback: (res: boolean) => void) => {
-    const db = activeCore.getDbCore();
+    const db = core.getDbCore();
     db.collections.global.get((res: any[]) => {
         const lastUpdate = res[0].shops.lastUpdate;
         const d = (new Date() as any) - (lastUpdate);
@@ -59,7 +59,7 @@ const updateDiscounts = (callback: (res: boolean) => void) => {
     });
 };
 
-const viewShop = new FortniteBotAction(0, (state: FortniteBotState,
+const viewShop = new FortniteBotAction(0, (state: CoreState,
                                            args: string[]) => {
     const m = (state.getHandle() as Discord.Message);
     const shopName = args.join(" ");
@@ -87,7 +87,7 @@ const buy = new FortniteBotAction(0,
     let m: Discord.Message = state.getHandle();
     if (args.length < 3) {
         (state.getHandle() as Discord.Message).channel.send(
-            "Usage: !f buy `index/item` from `shopname`."
+            "Usage: !f buy `index/item` from `shopname`.",
         );
         return;
     }
@@ -95,7 +95,7 @@ const buy = new FortniteBotAction(0,
     const itemName: any = args.join(" ").split("from")[0];
     const shopIndex = Shops.findIndex((shop: Shop) =>
         shop.name.replace(/\s/g, "").toLowerCase() ===
-        shopName.replace(/\s/g, "").toLowerCase()
+        shopName.replace(/\s/g, "").toLowerCase(),
     );
     if (shopIndex === -1) {
         m.channel.send("Shop not found.");
@@ -118,7 +118,7 @@ const buy = new FortniteBotAction(0,
         } else {
             const itemIndex = inventory.findIndex((item: Item) =>
                 item.name.replace(/\s/g, "").toLowerCase() ===
-                itemName.replace(/\s/g, "").toLowerCase()
+                itemName.replace(/\s/g, "").toLowerCase(),
             );
             if (itemIndex !== -1) {
                 selectedItem = inventory[itemIndex];
@@ -127,28 +127,28 @@ const buy = new FortniteBotAction(0,
                 return;
             }
         }
-        const db = activeCore.getDbCore();
+        const db = core.getDbCore();
         db.collections.user.getUser(m.author.id, (res: User) => {
-            console.log(res);
+            // console.log(res);
             if (!res) {
                 return false;
             }
             if (res.currency[selectedItem.cost.coinType] <
                 selectedItem.cost.value) {
                 m.reply("You do not have enough **" +
-                    selectedItem.cost.coinType + "**."
+                    selectedItem.cost.coinType + "**.",
                 );
                 return;
             }
             m.reply("You selected **" + selectedItem.name + "**. Buy?\n" +
-                "`yes` or `no`."
+                "`yes` or `no`.",
             );
             m.channel.awaitMessages(() => {
                 return state.updateHandle().author.id === m.author.id;
             }, {
                 max: 1,
                 time: 300000,
-                errors: ["time"]
+                errors: ["time"],
             }).then((response) => {
                 m = state.updateHandle();
                 if (response.first().content === "yes") {
@@ -184,5 +184,5 @@ const buy = new FortniteBotAction(0,
 export const shopCommands = [
     new ExecutableCommand("shoplist", 0, shopList),
     new ExecutableCommand("viewshop", 0, viewShop),
-    new RequireResponseCommand("buy", 1, buy)
+    new RequireResponseCommand("buy", 1, buy),
 ];

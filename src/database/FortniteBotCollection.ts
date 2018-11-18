@@ -1,5 +1,5 @@
 import * as MongoDb from "mongodb";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { core } from "core/NikkuCore";
 
 export class FortniteBotCollection {
     /**
@@ -11,6 +11,6 @@ export class FortniteBotCollection {
      * @classdesc Main data collection for the bot.
      */
     constructor() {
-        this.db = activeCore.getDbCore().getDb();
+        this.db = core.getDbCore().getDb();
     }
 }
