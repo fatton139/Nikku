@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2018",
     "moduleResolution": "node",
     "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "removeComments": true,
     "resolveJsonModule": true,
+    "allowJs": false
   },
   "exclude": [
     "node_modules"
