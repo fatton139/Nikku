@@ -1,9 +1,9 @@
-import { FortniteBotCommandConfig } from "../config/FortniteBotCommandConfig";
-import { Command } from "../command/Command";
-import { AutoTriggerCommand } from "../command/AutoTriggerCommand";
-import { User } from "../user/User";
-import { FortniteBotException } from "../exceptions/FortniteBotException";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import { Command } from "command/Command";
+import { AutoTriggerCommand } from "command/AutoTriggerCommand";
+import { User } from "user/User";
+import { FortniteBotException } from "exceptions/FortniteBotException";
+import { PrefixManager } from "command/PrefixManager";
+import { core } from "core/NikkuCore";
 
 export class CommandManager {
     /**
@@ -14,17 +14,17 @@ export class CommandManager {
     /**
      * The prefix required to begin calling a command.
      */
-    private prefix: FortniteBotCommandConfig;
+    private prefix: PrefixManager;
 
     /**
      * @classdesc Class to handle import and execution of commands.
      */
     public constructor() {
         this.commands = [];
-        this.prefix = new FortniteBotCommandConfig(
+        this.prefix = new PrefixManager(
             [
-                "!f"
-            ]
+                "!f",
+            ],
         );
     }
 
@@ -71,16 +71,16 @@ export class CommandManager {
                                 args = [];
                             }
                             command.args = args;
-                            activeCore.getDbCore().collections.user
+                            core.getDbCore().collections.user
                             .get((res) => {
                                 const index = res.findIndex(
                                     (user) => user.id === id);
                                 if (index === -1) {
-                                    command.executeAction(new User(null, 0));
+                                    command.executeAction(new User(undefined, 0));
                                 } else {
                                     command.executeAction(
                                         new User(res[index].id,
-                                            res[index].accessLevel
+                                            res[index].accessLevel,
                                         ));
                                 }
                             });
@@ -128,7 +128,7 @@ export class CommandManager {
             if (command instanceof AutoTriggerCommand) {
                 if (command.tryTrigger()) {
                     try {
-                        command.executeAction(new User(null, 0));
+                        command.executeAction(new User(undefined, 0));
                     } catch (e) {
                         if (e instanceof FortniteBotException) {
                             // Output
