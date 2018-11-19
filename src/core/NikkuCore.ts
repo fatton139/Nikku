@@ -23,13 +23,16 @@ export default class NikkuCore {
 
     private state: CoreState;
 
+    private config: typeof Config;
+
     /**
      * @classdesc The main class of the bot. Initializes most of the main methods.
      */
-    public constructor() {
+    public constructor(config: typeof Config) {
+        this.config = config;
         this.client = new Discord.Client();
-        this.eventCore = new EventCore();
-        this.databaseCore = new DatabaseCore(Config.Database.URL);
+        this.eventCore = new EventCore(this.client);
+        this.databaseCore = new DatabaseCore(this.config.Database.URL);
         this.state = new CoreState(undefined);
     }
 
@@ -39,7 +42,7 @@ export default class NikkuCore {
     public start(): void {
         try {
             this.databaseCore.connectDb().then(() => {
-                this.client.login(Config.Discord.TOKEN);
+                this.client.login(this.config.Discord.TOKEN);
                 this.client.on("ready", () => {
                     this.eventCore.listenMessages();
                     this.client.user.setActivity("Brad's Weight: 214.23kg");
@@ -77,4 +80,4 @@ export default class NikkuCore {
 }
 
 /* Core Singleton */
-export const core: NikkuCore = new NikkuCore();
+export const core: NikkuCore = new NikkuCore(Config);

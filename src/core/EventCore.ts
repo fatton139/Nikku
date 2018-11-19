@@ -23,8 +23,9 @@ export class EventCore {
      * @classdesc Class for handling events.
      * @param core - The main bot core.
      */
-    public constructor() {
+    public constructor(client: Discord.Client) {
         this.commandManager = new CommandManager();
+        this.client = client;
         // this.commandManager.addBulkCommand(defaultCommands);
         // this.commandManager.addBulkCommand(userCommands);
         // this.commandManager.addBulkCommand(shopCommands);
