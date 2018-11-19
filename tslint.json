@@ -46,9 +46,7 @@
         "max-line-length": [true, 140],
         "member-ordering": false,
         "newline-per-chained-call": false,
-        "no-console": {
-          "options": ["log"]
-        },
+        "no-console": false,
         "switch-default": false,
         "variable-name": [true,
           "ban-keywords",

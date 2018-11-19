@@ -1,21 +1,20 @@
 {
-  "name": "mrfortnight",
-  "version": "2.0.0",
+  "name": "NikkuBot",
+  "version": "2.1.0",
   "description": "fortnite?",
   "engines": {
     "node": "10.4"
   },
   "main": "fortniteBot.js",
   "scripts": {
-    "start": "node fortniteBot.js",
+    "start": "cross-env NODE_PATH=./src node main.js",
     "test": "test",
     "postinstall": "tsc"
   },
+  "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",
   "license": "MIT",
   "dependencies": {
-    "@types/mongodb": "^3.1.14",
-    "@types/node": "^10.12.9",
     "audit": "0.0.6",
     "cleverbot.io": "^1.0.4",
     "discord.js": "^11.4.2",
@@ -24,7 +23,16 @@
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "mongodb": "^3.1.10",
+    "mongoose": "^5.3.12",
     "request": "^2.88.0",
+    "winston": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.14",
+    "@types/mongoose": "^5.3.1",
+    "@types/node": "^10.12.9",
+    "cross-env": "^5.2.0",
+    "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   }
 }
