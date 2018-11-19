@@ -9,7 +9,9 @@
     "noImplicitAny": false,
     "removeComments": true,
     "resolveJsonModule": true,
-    "allowJs": false
+    "allowJs": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "exclude": [
     "node_modules"
