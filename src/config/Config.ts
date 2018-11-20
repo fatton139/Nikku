@@ -22,4 +22,7 @@ export namespace Config {
         public static readonly AUTHOR = pjson.author;
         public static readonly VERSION = pjson.version;
     }
+    export class DefaultUser {
+        public static readonly AXISES_ID = process.env.AXISES_ID;
+    }
 }

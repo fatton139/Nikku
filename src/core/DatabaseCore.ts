@@ -17,11 +17,13 @@ export class DatabaseCore {
     private UserModel: Mongoose.Model<Mongoose.Document, {}>;
     private DateTrackerModel: Mongoose.Model<Mongoose.Document, {}>;
 
+    private defaultUsers: string[];
     /**
      * @classdesc Class for handling important database methods.
      */
-    public constructor(url: string) {
+    public constructor(url: string, defaultUsers: string[]) {
         this.URL = url;
+        this.defaultUsers = defaultUsers;
     }
 
     /**
@@ -39,6 +41,8 @@ export class DatabaseCore {
             this.UserModel.find({}).then((doc) => {
                 if (doc.length === 0) {
                     this.logger.warn("User model has not been setup. Creating default profiles...");
+                    const migrator = new UserMigrator(userSchema);
+                    migrator.createModels(this.defaultUsers);
                 }
             });
             this.DateTrackerModel = new DBDateTracker().getModelForClass(DBDateTracker);

@@ -32,7 +32,7 @@ export default class NikkuCore {
         this.config = config;
         this.client = new Discord.Client();
         this.eventCore = new EventCore(this.client);
-        this.databaseCore = new DatabaseCore(this.config.Database.URL);
+        this.databaseCore = new DatabaseCore(this.config.Database.URL, [this.config.DefaultUser.AXISES_ID]);
         this.state = new CoreState(undefined);
     }
 
@@ -45,7 +45,7 @@ export default class NikkuCore {
                 this.client.login(this.config.Discord.TOKEN);
                 this.client.on("ready", () => {
                     this.eventCore.listenMessages();
-                    this.client.user.setActivity("Brad's Weight: 214.23kg");
+                    this.client.user.setActivity("Brad's Weight: NaN");
                 });
                 const db = this.databaseCore.getDb();
             });
