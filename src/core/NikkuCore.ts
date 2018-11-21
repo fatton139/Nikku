@@ -4,9 +4,10 @@ import { FortniteBotException } from "exceptions/FortniteBotException";
 import { EventCore } from "core/EventCore";
 import { DatabaseCore } from "core/DatabaseCore";
 import { Config } from "config/Config";
-import { CoreState } from "state/CoreState";
+import CoreState from "state/CoreState";
 import { Logger } from "logger/Logger";
 import { ChannelTransport } from "logger/ChannelTransport";
+import { CommandManager } from "command/CommandManager";
 
 export default class NikkuCore {
     /**
@@ -26,6 +27,8 @@ export default class NikkuCore {
 
     private state: CoreState;
 
+    private commandManager: CommandManager;
+
     private config: typeof Config;
 
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -34,11 +37,10 @@ export default class NikkuCore {
      * @classdesc The main class of the bot. Initializes most of the main methods.
      */
     public constructor(config: typeof Config) {
+        this.logger.debug("Core Started.");
         this.config = config;
         this.client = new Discord.Client();
-        this.eventCore = new EventCore(this.client);
-        this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
-        this.state = new CoreState(undefined);
+        this.state = new CoreState(this);
     }
 
     /**
@@ -49,18 +51,27 @@ export default class NikkuCore {
             this.client.login(this.config.Discord.TOKEN);
             this.client.on("ready", () => {
                 this.setDebugLogChannels();
+                this.initializeComponents();
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
                 this.databaseCore.connectDb().then(() => {
                     this.logger.info("Database connected successfully.");
-                    this.eventCore.listenMessages();
-                    this.client.user.setActivity("Brad's Weight: NaN");
+                    this.eventCore.listenMessages(this);
+                }).catch(() => {
+                    this.logger.info("Failed to connect to Database");
                 });
+                this.client.user.setActivity("Brad's Weight: NaN");
             });
         } catch (error) {
             if (error instanceof FortniteBotException) {
                 // console.log(error);
             }
         }
+    }
+
+    public initializeComponents() {
+        this.eventCore = new EventCore(this.client);
+        this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
+        this.commandManager = new CommandManager(this.config.Command.PREFIXES);
     }
 
     public setDebugLogChannels(): void {
@@ -95,6 +106,10 @@ export default class NikkuCore {
 
     public getClient(): Discord.Client {
         return this.client;
+    }
+
+    public getCommandManager(): CommandManager {
+        return this.commandManager;
     }
 }
 

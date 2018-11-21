@@ -1,7 +1,8 @@
 import * as Discord from "discord.js";
 import { CommandManager } from "../command/CommandManager";
-import { CoreState } from "state/CoreState";
-import { core } from "core/NikkuCore";
+import CoreState from "state/CoreState";
+import NikkuCore from "core/NikkuCore";
+import OnMessageState from "state/OnMessageState";
 // import { defaultCommands } from "../command/DefaultCommands";
 // import { userCommands } from "../command/UserCommands";
 // import { User } from "../user/User";
@@ -15,16 +16,10 @@ export class EventCore {
     private client: Discord.Client;
 
     /**
-     * The command manager to handle commands execution.
-     */
-    private commandManager: CommandManager;
-
-    /**
      * @classdesc Class for handling events.
      * @param core - The main bot core.
      */
     public constructor(client: Discord.Client) {
-        this.commandManager = new CommandManager();
         this.client = client;
         // this.commandManager.addBulkCommand(defaultCommands);
         // this.commandManager.addBulkCommand(userCommands);
@@ -34,21 +29,13 @@ export class EventCore {
     /**
      * Begin listening for channel messages.
      */
-    public listenMessages(): void {
-        this.client.on("message", (message) => {
-            core.setCoreState(new CoreState(message));
+    public listenMessages(core: NikkuCore): void {
+        this.client.on("message", (message: Discord.Message) => {
             if (!message.author.bot) {
-                this.commandManager.attemptExecution(message.content,
-                message.author.id);
+                core.setCoreState(new OnMessageState(core, message));
+                core.getCommandManager().parseLine(message.content,
+                    message.author.id);
             }
         });
-    }
-
-    /**
-     * Gets the current CommandManager Object.
-     * @returns The current CommandManager Object.
-     */
-    public getCommandManager(): CommandManager {
-        return this.commandManager;
     }
 }
