@@ -1,4 +1,4 @@
-import { FortniteBotAction } from "../action/FortniteBotAction";
+import Action from "action/Action";
 
 /**
  * Interface for all fortniteBot commands.
@@ -17,5 +17,5 @@ export interface ICommand {
     /**
      * An action to invoke when the command is called.
      */
-    action: FortniteBotAction;
+    action: Action;
 }

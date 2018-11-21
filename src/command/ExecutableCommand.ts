@@ -1,6 +1,6 @@
 import { ICommand } from "../command/ICommand";
 import { Command } from "../command/Command";
-import { FortniteBotAction } from "../action/FortniteBotAction";
+import { FortniteBotAction } from "../action/Action";
 
 export class ExecutableCommand extends Command implements ICommand {
     /**

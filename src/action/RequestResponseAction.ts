@@ -1,5 +1,5 @@
 import { CoreState } from "state/CoreState";
-import { FortniteBotAction } from "action/FortniteBotAction";
+import { FortniteBotAction } from "action/Action";
 
 export class RequestResponseAction extends FortniteBotAction {
     /**

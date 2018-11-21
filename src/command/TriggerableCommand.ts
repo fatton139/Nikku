@@ -1,14 +1,14 @@
-import { ICommand } from "../command/ICommand";
-import { Command } from "../command/Command";
-import { FortniteBotAction } from "action/FortniteBotAction";
-import { FortniteBotTrigger } from "action/FortniteBotTrigger";
+import { ICommand } from "./ICommand";
+import { Command } from "./Command";
+import Action from "action/Action";
+import Trigger from "action/Trigger";
 import { core } from "core/NikkuCore";
 
-export class AutoTriggerCommand extends Command implements ICommand {
+export default class TriggerableCommand extends Command implements ICommand {
     /**
      * The condition required to execute the action.
      */
-    public trigger: FortniteBotTrigger;
+    public trigger: Trigger;
 
     /**
      * @classdesc Commands which are triggered without user directly calling it.
@@ -17,7 +17,7 @@ export class AutoTriggerCommand extends Command implements ICommand {
      * @param trigger - The condition required to execute the action.
      */
     public constructor(accessLevel: number,
-                       action: FortniteBotAction, trigger: FortniteBotTrigger) {
+                       action: Action, trigger: Trigger) {
         super(undefined, accessLevel, action);
         this.trigger = trigger;
     }

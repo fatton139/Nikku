@@ -1,6 +1,6 @@
-import { CoreState } from "state/CoreState";
+import CoreState from "state/CoreState";
 
-export class FortniteBotAction {
+export default class Action {
     /**
      * Number of arguments this action requires.
      */

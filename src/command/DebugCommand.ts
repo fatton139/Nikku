@@ -1,6 +1,6 @@
 import { ICommand } from "./ICommand";
 import { ExecutableCommand } from "./ExecutableCommand";
-import { FortniteBotAction } from "action/FortniteBotAction";
+import { FortniteBotAction } from "action/Action";
 
 export class DebugCommand extends ExecutableCommand implements ICommand {
 

@@ -1,7 +1,7 @@
-import { FortniteBotAction } from "action/FortniteBotAction";
-import { CoreState } from "state/CoreState";
+import Action from "action/Action";
+import CoreState from "state/CoreState";
 
-export class FortniteBotTrigger extends FortniteBotAction {
+export default class Trigger extends Action {
     /**
      * @classdesc Base trigger class, invokes an FortniteBotAction if conditions are met.
      * @param trigger - A trigger to invoke, returns true if conditions are met.

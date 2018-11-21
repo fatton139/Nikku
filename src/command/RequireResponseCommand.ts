@@ -1,7 +1,7 @@
 import { ExecutableCommand } from "./ExecutableCommand";
 import { ICommand } from "./ICommand";
 import { User } from "../user/User";
-import { FortniteBotAction } from "../action/FortniteBotAction";
+import { FortniteBotAction } from "../action/Action";
 import { PendingResponseState } from "../state/PendingResponseState";
 import { core } from "core/NikkuCore";
 
