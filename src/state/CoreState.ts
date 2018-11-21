@@ -1,17 +1,20 @@
-import { core } from "core/NikkuCore";
+import NikkuCore from "core/NikkuCore";
+import { ICoreState } from "./ICoreState";
 
-export class CoreState {
+export default class CoreState implements ICoreState {
     /**
      * Hander for the state.
      */
-    public handle: any;
+    protected handle: any;
+
+    protected core: NikkuCore;
 
     /**
      * @classdesc Base state for the bot.
      * @param handle - Handler for the state.
      */
-    constructor(handle: object) {
-        this.handle = handle;
+    constructor(core: NikkuCore) {
+        this.core = core;
     }
 
     /**
@@ -27,13 +30,5 @@ export class CoreState {
      */
     public getHandle(): any {
         return this.handle;
-    }
-
-    /**
-     * Updates the current handle.
-     */
-    public updateHandle(): any {
-        // Todo.
-        return core.getCoreState().getHandle();
     }
 }
