@@ -28,7 +28,9 @@ export class Logger {
                         }),
                     ),
                 }),
-                new ChannelTransport({}),
+                new ChannelTransport({
+                    level: "debug",
+                }),
             ],
         });
     }

@@ -7,7 +7,7 @@ export class ChannelTransport extends Transport {
 
     private static channels: Discord.TextChannel[];
 
-    public constructor(options: object) {
+    public constructor(options: any) {
         super(options);
     }
 
@@ -15,8 +15,10 @@ export class ChannelTransport extends Transport {
         setImmediate(() => {
             this.emit("logged", info);
         });
-        for (const channel of ChannelTransport.channels) {
-            channel.send(`${moment().format()}:${info.label}:**${info.level}**:${info.message}`);
+        if (ChannelTransport.channels) {
+            for (const channel of ChannelTransport.channels) {
+                channel.send(`${moment().format()}:${info.label}:**${info.level}**:${info.message}`);
+            }
         }
         callback();
     }
