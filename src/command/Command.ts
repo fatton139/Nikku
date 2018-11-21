@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import { ICommand } from "command/ICommand";
 import { User } from "user/User";
 import { UnauthorizedCommandException } from "exceptions/UnauthorizedCommandException";
-import { FortniteBotAction } from "action/FortniteBotAction";
+import Action from "action/Action";
 import { FortniteBotException } from "exceptions/FortniteBotException";
 import { core } from "core/NikkuCore";
 
@@ -10,7 +10,7 @@ export class Command implements ICommand {
     /**
      * The string required to execute this command.
      */
-    public commandString?: string;
+    public readonly commandString?: string;
 
     /**
      * The required access level to execute this command.
@@ -20,12 +20,14 @@ export class Command implements ICommand {
     /**
      * An action to execute.
      */
-    public action: FortniteBotAction;
+    public readonly action: Action;
 
     /**
      * Arguments to execute the action with.
      */
     public args: string[];
+
+    public isEnabled: boolean;
 
     /**
      * @classdesc Base command class for the bot.
@@ -34,7 +36,7 @@ export class Command implements ICommand {
      * @param action - The action to execute.
      */
     public constructor(commandString: string, accessLevel: number,
-                       action: FortniteBotAction) {
+                       action: Action) {
         this.action = action;
         this.accessLevel = accessLevel;
         this.commandString = commandString;
@@ -68,5 +70,9 @@ export class Command implements ICommand {
         if (!this.action.execute(core.getCoreState(), this.args)) {
             throw new FortniteBotException("Failed Execution");
         }
+    }
+
+    public setEnabled(enabled: boolean): void {
+        this.isEnabled = enabled;
     }
 }
