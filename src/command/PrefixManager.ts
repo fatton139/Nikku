@@ -1,17 +1,22 @@
-import { throws } from "assert";
+import * as winston from "winston";
+import { Logger } from "logger/Logger";
 
 export class PrefixManager {
     /**
      * An array of prefixes accepted by the bot.
      */
     private prefixes: string[];
-
+    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * @classdesc Initial configuration for commands.
      * @param prefix - The array of prefixes used to call commands.
      */
-    public constructor(prefix: string[]) {
-        this.prefixes = prefix;
+    public constructor(prefixes: string[]) {
+        this.logger.debug("Prefix Manager created.");
+        this.prefixes = [];
+        for (const prefix of prefixes) {
+            this.addPrefix(prefix);
+        }
     }
 
     /**
@@ -20,10 +25,12 @@ export class PrefixManager {
      * @returns true if successfully added.
      */
     public addPrefix(prefix: string): boolean {
-        if (prefix as any instanceof String && this.prefixes.indexOf(prefix) === -1) {
+        if (this.prefixes.indexOf(prefix) === -1) {
             this.prefixes.push(prefix);
+            this.logger.info(`Prefix "${prefix}" loaded.`);
             return true;
         }
+        this.logger.info(`Failed to load "${prefix}" duplicate.`);
         return false;
     }
 
@@ -44,7 +51,7 @@ export class PrefixManager {
     /**
      * @return The array of prefixes.
      */
-    public getPrefix(): string[] {
+    public getPrefixes(): string[] {
         return this.prefixes;
     }
 }
