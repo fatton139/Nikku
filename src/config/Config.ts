@@ -6,6 +6,7 @@ export namespace Config {
     const pjson = JSON.parse(fs.readFileSync("package.json", "utf8"));
     export class Discord {
         public static readonly TOKEN: string = process.env.DISCORD_TOKEN;
+        public static readonly DEBUG_CHANNELS: string[] = process.env.DEBUG_CHANNELS.split(",");
     }
     export class Database {
         public static readonly URL: string = process.env.DATABASE_URL;
@@ -23,6 +24,6 @@ export namespace Config {
         public static readonly VERSION = pjson.version;
     }
     export class DefaultUser {
-        public static readonly AXISES_ID = process.env.AXISES_ID;
+        public static readonly IDS: string[] = process.env.DEV_IDS.split(",");
     }
 }
