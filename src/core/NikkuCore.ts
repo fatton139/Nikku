@@ -49,6 +49,7 @@ export default class NikkuCore {
             this.client.login(this.config.Discord.TOKEN);
             this.client.on("ready", () => {
                 this.setDebugLogChannels();
+                this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
                 this.databaseCore.connectDb().then(() => {
                     this.logger.info("Database connected successfully.");
                     this.eventCore.listenMessages();

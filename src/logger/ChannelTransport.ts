@@ -11,13 +11,14 @@ export class ChannelTransport extends Transport {
         super(options);
     }
 
-    public log(info: TransformableInfo) {
+    public log(info: TransformableInfo, callback: () => any) {
         setImmediate(() => {
             this.emit("logged", info);
         });
         for (const channel of ChannelTransport.channels) {
             channel.send(`${moment().format()}:${info.label}:**${info.level}**:${info.message}`);
         }
+        callback();
     }
 
     public static setChannels(channels: Discord.TextChannel[]) {
