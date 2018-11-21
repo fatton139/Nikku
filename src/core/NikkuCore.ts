@@ -1,15 +1,18 @@
 import * as Discord from "discord.js";
+import * as winston from "winston";
 import { FortniteBotException } from "exceptions/FortniteBotException";
 import { EventCore } from "core/EventCore";
 import { DatabaseCore } from "core/DatabaseCore";
 import { Config } from "config/Config";
 import { CoreState } from "state/CoreState";
+import { Logger } from "logger/Logger";
+import { ChannelTransport } from "logger/ChannelTransport";
 
 export default class NikkuCore {
     /**
      * Discord.js API
      */
-    public client: Discord.Client;
+    private client: Discord.Client;
 
     /**
      * Main event handlers for the bot.
@@ -25,6 +28,8 @@ export default class NikkuCore {
 
     private config: typeof Config;
 
+    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+
     /**
      * @classdesc The main class of the bot. Initializes most of the main methods.
      */
@@ -32,7 +37,7 @@ export default class NikkuCore {
         this.config = config;
         this.client = new Discord.Client();
         this.eventCore = new EventCore(this.client);
-        this.databaseCore = new DatabaseCore(this.config.Database.URL, [this.config.DefaultUser.AXISES_ID]);
+        this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
         this.state = new CoreState(undefined);
     }
 
@@ -41,13 +46,14 @@ export default class NikkuCore {
      */
     public start(): void {
         try {
-            this.databaseCore.connectDb().then(() => {
-                this.client.login(this.config.Discord.TOKEN);
-                this.client.on("ready", () => {
+            this.client.login(this.config.Discord.TOKEN);
+            this.client.on("ready", () => {
+                this.setDebugLogChannels();
+                this.databaseCore.connectDb().then(() => {
+                    this.logger.info("Database connected successfully.");
                     this.eventCore.listenMessages();
                     this.client.user.setActivity("Brad's Weight: NaN");
                 });
-                const db = this.databaseCore.getDb();
             });
         } catch (error) {
             if (error instanceof FortniteBotException) {
@@ -56,6 +62,14 @@ export default class NikkuCore {
         }
     }
 
+    public setDebugLogChannels(): void {
+        for (const id of this.config.Discord.DEBUG_CHANNELS) {
+            const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
+            if (channel) {
+                ChannelTransport.addChannel(channel);
+            }
+        }
+    }
     /**
      * @returns The event core of the bot.
      */
@@ -76,6 +90,10 @@ export default class NikkuCore {
 
     public getCoreState(): CoreState {
         return this.state;
+    }
+
+    public getClient(): Discord.Client {
+        return this.client;
     }
 }
 
