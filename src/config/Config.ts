@@ -12,7 +12,7 @@ export namespace Config {
         public static readonly URL: string = process.env.DATABASE_URL;
     }
     export class Command {
-        public static readonly PREFIX: string[];
+        public static readonly PREFIXES: string[] = process.env.PREFIXES.split(",");
     }
     export class Service {
         public static readonly CHATBOT_USER_ID: string = process.env.CHATBOT_USER_ID;
