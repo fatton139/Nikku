@@ -1,10 +1,11 @@
 import * as MongoDb from "mongodb";
 import * as Mongoose from "mongoose";
+import * as winston from "winston";
 import { DBUserSchema } from "database/schemas/DBUserSchema";
 import { DBDateTracker } from "database/schemas/DBDateTracker";
 import { Logger } from "logger/Logger";
-import winston = require("winston");
-import { UserMigrator } from "database/mirgration/UserMigrator";
+import { UserMigrator } from "database/migration/UserMigrator";
+import { DateMigrator } from "database/migration/DateMigrator";
 
 export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -32,25 +33,33 @@ export class DatabaseCore {
     public async connectDb(): Promise<void> {
         Mongoose.connect(this.URL, { useNewUrlParser: true });
         this.connection = Mongoose.connection;
-        this.connection.on("error", () => {
+        this.connection.on("error", (err) => {
+            this.logger.error("Error connecting to DB:" + err + ".");
             throw new Error("Connection Error");
         });
         this.connection.once("open", () => {
-            const userSchema: DBUserSchema = new DBUserSchema();
-            this.UserModel = userSchema.getModelForClass(DBUserSchema);
-            this.UserModel.find({}).then((doc) => {
-                if (doc.length === 0) {
-                    this.logger.warn("User model has not been setup. Creating default profiles...");
-                    const migrator = new UserMigrator(userSchema);
-                    migrator.createModels(this.defaultUsers);
-                }
-            });
-            this.DateTrackerModel = new DBDateTracker().getModelForClass(DBDateTracker);
-            this.DateTrackerModel.find({}).then((doc) => {
-                if (doc.length === 0) {
-                    this.logger.warn("Date tracker model has not been setup. Creating default profiles...");
-                }
-            });
+            this.generateModelsIfEmpty();
+        });
+    }
+
+    private generateModelsIfEmpty(): void {
+        const userSchema: DBUserSchema = new DBUserSchema();
+        this.UserModel = userSchema.getModelForClass(DBUserSchema);
+        this.UserModel.find({}).then((doc) => {
+            if (doc.length === 0) {
+                this.logger.warn("Dev user models has not been setup. Creating default profiles.");
+                const migrator = new UserMigrator(userSchema);
+                migrator.createModels(this.defaultUsers);
+            }
+        });
+        const dateTrackerSchema = new DBDateTracker();
+        this.DateTrackerModel = dateTrackerSchema.getModelForClass(DBDateTracker);
+        this.DateTrackerModel.find({}).then((doc) => {
+            if (doc.length === 0) {
+                this.logger.warn("Dates and times model has not been setup. Creating default profiles.");
+                const migrator = new DateMigrator(dateTrackerSchema);
+                migrator.createModels();
+            }
         });
     }
 
@@ -65,6 +74,7 @@ export class DatabaseCore {
      * Closes connection to the host of the db.
      */
     public closeConnection(): void {
+        this.logger.warn("Connection to DB closed.");
         this.connection.close();
     }
 }
