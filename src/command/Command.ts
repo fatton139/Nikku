@@ -53,31 +53,35 @@ export class Command {
      * @param args - New arguments for the command.
      */
     public setArgs(args: string[]): void {
-        this.args = args;
+        this.args = args ? args : [];
     }
 
     /**
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public executeAction(core: NikkuCore, user?: User): void {
-        if (!user) {
-            user.setAccessLevel(AccessLevel.UNREGISTERED);
-        }
+    public async executeAction(core: NikkuCore, user?: User): Promise<void> {
         if (user.getAccessLevel() < this.accessLevel) {
-            const state: OnMessageState = core.getCoreState();
-            state.getMessageHandle().reply(
-                "You do not have the required access level to this command.\n" +
-                `Your access level: **${user.getAccessLevel()}** (${AccessLevel[user.getAccessLevel()]})\n` +
-                `Command access level: **${this.accessLevel}** (${AccessLevel[this.accessLevel]})\n`);
-            throw new UnauthorizedCommandException("Unauthorized Execution of " +
-                "Command of " + this.commandString);
-        }
-        if (!this.args) {
-            this.args = [];
+            throw new UnauthorizedCommandException(core.getCoreState(), this, user);
         }
         if (!this.action.execute(core.getCoreState(), this.args)) {
-            throw new FortniteBotException("Failed Execution");
+            throw new NikkuException(core.getCoreState(), "Failed Execution");
+        }
+    }
+
+    public async executeActionNoUser(core: NikkuCore) {
+        const tempUser = new User();
+        tempUser.setAccessLevel(AccessLevel.UNREGISTERED);
+        if (tempUser.getAccessLevel() >= this.accessLevel) {
+            if (!this.action.execute(core.getCoreState(), this.args)) {
+                throw new NikkuException(core.getCoreState(), "Failed Execution");
+            }
+        }
+    }
+
+    public executeActionNoWarning(core: NikkuCore, user?: User): void {
+        if (user.getAccessLevel() >= this.accessLevel) {
+            this.action.execute(core.getCoreState(), this.args);
         }
     }
 

@@ -43,40 +43,44 @@ export class CommandManager {
      * @param id - The discord id of the user invoking the command.
      */
     public parseLine(line: string, id: string): void {
-        this.triggerAction(id);
-        const commandString = this.extractCommand(line);
-        if (commandString === null) {
-            return;
-        }
         for (const prefix of this.prefixManager.getPrefixes()) {
             if (line.startsWith(prefix)) {
+                const commandString = this.extractCommand(line);
+                if (commandString === null) {
+                    return;
+                }
                 const command = this.commandRegistry.getCommand(commandString);
-                console.log(command);
                 if (command) {
                     this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id);
                 }
-                break;
-            }
-        }
-    }
-
-    private attemptExecution(command: Command, args: string[], userId: string) {
-        try {
-            command.setArgs(args);
-            const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
-            users.findOne({id: userId}).then((user: Mongoose.Document) => {
-                if (user) {
-                    command.executeAction(this.core, user as any as User);
-                } else {
-                    command.executeAction(this.core);
-                }
-            });
-        } catch (e) {
-            if (e instanceof FortniteBotException) {
-                // Output
                 return;
             }
         }
+        this.triggerAction(id);
+    }
+
+    private attemptExecution(command: Command, args: string[], userId: string) {
+        command.setArgs(args);
+        const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
+        users.findOne({id: userId}).then((user: Mongoose.Document) => {
+            if (user) {
+                this.logger.info(`Executing command "${command.getCommandString()}".`);
+                command.executeAction(this.core, user as any as User).catch((err: NikkuException) => {
+                    this.logger.verbose(
+                        `Execution of "${command.getCommandString()}"` +
+                        `failed, ${err.constructor.name}.`,
+                    );
+                });
+            } else {
+                this.logger.info(`Executing command "${command.getCommandString()}" with no registered user.`);
+                command.executeActionNoUser(this.core).catch((err: NikkuException) => {
+                    this.logger.verbose(
+                        `Execution of "${command.getCommandString()}"` +
+                        `failed, ${err.constructor.name}.`,
+                    );
+                });
+            }
+        });
     }
 
     /**
@@ -104,19 +108,26 @@ export class CommandManager {
      * Attempt to invoke the action by testing if the trigger conditions are met.
      * @param id - The discord id of the user invoking the command.
      */
-    public triggerAction(id: string): void {
+    public triggerAction(userId: string): void {
+        const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
         for (const pair of this.commandRegistry.getCommandMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1];
                 if (command.tryTrigger(this.core)) {
-                    try {
-                        command.executeAction(this.core);
-                    } catch (e) {
-                        if (e instanceof FortniteBotException) {
-                            // Output
-                            return;
+                    users.findOne({id: userId}).then((user: Mongoose.Document) => {
+                        if (user) {
+                            this.logger.info(`Triggering auto command with no warning.`);
+                            command.executeActionNoWarning(this.core, user as any as User);
+                        } else {
+                            this.logger.info(`Triggering auto command with no registered user.`);
+                            command.executeActionNoUser(this.core).catch((err: NikkuException) => {
+                                this.logger.verbose(
+                                    `Auto execution of "${command.getCommandString()}"` +
+                                    `failed, ${err.constructor.name}.`,
+                                );
+                            });
                         }
-                    }
+                    });
                 }
             }
         }

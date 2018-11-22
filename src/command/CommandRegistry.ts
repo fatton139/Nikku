@@ -8,13 +8,23 @@ export class CommandRegistry {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor() {
+        this.logger.debug("Command Registry created.");
         this.commands = new Map<string, Command>();
     }
 
-    public addCommand(name: string, command: Command): boolean {
-        if (!this.commands.has(name) && name && name.length !== 0) {
+    public addCommand(command: Command): boolean {
+        const name: string = command.getCommandString();
+        if (command instanceof TriggerableCommand) {
+            const index = this.getCommandAmount("TriggerableCommand");
+            this.commands.set("TriggerableCommand" + index, command);
+            this.logger.info(
+                `AutoCommand registered` +
+                `"${"TriggerableCommand" + index}".`,
+            );
+            return true;
+        } else if (!this.commands.has(name) && name && name.length !== 0) {
             this.commands.set(name, command);
-            this.logger.info(`Command registered ${name}. ${command.getAccessLevel()} access required.`);
+            this.logger.info(`Command registered "${name}".`);
             return true;
         }
         return false;
@@ -22,12 +32,8 @@ export class CommandRegistry {
 
     public addCommandMulti(commands: Command[]) {
         for (const command of commands) {
-            if (!command.getCommandString() && command instanceof TriggerableCommand) {
-                this.addCommand("TriggerableCommand" + this.getCommandAmount("TriggerableCommand"), command);
-            } else if (command.getCommandString()) {
-                this.addCommand(command.getCommandString(), command);
-            } else {
-                //
+            if (!this.addCommand(command)) {
+                this.logger.warn(`Failed to register command "${command.getCommandString()}".`);
             }
         }
     }
@@ -36,7 +42,7 @@ export class CommandRegistry {
         let amount = 0;
         for (const pair of this.commands.entries()) {
             if (type) {
-                if (typeof pair[1] === type) {
+                if (pair[1].constructor.name === type) {
                     amount++;
                 }
             } else {
