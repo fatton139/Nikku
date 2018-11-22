@@ -7,12 +7,13 @@ import NikkuCore from "core/NikkuCore";
 import AccessLevel from "user/AccessLevel";
 import Trigger from "action/Trigger";
 import OnMessageState from "state/OnMessageState";
+import IHasAction from "./IHasAction";
 
-export default class Command {
+export default class Command implements IHasAction {
     /**
      * The string required to execute this command.
      */
-    private readonly commandString?: string;
+    protected commandString: string;
 
     /**
      * The required access level to execute this command.
@@ -24,8 +25,6 @@ export default class Command {
      */
     protected action: Action;
 
-    protected trigger: Trigger;
-
     private readonly argLength: number;
 
     /**
@@ -35,17 +34,19 @@ export default class Command {
 
     private isEnabled: boolean;
 
+    private description: string;
+
     /**
      * @classdesc Base command class for the bot.
      * @param commandString - The string required to execute this command.
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(commandString: string, accessLevel: AccessLevel, argLength: number, action: Action) {
-        this.action = action;
+    public constructor(accessLevel: AccessLevel, argLength: number, description?: string) {
+        this.action = this.setCustomAction();
         this.accessLevel = accessLevel;
         this.argLength = argLength;
-        this.commandString = commandString;
+        this.description = description;
     }
 
     /**
@@ -54,6 +55,10 @@ export default class Command {
      */
     public setArgs(args: string[]): void {
         this.args = args ? args : [];
+    }
+
+    public getCommandString(): string {
+        return this.commandString;
     }
 
     /**
@@ -85,10 +90,6 @@ export default class Command {
         }
     }
 
-    public tryTrigger(core: NikkuCore): boolean {
-        return this.trigger.execute(core.getCoreState());
-    }
-
     public setEnabled(enabled: boolean): void {
         this.isEnabled = enabled;
     }
@@ -105,11 +106,15 @@ export default class Command {
         return this.argLength;
     }
 
-    public getCommandString(): string {
-        return this.commandString;
-    }
-
     public getAccessLevel(): AccessLevel {
         return this.accessLevel;
+    }
+
+    public getDescription(): string {
+        return this.description;
+    }
+
+    public setCustomAction(): Action {
+        return;
     }
 }
