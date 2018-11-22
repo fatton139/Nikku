@@ -1,33 +1,38 @@
 import * as Discord from "discord.js";
-import { ICommand } from "command/ICommand";
 import { User } from "user/User";
 import { UnauthorizedCommandException } from "exceptions/UnauthorizedCommandException";
 import Action from "action/Action";
 import { FortniteBotException } from "exceptions/FortniteBotException";
 import { core } from "core/NikkuCore";
+import { AccessLevel } from "user/AccessLevel";
+import Trigger from "action/Trigger";
 
-export class Command implements ICommand {
+export class Command {
     /**
      * The string required to execute this command.
      */
-    public readonly commandString?: string;
+    private readonly commandString?: string;
 
     /**
      * The required access level to execute this command.
      */
-    public readonly accessLevel: number;
+    private readonly accessLevel: AccessLevel;
 
     /**
      * An action to execute.
      */
-    public readonly action: Action;
+    protected action: Action;
+
+    protected trigger: Trigger;
+
+    private readonly argLength: number;
 
     /**
      * Arguments to execute the action with.
      */
-    public args: string[];
+    private args: string[];
 
-    public isEnabled: boolean;
+    private isEnabled: boolean;
 
     /**
      * @classdesc Base command class for the bot.
@@ -35,10 +40,10 @@ export class Command implements ICommand {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(commandString: string, accessLevel: number,
-                       action: Action) {
+    public constructor(commandString: string, accessLevel: AccessLevel, argLength: number, action: Action) {
         this.action = action;
         this.accessLevel = accessLevel;
+        this.argLength = argLength;
         this.commandString = commandString;
     }
 
@@ -72,7 +77,31 @@ export class Command implements ICommand {
         }
     }
 
+    public tryTrigger(): boolean {
+        return this.trigger.execute(core.getCoreState());
+    }
+
     public setEnabled(enabled: boolean): void {
         this.isEnabled = enabled;
+    }
+
+    public getEnabled(): boolean {
+        return this.isEnabled;
+    }
+
+    public getArgs(): string[] {
+        return this.args;
+    }
+
+    public getArgLength(): number {
+        return this.argLength;
+    }
+
+    public getCommandString(): string {
+        return this.commandString;
+    }
+
+    public getAccessLevel(): AccessLevel {
+        return this.accessLevel;
     }
 }
