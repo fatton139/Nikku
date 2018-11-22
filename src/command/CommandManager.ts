@@ -2,7 +2,7 @@ import * as Mongoose from "mongoose";
 import * as winston from "winston";
 import { Command } from "command/Command";
 import { DBUserSchema as User } from "database/schemas/DBUserSchema";
-import { FortniteBotException } from "exceptions/FortniteBotException";
+import NikkuException from "exception/NikkuException";
 import { PrefixManager } from "command/PrefixManager";
 import { Logger } from "logger/Logger";
 import NikkuCore from "core/NikkuCore";

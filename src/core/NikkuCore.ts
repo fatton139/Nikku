@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { FortniteBotException } from "exceptions/FortniteBotException";
+import NikkuException from "exception/NikkuException";
 import { EventCore } from "core/EventCore";
 import { DatabaseCore } from "core/DatabaseCore";
 import { Config } from "config/Config";
@@ -61,7 +61,7 @@ export default class NikkuCore {
                 this.client.user.setActivity("Brad's Weight: NaN");
             });
         } catch (error) {
-            if (error instanceof FortniteBotException) {
+            if (error instanceof NikkuException) {
                 // console.log(error);
             }
         }

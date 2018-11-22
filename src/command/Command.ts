@@ -1,8 +1,8 @@
 import * as Discord from "discord.js";
 import { DBUserSchema as User, DBUserSchema } from "database/schemas/DBUserSchema";
-import { UnauthorizedCommandException } from "exceptions/UnauthorizedCommandException";
+import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
-import { FortniteBotException } from "exceptions/FortniteBotException";
+import NikkuException from "exception/NikkuException";
 import NikkuCore from "core/NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import Trigger from "action/Trigger";
