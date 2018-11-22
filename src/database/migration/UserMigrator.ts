@@ -1,9 +1,9 @@
 import * as winston from "winston";
-import { Logger } from "logger/Logger";
-import { DBUserSchema } from "database/schemas/DBUserSchema";
-import { AccessLevel } from "user/AccessLevel";
+import Logger from "logger/Logger";
+import DBUserSchema from "database/schemas/DBUserSchema";
+import AccessLevel from "user/AccessLevel";
 
-export class UserMigrator {
+export default class UserMigrator {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     private schema: DBUserSchema;
     public constructor(schema: DBUserSchema) {

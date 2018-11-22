@@ -1,8 +1,8 @@
 import * as moment from "moment";
 import * as winston from "winston";
-import { ChannelTransport } from "./ChannelTransport";
+import ChannelTransport from "./ChannelTransport";
 
-export class Logger {
+export default class Logger {
     private readonly logger: winston.Logger;
     public constructor(className: string) {
         this.logger = winston.createLogger({

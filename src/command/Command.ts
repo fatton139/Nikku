@@ -1,14 +1,14 @@
 import * as Discord from "discord.js";
-import { DBUserSchema as User, DBUserSchema } from "database/schemas/DBUserSchema";
+import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
 import NikkuException from "exception/NikkuException";
 import NikkuCore from "core/NikkuCore";
-import { AccessLevel } from "user/AccessLevel";
+import AccessLevel from "user/AccessLevel";
 import Trigger from "action/Trigger";
 import OnMessageState from "state/OnMessageState";
 
-export class Command {
+export default class Command {
     /**
      * The string required to execute this command.
      */
@@ -60,7 +60,7 @@ export class Command {
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public async executeAction(core: NikkuCore, user?: User): Promise<void> {
+    public async executeAction(core: NikkuCore, user?: DBUserSchema): Promise<void> {
         if (user.getAccessLevel() < this.accessLevel) {
             throw new UnauthorizedCommandException(core.getCoreState(), this, user);
         }
@@ -70,7 +70,7 @@ export class Command {
     }
 
     public async executeActionNoUser(core: NikkuCore) {
-        const tempUser = new User();
+        const tempUser = new DBUserSchema();
         tempUser.setAccessLevel(AccessLevel.UNREGISTERED);
         if (tempUser.getAccessLevel() >= this.accessLevel) {
             if (!this.action.execute(core.getCoreState(), this.args)) {
@@ -79,7 +79,7 @@ export class Command {
         }
     }
 
-    public executeActionNoWarning(core: NikkuCore, user?: User): void {
+    public executeActionNoWarning(core: NikkuCore, user?: DBUserSchema): void {
         if (user.getAccessLevel() >= this.accessLevel) {
             this.action.execute(core.getCoreState(), this.args);
         }

@@ -1,13 +1,13 @@
 import * as MongoDb from "mongodb";
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
-import { DBUserSchema } from "database/schemas/DBUserSchema";
-import { DBDateTracker } from "database/schemas/DBDateTracker";
-import { Logger } from "logger/Logger";
-import { UserMigrator } from "database/migration/UserMigrator";
-import { DateMigrator } from "database/migration/DateMigrator";
+import DBUserSchema from "database/schemas/DBUserSchema";
+import DBDateTracker from "database/schemas/DBDateTracker";
+import Logger from "logger/Logger";
+import UserMigrator from "database/migration/UserMigrator";
+import DateMigrator from "database/migration/DateMigrator";
 
-export class DatabaseCore {
+export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     private readonly URL: string;
     /**

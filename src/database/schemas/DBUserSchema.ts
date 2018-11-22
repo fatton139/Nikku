@@ -1,7 +1,7 @@
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod } from "typegoose";
-import { AccessLevel } from "user/AccessLevel";
+import AccessLevel from "user/AccessLevel";
 
-export class DBUserSchema extends Typegoose {
+export default class DBUserSchema extends Typegoose {
     @prop({required: true, unique: true})
     private id: string;
 

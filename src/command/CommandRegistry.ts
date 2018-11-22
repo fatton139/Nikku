@@ -1,9 +1,9 @@
 import * as winston from "winston";
-import { Command } from "./Command";
+import Command from "./Command";
 import TriggerableCommand from "./TriggerableCommand";
-import { Logger } from "logger/Logger";
+import Logger from "logger/Logger";
 
-export class CommandRegistry {
+export default class CommandRegistry {
     private commands: Map<string, Command>;
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 

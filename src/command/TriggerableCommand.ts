@@ -1,8 +1,6 @@
-import { ICommand } from "./ICommand";
-import { Command } from "./Command";
+import Command from "./Command";
 import Action from "action/Action";
 import Trigger from "action/Trigger";
-import { core } from "core/NikkuCore";
 
 export default class TriggerableCommand extends Command {
     /**

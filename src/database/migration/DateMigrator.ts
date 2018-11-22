@@ -1,9 +1,8 @@
 import * as winston from "winston";
-import { Logger } from "logger/Logger";
-import { AccessLevel } from "user/AccessLevel";
-import { DBDateTracker } from "database/schemas/DBDateTracker";
+import Logger from "logger/Logger";
+import DBDateTracker from "database/schemas/DBDateTracker";
 
-export class DateMigrator {
+export default class DateMigrator {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     private schema: DBDateTracker;
     public constructor(schema: DBDateTracker) {

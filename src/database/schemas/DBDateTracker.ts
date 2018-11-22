@@ -1,6 +1,6 @@
 import { prop, Typegoose, ModelType, InstanceType } from "typegoose";
 
-export class DBDateTracker extends Typegoose {
+export default class DBDateTracker extends Typegoose {
     @prop({default: new Date()})
     private startTime: Date;
 

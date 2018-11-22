@@ -1,16 +1,16 @@
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
-import { Command } from "command/Command";
-import { DBUserSchema as User } from "database/schemas/DBUserSchema";
+import Command from "command/Command";
+import DBUserSchema from "database/schemas/DBUserSchema";
 import NikkuException from "exception/NikkuException";
-import { PrefixManager } from "command/PrefixManager";
-import { Logger } from "logger/Logger";
+import PrefixManager from "command/PrefixManager";
+import Logger from "logger/Logger";
 import NikkuCore from "core/NikkuCore";
-import { CommandRegistry } from "./CommandRegistry";
+import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
-import { MrFortniteCommand } from "command/modules/DefaultCommands";
+import MrFortniteCommands from "command/modules/MrFortniteCommands";
 
-export class CommandManager {
+export default class CommandManager {
     /**
      * The prefix required to begin calling a command.
      */
@@ -34,7 +34,7 @@ export class CommandManager {
     }
 
     private loadCommands(): void {
-        this.commandRegistry.addCommandMulti(MrFortniteCommand.commands);
+        this.commandRegistry.addCommandMulti(MrFortniteCommands.commands);
     }
 
     /**
@@ -65,7 +65,7 @@ export class CommandManager {
         users.findOne({id: userId}).then((user: Mongoose.Document) => {
             if (user) {
                 this.logger.info(`Executing command "${command.getCommandString()}".`);
-                command.executeAction(this.core, user as any as User).catch((err: NikkuException) => {
+                command.executeAction(this.core, user as any as DBUserSchema).catch((err: NikkuException) => {
                     this.logger.verbose(
                         `Execution of "${command.getCommandString()}"` +
                         `failed, ${err.constructor.name}.`,
@@ -117,7 +117,7 @@ export class CommandManager {
                     users.findOne({id: userId}).then((user: Mongoose.Document) => {
                         if (user) {
                             this.logger.info(`Triggering auto command with no warning.`);
-                            command.executeActionNoWarning(this.core, user as any as User);
+                            command.executeActionNoWarning(this.core, user as any as DBUserSchema);
                         } else {
                             this.logger.info(`Triggering auto command with no registered user.`);
                             command.executeActionNoUser(this.core).catch((err: NikkuException) => {

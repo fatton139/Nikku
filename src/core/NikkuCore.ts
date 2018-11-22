@@ -1,13 +1,13 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
 import NikkuException from "exception/NikkuException";
-import { EventCore } from "core/EventCore";
-import { DatabaseCore } from "core/DatabaseCore";
-import { Config } from "config/Config";
+import EventCore from "core/EventCore";
+import DatabaseCore from "core/DatabaseCore";
+import Config from "config/Config";
 import CoreState from "state/CoreState";
-import { Logger } from "logger/Logger";
-import { ChannelTransport } from "logger/ChannelTransport";
-import { CommandManager } from "command/CommandManager";
+import Logger from "logger/Logger";
+import ChannelTransport from "logger/ChannelTransport";
+import CommandManager from "command/CommandManager";
 
 export default class NikkuCore {
     /**

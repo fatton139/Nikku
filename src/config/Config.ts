@@ -1,7 +1,7 @@
 import { config as dotenvConfig } from "dotenv";
 import * as fs from "fs";
 
-export namespace Config {
+namespace Config {
     dotenvConfig();
     const pjson = JSON.parse(fs.readFileSync("package.json", "utf8"));
     export class Discord {
@@ -27,3 +27,5 @@ export namespace Config {
         public static readonly IDS: string[] = process.env.DEV_IDS.split(",");
     }
 }
+
+export default Config;

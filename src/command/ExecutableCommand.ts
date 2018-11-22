@@ -1,9 +1,8 @@
-import { ICommand } from "../command/ICommand";
-import { Command } from "../command/Command";
+import Command from "../command/Command";
 import Action from "../action/Action";
-import { AccessLevel } from "user/AccessLevel";
+import AccessLevel from "user/AccessLevel";
 
-export class ExecutableCommand extends Command implements ICommand {
+export default class ExecutableCommand extends Command {
     /**
      * @classdesc Commands which must be executed by a user to run.
      * @param commandString - The string required to execute this command.

@@ -1,14 +1,8 @@
 import * as Discord from "discord.js";
-import { CommandManager } from "../command/CommandManager";
-import CoreState from "state/CoreState";
 import NikkuCore from "core/NikkuCore";
 import OnMessageState from "state/OnMessageState";
-// import { defaultCommands } from "../command/DefaultCommands";
-// import { userCommands } from "../command/UserCommands";
-// import { User } from "../user/User";
-// import { shopCommands } from "../command/ShopCommand";
 
-export class EventCore {
+export default class EventCore {
 
     /**
      * Main interface with Discord.js
@@ -21,9 +15,6 @@ export class EventCore {
      */
     public constructor(client: Discord.Client) {
         this.client = client;
-        // this.commandManager.addBulkCommand(defaultCommands);
-        // this.commandManager.addBulkCommand(userCommands);
-        // this.commandManager.addBulkCommand(shopCommands);
     }
 
     /**

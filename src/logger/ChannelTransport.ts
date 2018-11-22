@@ -3,7 +3,7 @@ import * as Transport from "winston-transport";
 import * as Discord from "discord.js";
 import { TransformableInfo } from "logform";
 
-export class ChannelTransport extends Transport {
+export default class ChannelTransport extends Transport {
 
     private static channels: Discord.TextChannel[];
 

@@ -1,7 +1,7 @@
 import * as winston from "winston";
-import { Logger } from "logger/Logger";
+import Logger from "logger/Logger";
 
-export class PrefixManager {
+export default class PrefixManager {
     /**
      * An array of prefixes accepted by the bot.
      */
