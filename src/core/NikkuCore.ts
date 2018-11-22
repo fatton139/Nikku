@@ -5,8 +5,8 @@ import EventCore from "core/EventCore";
 import DatabaseCore from "core/DatabaseCore";
 import Config from "config/Config";
 import CoreState from "state/CoreState";
-import Logger from "logger/Logger";
-import ChannelTransport from "logger/ChannelTransport";
+import Logger from "log/Logger";
+import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "command/CommandManager";
 
 export default class NikkuCore {

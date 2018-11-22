@@ -5,7 +5,7 @@ import Command from "command/Command";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import NikkuException from "exception/NikkuException";
 import PrefixManager from "command/PrefixManager";
-import Logger from "logger/Logger";
+import Logger from "log/Logger";
 import NikkuCore from "core/NikkuCore";
 import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";

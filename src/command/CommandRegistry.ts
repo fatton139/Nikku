@@ -19,7 +19,7 @@ export default class CommandRegistry {
             this.commands.set("TriggerableCommand" + index, command);
             this.logger.info(
                 `AutoCommand registered` +
-                `"${"TriggerableCommand" + index}".`,
+                ` "${"TriggerableCommand" + index}".`,
             );
             return true;
         } else if (!this.commands.has(name) && name && name.length !== 0) {
