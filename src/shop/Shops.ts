@@ -7,7 +7,7 @@ import { Title } from "./Title";
 
 export const Shops = [
     new Shop("Title Shop", "DotmaCoin", true, "Buy titles for your profile."),
-    new Shop("Brad Shop", "BradCoin", false, "Some fat kid sells stuff here.")
+    new Shop("Brad Shop", "BradCoin", false, "Some fat kid sells stuff here."),
 ];
 
 Shops[0].addItems([
@@ -21,11 +21,11 @@ Shops[0].addItems([
     new Title("The UQ kid", 10000),
     new Title("The King", 15000),
     new Title("The Boss", 15000),
-    new Title("The Chad", 15000)
+    new Title("The Chad", 15000),
 ]);
 
 Shops[1].addItems([
     new Title("The Fat kid", 5, "BradCoin"),
     new Title("The Brad", 5, "BradCoin"),
-    new Title("YOUR CUSTOM TITLE", 50, "BradCoin")
+    new Title("YOUR CUSTOM TITLE", 50, "BradCoin"),
 ]);
