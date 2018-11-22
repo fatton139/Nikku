@@ -2,22 +2,16 @@ import CoreState from "state/CoreState";
 
 export default class Action {
     /**
-     * Number of arguments this action requires.
-     */
-    public argLength: number;
-
-    /**
      * An action to invoke.
      */
-    public action: (stateHandle: CoreState, args: string[]) => boolean;
+    private action: (stateHandle: CoreState, args: string[]) => boolean;
 
     /**
      * @classdesc Base class for a standard action executed by the bot.
      * @param argLength - Number of arguments the action requires.
      * @param action - An action to invoke.
      */
-    public constructor(argLength: number, action: (stateHandle: CoreState, args: string[]) => boolean) {
-        this.argLength = argLength;
+    public constructor(action: (stateHandle: CoreState, args: string[]) => boolean) {
         this.action = action;
     }
 

@@ -7,7 +7,7 @@ export default class Trigger extends Action {
      * @param trigger - A trigger to invoke, returns true if conditions are met.
      */
     public constructor(trigger: (state: CoreState) => boolean) {
-        super(0, trigger);
+        super(trigger);
     }
 
     /**
