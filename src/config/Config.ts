@@ -18,6 +18,7 @@ namespace Config {
         public static readonly COMMAND_FULL_PATH: string = `${path.dirname(require.main.filename)}/src/${Command.COMMAND_SRC}`;
         public static readonly COMMAND_PATHS: string[] = [
             "mrfortnite",
+            "util",
         ];
     }
     export class Service {
