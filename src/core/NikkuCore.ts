@@ -52,12 +52,11 @@ export default class NikkuCore {
             this.client.on("ready", () => {
                 this.setDebugLogChannels();
                 this.initializeComponents();
-                this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
                 this.databaseCore.connectDb().then(() => {
-                    this.logger.info("Database connected successfully.");
+                    this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
                     this.eventCore.listenMessages(this);
                 }).catch(() => {
-                    this.logger.info("Failed to connect to Database");
+                    this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
                 });
                 this.client.user.setActivity("Brad's Weight: NaN");
             });
@@ -71,7 +70,7 @@ export default class NikkuCore {
     public initializeComponents() {
         this.eventCore = new EventCore(this.client);
         this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
-        this.commandManager = new CommandManager(this.config.Command.PREFIXES);
+        this.commandManager = new CommandManager(this, this.config.Command.PREFIXES);
     }
 
     public setDebugLogChannels(): void {

@@ -38,6 +38,7 @@ export class DatabaseCore {
             throw new Error("Connection Error");
         });
         this.connection.once("open", () => {
+            this.logger.info("Database connected successfully.");
             this.generateModelsIfEmpty();
         });
     }
@@ -76,5 +77,13 @@ export class DatabaseCore {
     public closeConnection(): void {
         this.logger.warn("Connection to DB closed.");
         this.connection.close();
+    }
+
+    public getUserModel(): Mongoose.Model<Mongoose.Document, {}> {
+        return this.UserModel;
+    }
+
+    public getDateTrackerModel(): Mongoose.Model<Mongoose.Document, {}> {
+        return this.DateTrackerModel;
     }
 }
