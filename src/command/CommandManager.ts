@@ -1,5 +1,6 @@
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
+import * as fs from "fs";
 import Command from "command/Command";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import NikkuException from "exception/NikkuException";
@@ -8,7 +9,7 @@ import Logger from "logger/Logger";
 import NikkuCore from "core/NikkuCore";
 import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
-import MrFortniteCommands from "command/modules/MrFortniteCommands";
+import Config from "config/Config";
 
 export default class CommandManager {
     /**
@@ -25,16 +26,61 @@ export default class CommandManager {
     /**
      * @classdesc Class to handle import and execution of commands.
      */
-    public constructor(core: NikkuCore, prefixes: string[]) {
+    public constructor(core: NikkuCore, config: typeof Config) {
         this.logger.debug("Command Manager created.");
         this.core = core;
-        this.prefixManager = new PrefixManager(prefixes);
+        this.prefixManager = new PrefixManager(config.Command.PREFIXES);
         this.commandRegistry = new CommandRegistry();
-        this.loadCommands();
+        this.loadCommands(config.Command.COMMAND_FULL_PATH, config.Command.COMMAND_SRC, config.Command.COMMAND_PATHS);
     }
 
-    private loadCommands(): void {
-        this.commandRegistry.addCommandMulti(MrFortniteCommands.commands);
+    private async loadCommands(commandPath: string, src: string, paths: string[]): Promise<void> {
+        const importPaths: string[] = this.getImportPaths(commandPath, paths);
+        this.logger.info(`Detected ${importPaths.length}` +
+                `${importPaths.length === 1 ? "command" : "commands"} for import.`);
+        for (const path of importPaths) {
+            const commandClass = await import(`${src}/${path}`);
+            if (!commandClass.default) {
+                this.logger.warn(`${src}/${path} has no default export.`);
+                break;
+            } else if (!(new commandClass.default() instanceof Command)) {
+                this.logger.warn(`${src}/${path} exported class is not of type "Command".`);
+                break;
+            } else {
+                this.commandRegistry.addCommand(new commandClass.default());
+            }
+        }
+        this.logger.info(`Successfully imported ${this.commandRegistry.getCommandSize()} ` +
+                `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
+    }
+
+    private getImportPaths(commandPath: string, paths: string[]): string[] {
+        const filePaths: string[] = [];
+        for (const path of paths) {
+            let files: string[];
+            try {
+                files = fs.readdirSync(`${commandPath}/${path}`);
+            } catch (error) {
+                if (error.code === "ENOENT") {
+                    this.logger.warn(`No such directory "${path}".`);
+                } else {
+                    this.logger.warn(`FS System Error while reading "${path}".`);
+                }
+                break;
+            }
+            if (files.length === 0) {
+                this.logger.verbose(`Empty command directory "${path}".`);
+                break;
+            }
+            for (const file of files) {
+                const fileName = file.split(".")[0];
+                if (filePaths.indexOf(`${path}/${fileName}`) === -1) {
+                    filePaths.push(`${path}/${fileName}`);
+                    this.logger.info(`Command path detected "${path}/${fileName}".`);
+                }
+            }
+        }
+        return filePaths;
     }
 
     /**
@@ -49,7 +95,7 @@ export default class CommandManager {
                 if (commandString === null) {
                     return;
                 }
-                const command = this.commandRegistry.getCommand(commandString);
+                const command: Command = this.commandRegistry.getCommand(commandString);
                 if (command) {
                     this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id);
                 }
@@ -72,7 +118,7 @@ export default class CommandManager {
                     );
                 });
             } else {
-                this.logger.info(`Executing command "${command.getCommandString()}" with no registered user.`);
+                this.logger.info(`Executing command "${command.getCommandString()}". NO_REG_USER.`);
                 command.executeActionNoUser(this.core).catch((err: NikkuException) => {
                     this.logger.verbose(
                         `Execution of "${command.getCommandString()}"` +
@@ -116,10 +162,10 @@ export default class CommandManager {
                 if (command.tryTrigger(this.core)) {
                     users.findOne({id: userId}).then((user: Mongoose.Document) => {
                         if (user) {
-                            this.logger.info(`Triggering auto command with no warning.`);
+                            this.logger.info(`Triggering auto command. NO_WARN.`);
                             command.executeActionNoWarning(this.core, user as any as DBUserSchema);
                         } else {
-                            this.logger.info(`Triggering auto command with no registered user.`);
+                            this.logger.info(`Triggering auto command. NO_REG_USER.`);
                             command.executeActionNoUser(this.core).catch((err: NikkuException) => {
                                 this.logger.verbose(
                                     `Auto execution of "${command.getCommandString()}"` +

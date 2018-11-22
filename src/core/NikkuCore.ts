@@ -70,7 +70,7 @@ export default class NikkuCore {
     public initializeComponents() {
         this.eventCore = new EventCore(this.client);
         this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
-        this.commandManager = new CommandManager(this, this.config.Command.PREFIXES);
+        this.commandManager = new CommandManager(this, this.config);
     }
 
     public setDebugLogChannels(): void {

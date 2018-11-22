@@ -87,4 +87,8 @@ export default class CommandRegistry {
     public getCommand(name: string): Command {
         return this.commands.get(name);
     }
+
+    public getCommandSize(): number {
+        return this.commands.size;
+    }
 }
