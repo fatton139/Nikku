@@ -1,11 +1,12 @@
 import * as Discord from "discord.js";
-import { User } from "user/User";
+import { DBUserSchema as User, DBUserSchema } from "database/schemas/DBUserSchema";
 import { UnauthorizedCommandException } from "exceptions/UnauthorizedCommandException";
 import Action from "action/Action";
 import { FortniteBotException } from "exceptions/FortniteBotException";
-import { core } from "core/NikkuCore";
+import NikkuCore from "core/NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import Trigger from "action/Trigger";
+import OnMessageState from "state/OnMessageState";
 
 export class Command {
     /**
@@ -59,13 +60,16 @@ export class Command {
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public executeAction(user: User): void {
-        if (user.accessLevel < this.accessLevel) {
-            const m = core.getCoreState().getHandle() as Discord.Message;
-            m.reply(
+    public executeAction(core: NikkuCore, user?: User): void {
+        if (!user) {
+            user.setAccessLevel(AccessLevel.UNREGISTERED);
+        }
+        if (user.getAccessLevel() < this.accessLevel) {
+            const state: OnMessageState = core.getCoreState();
+            state.getMessageHandle().reply(
                 "You do not have the required access level to this command.\n" +
-                "Your access level: **" + user.accessLevel + "**\n" +
-                "Command access level: **" + this.accessLevel + "**");
+                `Your access level: **${user.getAccessLevel()}** (${AccessLevel[user.getAccessLevel()]})\n` +
+                `Command access level: **${this.accessLevel}** (${AccessLevel[this.accessLevel]})\n`);
             throw new UnauthorizedCommandException("Unauthorized Execution of " +
                 "Command of " + this.commandString);
         }
@@ -77,7 +81,7 @@ export class Command {
         }
     }
 
-    public tryTrigger(): boolean {
+    public tryTrigger(core: NikkuCore): boolean {
         return this.trigger.execute(core.getCoreState());
     }
 

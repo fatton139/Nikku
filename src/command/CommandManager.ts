@@ -1,20 +1,16 @@
+import * as Mongoose from "mongoose";
 import * as winston from "winston";
 import { Command } from "command/Command";
-import { User } from "user/User";
+import { DBUserSchema as User } from "database/schemas/DBUserSchema";
 import { FortniteBotException } from "exceptions/FortniteBotException";
 import { PrefixManager } from "command/PrefixManager";
 import { Logger } from "logger/Logger";
-import { core } from "core/NikkuCore";
+import NikkuCore from "core/NikkuCore";
 import { CommandRegistry } from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
 import { MrFortniteCommand } from "command/modules/DefaultCommands";
 
 export class CommandManager {
-    /**
-     * Set of all commands.
-     */
-    // public commands: Command[];
-
     /**
      * The prefix required to begin calling a command.
      */
@@ -22,13 +18,16 @@ export class CommandManager {
 
     private commandRegistry: CommandRegistry;
 
+    private core: NikkuCore;
+
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     /**
      * @classdesc Class to handle import and execution of commands.
      */
-    public constructor(prefixes: string[]) {
+    public constructor(core: NikkuCore, prefixes: string[]) {
         this.logger.debug("Command Manager created.");
+        this.core = core;
         this.prefixManager = new PrefixManager(prefixes);
         this.commandRegistry = new CommandRegistry();
         this.loadCommands();
@@ -61,22 +60,17 @@ export class CommandManager {
         }
     }
 
-    public attemptExecution(command: Command, args: string[], id: string) {
+    private attemptExecution(command: Command, args: string[], userId: string) {
         try {
             command.setArgs(args);
-            // core.getDbCore().collections.user
-            // .get((res) => {
-            //     const index = res.findIndex(
-            //         (user) => user.id === id);
-            //     if (index === -1) {
-            //         command.executeAction(new User(undefined, 0));
-            //     } else {
-            //         command.executeAction(
-            //             new User(res[index].id,
-            //                 res[index].accessLevel,
-            //             ));
-            //     }
-            // });
+            const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
+            users.findOne({id: userId}).then((user: Mongoose.Document) => {
+                if (user) {
+                    command.executeAction(this.core, user as any as User);
+                } else {
+                    command.executeAction(this.core);
+                }
+            });
         } catch (e) {
             if (e instanceof FortniteBotException) {
                 // Output
@@ -114,9 +108,9 @@ export class CommandManager {
         for (const pair of this.commandRegistry.getCommandMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1];
-                if (command.tryTrigger()) {
+                if (command.tryTrigger(this.core)) {
                     try {
-                        command.executeAction(new User(undefined, 0));
+                        command.executeAction(this.core);
                     } catch (e) {
                         if (e instanceof FortniteBotException) {
                             // Output
