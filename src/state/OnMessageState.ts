@@ -3,9 +3,6 @@ import CoreState from "./CoreState";
 import NikkuCore from "core/NikkuCore";
 
 export default class OnMessageState extends CoreState {
-
-    private messageHandle: Discord.Message;
-
     public constructor(core: NikkuCore, messageHandle: Discord.Message) {
         super(core);
         this.messageHandle = messageHandle;

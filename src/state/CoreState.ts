@@ -1,11 +1,14 @@
 import NikkuCore from "core/NikkuCore";
 import { ICoreState } from "./ICoreState";
+import * as Discord from "discord.js";
 
 export default class CoreState implements ICoreState {
     /**
      * Hander for the state.
      */
-    protected handle: any;
+    protected handle?: any;
+
+    protected messageHandle?: Discord.Message;
 
     protected core: NikkuCore;
 
@@ -30,5 +33,9 @@ export default class CoreState implements ICoreState {
      */
     public getHandle(): any {
         return this.handle;
+    }
+
+    public getMessageHandle(): Discord.Message {
+        return this.messageHandle;
     }
 }
