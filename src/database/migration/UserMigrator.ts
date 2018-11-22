@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import Logger from "logger/Logger";
+import Logger from "log/Logger";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import AccessLevel from "user/AccessLevel";
 

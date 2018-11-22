@@ -1,7 +1,7 @@
 import * as winston from "winston";
 import Command from "./Command";
 import TriggerableCommand from "./TriggerableCommand";
-import Logger from "logger/Logger";
+import Logger from "log/Logger";
 
 export default class CommandRegistry {
     private commands: Map<string, Command>;

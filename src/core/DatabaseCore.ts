@@ -3,7 +3,7 @@ import * as Mongoose from "mongoose";
 import * as winston from "winston";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import DBDateTracker from "database/schemas/DBDateTracker";
-import Logger from "logger/Logger";
+import Logger from "log/Logger";
 import UserMigrator from "database/migration/UserMigrator";
 import DateMigrator from "database/migration/DateMigrator";
 

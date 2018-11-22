@@ -158,7 +158,7 @@ export default class CommandManager {
         const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
         for (const pair of this.commandRegistry.getCommandMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
-                const command: TriggerableCommand = pair[1];
+                const command: TriggerableCommand = pair[1] as TriggerableCommand;
                 if (command.tryTrigger(this.core)) {
                     users.findOne({id: userId}).then((user: Mongoose.Document) => {
                         if (user) {

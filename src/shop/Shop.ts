@@ -1,5 +1,5 @@
 import { Item } from "./Item";
-import { randInt } from "../utils/Random";
+import randInt from "../utils/Random";
 
 export class Shop {
     /**
