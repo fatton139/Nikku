@@ -1,8 +1,11 @@
+import * as winston from "winston";
 import { Command } from "./Command";
 import TriggerableCommand from "./TriggerableCommand";
+import { Logger } from "logger/Logger";
 
 export class CommandRegistry {
     private commands: Map<string, Command>;
+    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor() {
         this.commands = new Map<string, Command>();
@@ -11,6 +14,7 @@ export class CommandRegistry {
     public addCommand(name: string, command: Command): boolean {
         if (!this.commands.has(name) && name && name.length !== 0) {
             this.commands.set(name, command);
+            this.logger.info(`Command registered ${name}. ${command.getAccessLevel()} access required.`);
             return true;
         }
         return false;
@@ -18,10 +22,10 @@ export class CommandRegistry {
 
     public addCommandMulti(commands: Command[]) {
         for (const command of commands) {
-            if (!command.commandString && command instanceof TriggerableCommand) {
+            if (!command.getCommandString() && command instanceof TriggerableCommand) {
                 this.addCommand("TriggerableCommand" + this.getCommandAmount("TriggerableCommand"), command);
-            } else if (command.commandString) {
-                this.addCommand(command.commandString, command);
+            } else if (command.getCommandString()) {
+                this.addCommand(command.getCommandString(), command);
             } else {
                 //
             }

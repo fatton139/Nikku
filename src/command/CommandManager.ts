@@ -52,8 +52,9 @@ export class CommandManager {
         for (const prefix of this.prefixManager.getPrefixes()) {
             if (line.startsWith(prefix)) {
                 const command = this.commandRegistry.getCommand(commandString);
+                console.log(command);
                 if (command) {
-                    this.attemptExecution(command, this.extractArguments(line, command.action.argLength), id);
+                    this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id);
                 }
                 break;
             }
@@ -62,7 +63,7 @@ export class CommandManager {
 
     public attemptExecution(command: Command, args: string[], id: string) {
         try {
-            command.args = args;
+            command.setArgs(args);
             // core.getDbCore().collections.user
             // .get((res) => {
             //     const index = res.findIndex(
