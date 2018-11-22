@@ -2,6 +2,7 @@ import * as winston from "winston";
 import Command from "./Command";
 import TriggerableCommand from "./TriggerableCommand";
 import Logger from "log/Logger";
+import ExecutableCommand from "./ExecutableCommand";
 
 export default class CommandRegistry {
     private commands: Map<string, Command>;
@@ -15,16 +16,15 @@ export default class CommandRegistry {
     public addCommand(command: Command): boolean {
         const name: string = command.getCommandString();
         if (command instanceof TriggerableCommand) {
-            const index = this.getCommandAmount("TriggerableCommand");
-            this.commands.set("TriggerableCommand" + index, command);
+            this.commands.set(command.constructor.name, command);
             this.logger.info(
                 `AutoCommand registered` +
-                ` "${"TriggerableCommand" + index}".`,
+                ` "${command.constructor.name}".`,
             );
             return true;
         } else if (!this.commands.has(name) && name && name.length !== 0) {
             this.commands.set(name, command);
-            this.logger.info(`Command registered "${name}".`);
+            this.logger.info(`ExecutableCommand registered "${name}".`);
             return true;
         }
         return false;
@@ -38,14 +38,10 @@ export default class CommandRegistry {
         }
     }
 
-    private getCommandAmount(type?: string): number {
+    private getAutoCommandAmount(): number {
         let amount = 0;
         for (const pair of this.commands.entries()) {
-            if (type) {
-                if (pair[1].constructor.name === type) {
-                    amount++;
-                }
-            } else {
+            if (pair[1] instanceof TriggerableCommand) {
                 amount++;
             }
         }

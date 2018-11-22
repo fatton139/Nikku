@@ -37,7 +37,7 @@ export default class CommandManager {
     private async loadCommands(commandPath: string, src: string, paths: string[]): Promise<void> {
         const importPaths: string[] = this.getImportPaths(commandPath, paths);
         this.logger.info(`Detected ${importPaths.length}` +
-                `${importPaths.length === 1 ? "command" : "commands"} for import.`);
+                ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
         for (const path of importPaths) {
             const commandClass = await import(`${src}/${path}`);
             if (!commandClass.default) {
