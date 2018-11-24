@@ -46,29 +46,26 @@ export default class NikkuCore {
     /**
      * Start the main processes of the bot.
      */
-    public start(): void {
-        try {
-            this.client.login(this.config.Discord.TOKEN);
-            this.client.on("ready", () => {
-                this.setDebugLogChannels();
-                this.initializeComponents();
-                this.databaseCore.connectDb().then(() => {
-                    this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
-                    this.eventCore.listenMessages(this);
-                }).catch(() => {
-                    this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
-                });
-                this.client.user.setActivity("Brad's Weight: NaN");
-            });
-        } catch (error) {
-            if (error instanceof NikkuException) {
-                // console.log(error);
+    public async start() {
+        this.client.login(this.config.Discord.TOKEN);
+        this.client.on("ready", async () => {
+            this.setDebugLogChannels();
+            this.initializeComponents();
+            try {
+                await this.databaseCore.connectDb();
+                await this.commandManager.loadCommands(this.config.Command.COMMAND_FULL_PATH,
+                    this.config.Command.COMMAND_SRC, this.config.Command.COMMAND_PATHS);
+                this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
+                this.eventCore.listenMessages();
+            } catch (err) {
+                this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
             }
-        }
+            this.client.user.setActivity("Brad's Weight: NaN");
+        });
     }
 
     public initializeComponents() {
-        this.eventCore = new EventCore(this.client);
+        this.eventCore = new EventCore(this.client, this);
         this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
         this.commandManager = new CommandManager(this, this.config);
     }
