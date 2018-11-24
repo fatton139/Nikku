@@ -18,21 +18,23 @@ export default class RandomResponse extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger((state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState) => {
             return randInt(0, 100) < 5;
         });
     }
 
     public setCustomAction(): Action {
-        return new Action((state: OnMessageState) => {
+        return new Action(async (state: OnMessageState) => {
             const m: Discord.Message = state.getMessageHandle();
             if (m.content.replace(/\s/g, "").toLowerCase().startsWith("mrfortnite")) {
                 m.content = m.content.substring("Mr Fortnite ".length);
             }
-            this.botService.sendMessage(m.content, m.channel as Discord.TextChannel).then(() => {
+            try {
+                await this.botService.sendMessage(m.content, m.channel as Discord.TextChannel);
                 return true;
-            });
-            return false;
+            } catch (err) {
+                throw err;
+            }
         });
     }
 }

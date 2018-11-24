@@ -16,23 +16,25 @@ export default class AskResponse extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger((state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState) => {
             const m: Discord.Message = state.getMessageHandle();
             return m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") !== -1;
         });
     }
 
     public setCustomAction(): Action {
-        return new Action((state: OnMessageState) => {
+        return new Action(async (state: OnMessageState) => {
             const m: Discord.Message = state.getMessageHandle();
             if (m.content.replace(/\s/g, "").toLowerCase().startsWith("mrfortnite")) {
                 m.content = m.content.substring("Mr Fortnite ".length);
             }
             // Calculate Levenshtein Distance.
-            this.botService.sendMessage(m.content, m.channel as Discord.TextChannel).then(() => {
+            try {
+                this.botService.sendMessage(m.content, m.channel as Discord.TextChannel);
                 return true;
-            });
-            return false;
+            } catch (err) {
+                throw err;
+            }
         });
     }
 }

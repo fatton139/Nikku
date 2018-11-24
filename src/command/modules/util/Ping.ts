@@ -9,7 +9,7 @@ export default class Test extends ExecutableCommand {
     }
 
     public setCustomAction(): Action {
-        return new Action((state: OnMessageState) => {
+        return new Action(async (state: OnMessageState) => {
             state.getMessageHandle().channel.send("pong");
             return true;
         });
