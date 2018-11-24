@@ -3,7 +3,7 @@ import * as Mongoose from "mongoose";
 import Logger from "log/Logger";
 import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
 
-export default class DateMigrator {
+export default class GlobalPropertyMigrator {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     private schema: DBGlobalPropertySchema;
     public constructor(schema: DBGlobalPropertySchema) {

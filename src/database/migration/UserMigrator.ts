@@ -20,10 +20,10 @@ export default class UserMigrator {
             try {
                 const doc = await model.save();
                 i++;
-                this.logger.info(`Dev user saved ${i} of ${ids.length}.`);
+                this.logger.info(`Dev user created ${i} of ${ids.length}.`);
                 Promise.resolve(doc);
             } catch (err) {
-                this.logger.error(`Failed to save user ${userId}:${err}.`);
+                this.logger.error(`Failed to create user ${userId}:${err}.`);
                 Promise.reject(err);
             }
         }

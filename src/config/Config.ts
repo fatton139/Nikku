@@ -19,6 +19,7 @@ namespace Config {
         public static readonly COMMAND_PATHS: string[] = [
             "mrfortnite",
             "util",
+            "user",
         ];
     }
     export class Service {

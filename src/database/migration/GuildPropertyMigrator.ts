@@ -15,10 +15,10 @@ export default class GuildPropertyMigrator {
         });
         try {
             const docs = await model.save();
-            // this.logger.info("Setup global properties document.");
+            this.logger.info("Setup guild properties document.");
             Promise.resolve(docs);
         } catch (err) {
-            // this.logger.error("Failed to setup global properties document.");
+            this.logger.error("Failed to setup guild properties document.");
             Promise.reject(err);
         }
     }

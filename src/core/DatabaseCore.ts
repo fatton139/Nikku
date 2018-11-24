@@ -10,7 +10,6 @@ import UserMigrator from "database/migration/UserMigrator";
 import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
 import GuildPropertyMigrator from "database/migration/GuildPropertyMigrator";
 import NikkuCore from "./NikkuCore";
-import { getPriority } from "os";
 
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -39,6 +38,7 @@ export default class DatabaseCore {
         this.client = core.getClient();
         this.core = core;
         this.ready = false;
+        this.logger.debug("");
     }
 
     /**
