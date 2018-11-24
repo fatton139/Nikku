@@ -1,1 +1,1 @@
-worker: node fortniteBot.js
+worker: npm start
