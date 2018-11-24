@@ -1,6 +1,7 @@
 import NikkuCore from "core/NikkuCore";
 import { ICoreState } from "./ICoreState";
 import * as Discord from "discord.js";
+import DatabaseCore from "core/DatabaseCore";
 
 export default class CoreState implements ICoreState {
     /**
@@ -37,5 +38,9 @@ export default class CoreState implements ICoreState {
 
     public getMessageHandle(): Discord.Message {
         return this.messageHandle;
+    }
+
+    public getDbCore(): DatabaseCore {
+        return this.core.getDbCore();
     }
 }
