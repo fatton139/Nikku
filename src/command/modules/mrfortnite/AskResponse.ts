@@ -5,7 +5,7 @@ import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import Config from "config/Config";
-import ChatBotService from "services/chatbotService";
+import ChatBotService from "services/ChatBotService";
 
 export default class AskResponse extends TriggerableCommand {
     private botService: ChatBotService;

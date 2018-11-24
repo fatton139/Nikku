@@ -6,7 +6,7 @@ import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import randInt from "utils/Random";
 import Config from "config/Config";
-import ChatBotService from "services/chatbotService";
+import ChatBotService from "services/ChatBotService";
 
 export default class RandomResponse extends TriggerableCommand {
 
