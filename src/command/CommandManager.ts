@@ -31,20 +31,19 @@ export default class CommandManager {
         this.core = core;
         this.prefixManager = new PrefixManager(config.Command.PREFIXES);
         this.commandRegistry = new CommandRegistry();
-        this.loadCommands(config.Command.COMMAND_FULL_PATH, config.Command.COMMAND_SRC, config.Command.COMMAND_PATHS);
     }
 
-    private async loadCommands(commandPath: string, src: string, paths: string[]): Promise<void> {
+    public async loadCommands(commandPath: string, src: string, paths: string[]): Promise<void> {
         const importPaths: string[] = this.getImportPaths(commandPath, paths);
         this.logger.info(`Detected ${importPaths.length}` +
                 ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
         for (const path of importPaths) {
             const commandClass = await import(`${src}/${path}`);
             if (!commandClass.default) {
-                this.logger.warn(`${src}/${path} has no default export.`);
+                this.logger.warn(`Fail to register command. "${src}/${path}" has no default export.`);
                 break;
             } else if (!(new commandClass.default() instanceof Command)) {
-                this.logger.warn(`${src}/${path} exported class is not of type "Command".`);
+                this.logger.warn(`Fail to register command. "${src}/${path}" exported class is not of type "Command".`);
                 break;
             } else {
                 this.commandRegistry.addCommand(new commandClass.default());
