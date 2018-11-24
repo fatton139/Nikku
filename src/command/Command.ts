@@ -65,16 +65,20 @@ export default class Command implements IHasAction {
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public async executeAction(core: NikkuCore, user?: DBUserSchema): Promise<void> {
+    public executeAction(core: NikkuCore, user?: DBUserSchema): void {
         if (user.getAccessLevel() < this.accessLevel) {
             throw new UnauthorizedCommandException(core.getCoreState(), this, user);
         }
-        if (!this.action.execute(core.getCoreState(), this.args)) {
-            throw new NikkuException(core.getCoreState(), "Failed Execution");
-        }
+        this.action.execute(core.getCoreState(), this.args).then((status: boolean) => {
+            if (!status) {
+                console.log(status);
+                throw new NikkuException(core.getCoreState(), "Failed Execution");
+            }
+        });
+
     }
 
-    public async executeActionNoUser(core: NikkuCore) {
+    public executeActionNoUser(core: NikkuCore): void {
         const tempUser = new DBUserSchema();
         tempUser.setAccessLevel(AccessLevel.UNREGISTERED);
         if (tempUser.getAccessLevel() >= this.accessLevel) {

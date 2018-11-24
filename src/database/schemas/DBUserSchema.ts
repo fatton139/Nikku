@@ -18,6 +18,11 @@ export default class DBUserSchema extends Typegoose {
     private title?: {};
 
     @instanceMethod
+    public getId(): string {
+        return this.id;
+    }
+
+    @instanceMethod
     public setAccessLevel(level: AccessLevel) {
         this.accessLevel = this.accessLevel;
     }

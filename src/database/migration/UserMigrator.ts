@@ -9,7 +9,7 @@ export default class UserMigrator {
     public constructor(schema: DBUserSchema) {
         this.schema = schema;
     }
-    public createModels(ids: string[]): void {
+    public async createModels(ids: string[]): Promise<any> {
         let i = 0;
         for (const userId of ids) {
             const userModel = this.schema.getModelForClass(DBUserSchema);
@@ -17,12 +17,15 @@ export default class UserMigrator {
                 id: userId,
                 accessLevel: AccessLevel.DEVELOPER,
             });
-            model.save().then((user) => {
+            try {
+                const doc = await model.save();
                 i++;
-                this.logger.info("Dev user saved " + i + " of " + ids.length + ".");
-            }).catch((err) => {
-                this.logger.error("Failed to save user " + userId + ":" + err + ".");
-            });
+                this.logger.info(`Dev user saved ${i} of ${ids.length}.`);
+                Promise.resolve(doc);
+            } catch (err) {
+                this.logger.error(`Failed to save user ${userId}:${err}.`);
+                Promise.reject(err);
+            }
         }
     }
 }

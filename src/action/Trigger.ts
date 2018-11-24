@@ -6,7 +6,7 @@ export default class Trigger extends Action {
      * @classdesc Base trigger class, invokes an FortniteBotAction if conditions are met.
      * @param trigger - A trigger to invoke, returns true if conditions are met.
      */
-    public constructor(trigger: (state: CoreState) => boolean) {
+    public constructor(trigger: (state: CoreState) => Promise<boolean>) {
         super(trigger);
     }
 
@@ -15,7 +15,7 @@ export default class Trigger extends Action {
      * @param state A Handle for the trigger to bind to.
      * @returns true if the command was successfully executed.
      */
-    public execute(state: CoreState): boolean {
-        return super.execute(state, undefined);
+    public async execute(state: CoreState): Promise<boolean> {
+        return super.execute(state, []);
     }
 }

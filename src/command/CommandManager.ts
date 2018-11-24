@@ -9,7 +9,6 @@ import Logger from "log/Logger";
 import NikkuCore from "core/NikkuCore";
 import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
-import Config from "config/Config";
 
 export default class CommandManager {
     /**
@@ -26,10 +25,10 @@ export default class CommandManager {
     /**
      * @classdesc Class to handle import and execution of commands.
      */
-    public constructor(core: NikkuCore, config: typeof Config) {
+    public constructor(core: NikkuCore) {
         this.logger.debug("Command Manager created.");
         this.core = core;
-        this.prefixManager = new PrefixManager(config.Command.PREFIXES);
+        this.prefixManager = new PrefixManager(core.getConfig().Command.PREFIXES);
         this.commandRegistry = new CommandRegistry();
     }
 
@@ -110,20 +109,24 @@ export default class CommandManager {
         users.findOne({id: userId}).then((user: Mongoose.Document) => {
             if (user) {
                 this.logger.info(`Executing command "${command.getCommandString()}".`);
-                command.executeAction(this.core, user as any as DBUserSchema).catch((err: NikkuException) => {
+                try {
+                    command.executeAction(this.core, user as any as DBUserSchema);
+                } catch (err) {
                     this.logger.verbose(
                         `Execution of "${command.getCommandString()}"` +
-                        `failed, ${err.constructor.name}.`,
+                        ` failed, ${err.constructor.name}:${err}`,
                     );
-                });
+                }
             } else {
                 this.logger.info(`Executing command "${command.getCommandString()}". NO_REG_USER.`);
-                command.executeActionNoUser(this.core).catch((err: NikkuException) => {
+                try {
+                    command.executeActionNoUser(this.core);
+                } catch (err) {
                     this.logger.verbose(
                         `Execution of "${command.getCommandString()}"` +
-                        `failed, ${err.constructor.name}.`,
+                        ` failed, ${err.constructor.name}.`,
                     );
-                });
+                }
             }
         });
     }
@@ -158,22 +161,27 @@ export default class CommandManager {
         for (const pair of this.commandRegistry.getCommandMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1] as TriggerableCommand;
-                if (command.tryTrigger(this.core)) {
-                    users.findOne({id: userId}).then((user: Mongoose.Document) => {
-                        if (user) {
-                            this.logger.info(`Triggering auto command. NO_WARN.`);
-                            command.executeActionNoWarning(this.core, user as any as DBUserSchema);
-                        } else {
-                            this.logger.info(`Triggering auto command. NO_REG_USER.`);
-                            command.executeActionNoUser(this.core).catch((err: NikkuException) => {
-                                this.logger.verbose(
-                                    `Auto execution of "${command.getCommandString()}"` +
-                                    `failed, ${err.constructor.name}.`,
-                                );
-                            });
-                        }
-                    });
-                }
+                command.tryTrigger(this.core).then((status: boolean) => {
+                    if (status) {
+                        users.findOne({id: userId}).then((user: Mongoose.Document) => {
+                            if (user) {
+                                console.log(command.constructor.name);
+                                this.logger.info(`Triggering auto command. NO_WARN.`);
+                                command.executeActionNoWarning(this.core, user as any as DBUserSchema);
+                            } else {
+                                this.logger.info(`Triggering auto command. NO_REG_USER.`);
+                                try {
+                                    command.executeActionNoUser(this.core);
+                                } catch (err) {
+                                    this.logger.verbose(
+                                        `Auto execution of "${command.getCommandString()}"` +
+                                        `failed, ${err.constructor.name}.`,
+                                    );
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     }
