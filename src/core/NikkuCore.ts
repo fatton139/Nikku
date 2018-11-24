@@ -46,7 +46,7 @@ export default class NikkuCore {
     /**
      * Start the main processes of the bot.
      */
-    public async start() {
+    public async start(): Promise<void> {
         this.client.login(this.config.Discord.TOKEN);
         this.client.on("ready", async () => {
             this.setDebugLogChannels();
@@ -64,7 +64,7 @@ export default class NikkuCore {
         });
     }
 
-    public initializeComponents() {
+    public initializeComponents(): void {
         this.eventCore = new EventCore(this.client, this);
         this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
         this.commandManager = new CommandManager(this, this.config);
