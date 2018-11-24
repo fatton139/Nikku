@@ -38,7 +38,7 @@ export default class DatabaseCore {
         this.client = core.getClient();
         this.core = core;
         this.ready = false;
-        this.logger.debug("");
+        this.logger.debug("Database Core created.");
     }
 
     /**

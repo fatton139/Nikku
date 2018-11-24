@@ -20,6 +20,7 @@ export default class EventCore {
     public constructor(core: NikkuCore) {
         this.client = core.getClient();
         this.core = core;
+        this.logger.debug("Event Core created.");
     }
 
     /**
