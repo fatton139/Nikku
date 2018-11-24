@@ -1,4 +1,4 @@
-export class Loop {
+export default class Loop {
     private amount: number;
     private delay: number;
     private callback: (amount: number) => void;
@@ -15,7 +15,7 @@ export class Loop {
         this.amount = amount;
         this.delay = delay;
         this.callback = callback;
-        this.interval = null;
+        this.interval = undefined;
     }
 
     /**
