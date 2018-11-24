@@ -92,7 +92,7 @@ export default class DatabaseCore {
                 const model = new this.guildPropertyModel({
                     id: guild[1].id,
                 });
-                this.logger.warn(`Unregistered guild detected. Creating server property document for ${guild[1].name}.""`);
+                this.logger.warn(`Unregistered guild detected. Creating server property document for "${guild[1].name}".`);
                 await model.save();
             }
         }
