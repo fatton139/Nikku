@@ -22,8 +22,8 @@ export default class ChatBotService {
             return Promise.resolve();
         } catch (err) {
             this.logger.warn(err);
+            throw err;
         }
-        return Promise.reject();
     }
 
     public getResponse(message: string): Promise<string> {

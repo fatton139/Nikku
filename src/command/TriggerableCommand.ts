@@ -1,5 +1,4 @@
 import Command from "./Command";
-import Action from "action/Action";
 import Trigger from "action/Trigger";
 import NikkuCore from "core/NikkuCore";
 import IHasAction from "./IHasAction";
@@ -20,8 +19,8 @@ export default class TriggerableCommand extends Command implements IHasAction, I
         this.trigger = this.setCustomTrigger();
     }
 
-    public tryTrigger(core: NikkuCore): boolean {
-        return this.trigger.execute(core.getCoreState());
+    public async tryTrigger(core: NikkuCore): Promise<boolean> {
+        return await this.trigger.execute(core.getCoreState());
     }
 
     public setCustomTrigger(): Trigger {
