@@ -65,9 +65,9 @@ export default class NikkuCore {
     }
 
     public initializeComponents(): void {
-        this.eventCore = new EventCore(this.client, this);
-        this.databaseCore = new DatabaseCore(this.config.Database.URL, this.config.DefaultUser.IDS);
-        this.commandManager = new CommandManager(this, this.config);
+        this.eventCore = new EventCore(this);
+        this.databaseCore = new DatabaseCore(this);
+        this.commandManager = new CommandManager(this);
     }
 
     public setDebugLogChannels(): void {
@@ -107,6 +107,11 @@ export default class NikkuCore {
     public getCommandManager(): CommandManager {
         return this.commandManager;
     }
+
+    public getConfig(): typeof Config {
+        return this.config;
+    }
+
 }
 
 /* Core Singleton */

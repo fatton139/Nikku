@@ -17,8 +17,9 @@ export default class EventCore {
      * @classdesc Class for handling events.
      * @param core - The main bot core.
      */
-    public constructor(client: Discord.Client, core: NikkuCore) {
-        this.client = client;
+    public constructor(core: NikkuCore) {
+        this.client = core.getClient();
+        this.core = core;
     }
 
     /**
