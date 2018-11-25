@@ -15,10 +15,12 @@ namespace Config {
     }
     export class Command {
         public static readonly PREFIXES: string[] = process.env.PREFIXES ?
-            process.env.PREFIXES.replace(/\s/g, "").split(",") : undefined;
+            process.env.PREFIXES.replace(/\s/g, "").split(",") : ["!f"];
         public static readonly COMMAND_SRC: string = "command/modules";
-        public static readonly COMMAND_FULL_PATH: string = `${path.dirname(require.main.filename)}/src/${Command.COMMAND_SRC}`;
-        public static readonly COMMAND_PATHS: string[] = [
+        public static readonly COMMAND_FULL_PATH: string =
+            `${path.dirname(require.main.filename)}/src/${Command.COMMAND_SRC}`;
+        public static readonly COMMAND_PATHS: string[] =
+        [
             "mrfortnite",
             "util",
             "user",
