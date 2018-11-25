@@ -4,7 +4,6 @@ import TriggerableCommand from "command/TriggerableCommand";
 import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
-import DatabaseCore from "core/DatabaseCore";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class FortniteTextEvent extends TriggerableCommand {
