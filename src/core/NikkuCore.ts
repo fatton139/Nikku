@@ -49,7 +49,13 @@ export default class NikkuCore {
     public async start(): Promise<void> {
         this.client.login(this.config.Discord.TOKEN);
         this.client.on("ready", async () => {
-            this.setDebugLogChannels();
+            if (this.config.Discord.DEBUG_CHANNELS) {
+                this.setDebugLogChannels();
+            }
+            if (!this.config.Command.PREFIXES) {
+                this.logger.error("No command prefixes detected.");
+                process.exit(1);
+            }
             this.initializeComponents();
             try {
                 await this.databaseCore.connectDb();
@@ -59,6 +65,7 @@ export default class NikkuCore {
                 this.eventCore.listenMessages();
             } catch (err) {
                 this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
+                // no db mode.
             }
             this.client.user.setActivity("Brad's Weight: NaN");
         });
@@ -71,10 +78,12 @@ export default class NikkuCore {
     }
 
     public setDebugLogChannels(): void {
-        for (const id of this.config.Discord.DEBUG_CHANNELS) {
-            const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
-            if (channel) {
-                ChannelTransport.addChannel(channel);
+        if (this.config.Discord.DEBUG_CHANNELS) {
+            for (const id of this.config.Discord.DEBUG_CHANNELS) {
+                const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
+                if (channel) {
+                    ChannelTransport.addChannel(channel);
+                }
             }
         }
     }

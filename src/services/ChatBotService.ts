@@ -11,6 +11,10 @@ export default class ChatBotService {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor(config: typeof Config) {
+        if (!config.Service.CHATBOT_API_KEY || !config.Service.CHATBOT_USER_ID || ! config.Service.CHATBOT_SESSION) {
+            this.logger.warn("Failed to initialize chat service. Missing keys.");
+            return;
+        }
         this.bot = new ChatBot(config.Service.CHATBOT_USER_ID, config.Service.CHATBOT_API_KEY);
         this.bot.setNick(config.Service.CHATBOT_SESSION);
     }

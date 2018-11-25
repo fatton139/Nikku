@@ -60,6 +60,9 @@ export default class DatabaseCore {
     }
 
     public async generateDevUserModel(): Promise<void> {
+        if (!this.core.getConfig().DefaultUser.IDS) {
+            return Promise.resolve();
+        }
         const userSchema: DBUserSchema = new DBUserSchema();
         this.UserModel = userSchema.getModelForClass(DBUserSchema);
         const doc: Mongoose.Document[] = await this.UserModel.find({});
