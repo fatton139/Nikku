@@ -27,6 +27,7 @@ export default class FortniteTextEvent extends TriggerableCommand {
             const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
             if (!doc) {
                 await state.getDbCore().generateGuildPropertyModel();
+                state.getMessageHandle().channel.send("<@!455679698610159616> fortnite?");
                 return false;
             } else {
                 const guild = doc as any as DBGuildPropertySchema;
