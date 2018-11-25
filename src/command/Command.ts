@@ -71,7 +71,6 @@ export default class Command implements IHasAction {
         }
         this.action.execute(core.getCoreState(), this.args).then((status: boolean) => {
             if (!status) {
-                console.log(status);
                 throw new NikkuException(core.getCoreState(), "Failed Execution");
             }
         });
