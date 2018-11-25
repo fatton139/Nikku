@@ -9,20 +9,22 @@ export default class AddTargetSelf extends ExecutableCommand {
         super("targetself", AccessLevel.UNREGISTERED, 0, "Adds yourself to the target list");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState, args) => {
+        return new Action(async (state: OnMessageState) => {
             const guildId = state.getMessageHandle().guild.id;
             const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
             if (!doc) {
+                state.getMessageHandle().reply(`Hmmm, your guild is not in the database. Adding...`);
                 await state.getDbCore().generateGuildPropertyModel();
                 return false;
             } else {
                 const guild = doc as any as DBGuildPropertySchema;
-                state.getMessageHandle().channel.send(`${guild.targets}`);
                 const id: string = state.getMessageHandle().author.id;
                 if (guild.targets.indexOf(id) === -1) {
                     guild.addTarget(id);
-                    state.getMessageHandle().channel.send(`Added to target list.`);
+                    state.getMessageHandle().reply(`Added to target list.`);
                     return true;
+                } else {
+                    state.getMessageHandle().reply(`You are already on the target list.`);
                 }
             }
             return false;
