@@ -31,7 +31,6 @@ export default class FortniteTextEvent extends TriggerableCommand {
             } else {
                 const guild = doc as any as DBGuildPropertySchema;
                 let targetString = "OwO someone said fortnite? ";
-                state.getMessageHandle().channel.send(`${guild.targets}`);
                 for (const target of guild.targets) {
                     targetString += "<@!" + target + "> ";
                 }
