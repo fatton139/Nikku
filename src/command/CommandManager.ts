@@ -164,16 +164,15 @@ export default class CommandManager {
                     if (status) {
                         users.findOne({id: userId}).then((user: Mongoose.Document) => {
                             if (user) {
-                                console.log(command.constructor.name);
-                                this.logger.info(`Triggering auto command. NO_WARN.`);
+                                this.logger.info(`Triggering auto command "${command.constructor.name}". NO_WARN.`);
                                 command.executeActionNoWarning(this.core, user as any as DBUserSchema);
                             } else {
-                                this.logger.info(`Triggering auto command. NO_REG_USER.`);
+                                this.logger.info(`Triggering auto command "${command.constructor.name}". NO_REG_USER.`);
                                 try {
                                     command.executeActionNoUser(this.core);
                                 } catch (err) {
                                     this.logger.verbose(
-                                        `Auto execution of "${command.getCommandString()}"` +
+                                        `Auto execution of "${command.constructor.name}"` +
                                         `failed, ${err.constructor.name}.`,
                                     );
                                 }
