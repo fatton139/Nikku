@@ -1,4 +1,4 @@
-import Trigger from "action/Trigger";
+import Trigger from "./Trigger";
 
 export default interface IHasTrigger {
     setCustomTrigger(): Trigger;

@@ -1,8 +1,8 @@
 import Command from "./Command";
 import Trigger from "action/Trigger";
 import NikkuCore from "core/NikkuCore";
-import IHasAction from "./IHasAction";
-import IHasTrigger from "./IHasTrigger";
+import IHasAction from "action/IHasAction";
+import IHasTrigger from "action/IHasTrigger";
 
 export default class TriggerableCommand extends Command implements IHasAction, IHasTrigger {
 

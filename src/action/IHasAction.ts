@@ -1,4 +1,4 @@
-import Action from "action/Action";
+import Action from "./Action";
 
 export default interface IHasAction {
     setCustomAction(): Action;

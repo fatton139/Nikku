@@ -1,7 +1,6 @@
-import Command from "../command/Command";
-import Action from "../action/Action";
+import Command from "./Command";
 import AccessLevel from "user/AccessLevel";
-import IHasAction from "./IHasAction";
+import IHasAction from "action/IHasAction";
 
 export default class ExecutableCommand extends Command implements IHasAction {
     /**
