@@ -16,13 +16,21 @@ export default class CommandRegistry {
     public addCommand(command: Command): boolean {
         const name: string = command.getCommandString();
         if (command instanceof TriggerableCommand) {
+            if (this.commands.has(command.constructor.name)) {
+                this.logger.warn(`Duplicate command "${command.constructor.name}".`);
+                return false;
+            }
             this.commands.set(command.constructor.name, command);
             this.logger.info(
                 `AutoCommand registered` +
                 ` "${command.constructor.name}".`,
             );
             return true;
-        } else if (!this.commands.has(name) && name && name.length !== 0) {
+        } else if (name && name.length !== 0) {
+            if (this.commands.has(name)) {
+                this.logger.warn(`Duplicate command "${name}".`);
+                return false;
+            }
             this.commands.set(name, command);
             this.logger.info(`ExecutableCommand registered "${name}".`);
             return true;
