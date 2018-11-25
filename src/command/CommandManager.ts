@@ -3,7 +3,6 @@ import * as winston from "winston";
 import * as fs from "fs";
 import Command from "command/Command";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import NikkuException from "exception/NikkuException";
 import PrefixManager from "command/PrefixManager";
 import Logger from "log/Logger";
 import NikkuCore from "core/NikkuCore";
@@ -88,7 +87,7 @@ export default class CommandManager {
      */
     public parseLine(line: string, id: string): void {
         for (const prefix of this.prefixManager.getPrefixes()) {
-            if (line.startsWith(prefix)) {
+            if (line.split(" ")[0] === prefix) {
                 const commandString = this.extractCommand(line);
                 if (commandString === null) {
                     return;
