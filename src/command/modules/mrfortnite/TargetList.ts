@@ -29,7 +29,6 @@ export default class TargetList extends ExecutableCommand {
                 state.getMessageHandle().channel.send(userList);
                 return true;
             }
-            return false;
         });
     }
 }

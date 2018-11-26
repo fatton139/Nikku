@@ -1,13 +1,10 @@
-import * as Discord from "discord.js";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
 import NikkuException from "exception/NikkuException";
 import NikkuCore from "core/NikkuCore";
 import AccessLevel from "user/AccessLevel";
-import Trigger from "action/Trigger";
-import OnMessageState from "state/OnMessageState";
-import IHasAction from "./IHasAction";
+import IHasAction from "action/IHasAction";
 
 export default class Command implements IHasAction {
     /**
