@@ -48,8 +48,8 @@ export default class CommandRegistry {
 
     private getAutoCommandAmount(): number {
         let amount = 0;
-        for (const pair of this.commands.entries()) {
-            if (pair[1] instanceof TriggerableCommand) {
+        for (const command of this.commands.values()) {
+            if (command instanceof TriggerableCommand) {
                 amount++;
             }
         }
