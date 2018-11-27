@@ -94,7 +94,11 @@ export default class CommandManager {
                 }
                 const command: Command = this.commandRegistry.getCommand(commandString);
                 if (command) {
-                    this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id);
+                    this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id).catch((err) => {
+                        this.logger.verbose(
+                            `${err.constructor.name}:Execution of "${command.getCommandString()}" failed`,
+                        );
+                    });
                 }
                 return;
             }
@@ -102,36 +106,30 @@ export default class CommandManager {
         this.triggerAction(id);
     }
 
-    private attemptExecution(command: Command, args: string[], userId: string) {
+    private async attemptExecution(command: Command, args: string[], userId: string): Promise<void> {
         if (!this.core.getDbCore().isReady()) {
             this.logger.warn("Please wait unit database connection has resolved.");
             return;
         }
         command.setArgs(args);
         const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
-        users.findOne({id: userId}).then((user: Mongoose.Document) => {
-            if (user) {
-                this.logger.info(`Executing command "${command.getCommandString()}".`);
-                try {
-                    command.executeAction(this.core, user as any as DBUserSchema);
-                } catch (err) {
-                    this.logger.verbose(
-                        `Execution of "${command.getCommandString()}"` +
-                        ` failed, ${err.constructor.name}:${err}`,
-                    );
-                }
-            } else {
-                this.logger.info(`Executing command "${command.getCommandString()}". NO_REG_USER.`);
-                try {
-                    command.executeActionNoUser(this.core);
-                } catch (err) {
-                    this.logger.verbose(
-                        `Execution of "${command.getCommandString()}"` +
-                        ` failed, ${err.constructor.name}.`,
-                    );
-                }
+        const user = await users.findOne({id: userId});
+        if (user) {
+            this.logger.info(`Executing command "${command.getCommandString()}".`);
+            try {
+                await command.executeAction(this.core, user as any as DBUserSchema);
+            } catch (err) {
+                throw err;
             }
-        });
+        } else {
+            this.logger.info(`Executing command "${command.getCommandString()}". NO_REG_USER.`);
+            try {
+                command.executeActionNoUser(this.core);
+            } catch (err) {
+                throw err;
+            }
+        }
+
     }
 
     /**
