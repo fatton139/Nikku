@@ -2,6 +2,7 @@ import NikkuCore from "core/NikkuCore";
 import { ICoreState } from "./ICoreState";
 import * as Discord from "discord.js";
 import DatabaseCore from "core/DatabaseCore";
+import CommandRegistry from "command/CommandRegistry";
 
 export default class CoreState implements ICoreState {
     /**
@@ -42,5 +43,9 @@ export default class CoreState implements ICoreState {
 
     public getDbCore(): DatabaseCore {
         return this.core.getDbCore();
+    }
+
+    public getCommandRegistry(): CommandRegistry {
+        return this.core.getCommandManager().getCommandRegistry();
     }
 }
