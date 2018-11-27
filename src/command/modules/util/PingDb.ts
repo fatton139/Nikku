@@ -5,7 +5,8 @@ import OnMessageState from "state/OnMessageState";
 
 export default class PingDb extends ExecutableCommand {
     public constructor() {
-        super("pingdb", AccessLevel.UNREGISTERED, 0, "Test command, responds with pong.");
+        super("pingdb", AccessLevel.UNREGISTERED, 0,
+            "Test command, calculates the time it takes to get a response from the database.");
     }
 
     public setCustomAction(): Action {

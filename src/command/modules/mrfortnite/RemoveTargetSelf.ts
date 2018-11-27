@@ -6,7 +6,7 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class RemoveTargetSelf extends ExecutableCommand {
     public constructor() {
-        super("removeself", AccessLevel.UNREGISTERED, 0, "Removes yourself from the target list");
+        super("removeself", AccessLevel.UNREGISTERED, 0, "Removes yourself from the target list.");
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {

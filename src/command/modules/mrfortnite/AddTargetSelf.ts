@@ -6,7 +6,7 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class AddTargetSelf extends ExecutableCommand {
     public constructor() {
-        super("targetself", AccessLevel.UNREGISTERED, 0, "Adds yourself to the target list");
+        super("targetself", AccessLevel.UNREGISTERED, 0, "Adds yourself to the target list.");
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
