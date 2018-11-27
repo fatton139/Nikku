@@ -103,6 +103,10 @@ export default class CommandManager {
     }
 
     private attemptExecution(command: Command, args: string[], userId: string) {
+        if (!this.core.getDbCore().isReady()) {
+            this.logger.warn("Please wait unit database connection has resolved.");
+            return;
+        }
         command.setArgs(args);
         const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
         users.findOne({id: userId}).then((user: Mongoose.Document) => {
