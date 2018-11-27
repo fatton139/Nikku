@@ -33,6 +33,11 @@ export default class Logger {
                 }),
             ],
         });
+        if (process.env.NODE_ENV === "test") {
+            for (const t of this.logger.transports) {
+                t.silent = true;
+            }
+        }
     }
     public getLogger(): winston.Logger {
         return this.logger;

@@ -44,4 +44,8 @@ export default class ChannelTransport extends Transport {
         }
         this.channels.splice(index, 1);
     }
+
+    public static getChannels(): Discord.TextChannel[] {
+        return this.channels ? this.channels : [];
+    }
 }

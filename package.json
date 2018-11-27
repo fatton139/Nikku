@@ -8,7 +8,7 @@
   "main": "fortniteBot.js",
   "scripts": {
     "start": "cross-env NODE_PATH=./src node main.js",
-    "test": "test",
+    "test": "cross-env NODE_ENV=test NODE_PATH=./src mocha test/**/*.js",
     "postinstall": "tsc"
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
@@ -30,10 +30,14 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
     "@types/mongodb": "^3.1.14",
     "@types/mongoose": "^5.3.1",
     "@types/node": "^10.12.9",
     "@types/winston": "^2.4.4",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   }
