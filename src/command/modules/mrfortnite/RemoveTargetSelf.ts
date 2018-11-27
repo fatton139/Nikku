@@ -4,9 +4,9 @@ import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
-export default class AddTargetSelf extends ExecutableCommand {
+export default class RemoveTargetSelf extends ExecutableCommand {
     public constructor() {
-        super("targetself", AccessLevel.UNREGISTERED, 0, "Adds yourself to the target list");
+        super("removeself", AccessLevel.UNREGISTERED, 0, "Removes yourself from the target list");
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
@@ -20,19 +20,18 @@ export default class AddTargetSelf extends ExecutableCommand {
                 const guild = doc as any as DBGuildPropertySchema;
                 const id: string = state.getMessageHandle().author.id;
                 if (guild.targets.indexOf(id) === -1) {
-                    try {
-                        await guild.addTarget(id);
-                        state.getMessageHandle().reply(`Added to target list.`);
-                    } catch (err) {
-                        state.getMessageHandle().reply(`Failed to add to target list.`);
-                        throw err;
-                    }
+                    state.getMessageHandle().reply("You are not on the target list.");
                     return true;
-                } else {
-                    state.getMessageHandle().reply(`You are already on the target list.`);
+                }
+                try {
+                    await guild.removeTarget(id);
+                    state.getMessageHandle().reply("Successfully removed from the target list");
+                    return true;
+                } catch (err) {
+                    state.getMessageHandle().reply("Failed to remove from target list.");
+                    throw err;
                 }
             }
-            return false;
         });
     }
 }

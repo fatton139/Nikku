@@ -1,4 +1,3 @@
-import * as Mongoose from "mongoose";
 import * as winston from "winston";
 import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod } from "typegoose";
