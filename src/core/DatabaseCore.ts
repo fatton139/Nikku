@@ -10,6 +10,7 @@ import UserMigrator from "database/migration/UserMigrator";
 import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
 import GuildPropertyMigrator from "database/migration/GuildPropertyMigrator";
 import NikkuCore from "./NikkuCore";
+import AccessLevel from "user/AccessLevel";
 
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -65,9 +66,9 @@ export default class DatabaseCore {
         }
         const userSchema: DBUserSchema = new DBUserSchema();
         this.UserModel = userSchema.getModelForClass(DBUserSchema);
-        const doc: Mongoose.Document[] = await this.UserModel.find({});
-        if (doc.length === 0) {
-            this.logger.warn(`Dev user models not detected. Creating ${this.defaultUsers.length} dev profiles.`);
+        const doc: Mongoose.Document[] = await this.UserModel.find({accessLevel: AccessLevel.DEVELOPER});
+        if (doc.length !== this.defaultUsers.length) {
+            this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
             const migrator = new UserMigrator(userSchema);
             await migrator.createModels(this.defaultUsers);
         }

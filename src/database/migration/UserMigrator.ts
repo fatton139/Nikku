@@ -13,18 +13,21 @@ export default class UserMigrator {
         let i = 0;
         for (const userId of ids) {
             const userModel = this.schema.getModelForClass(DBUserSchema);
-            const model = new userModel({
-                id: userId,
-                accessLevel: AccessLevel.DEVELOPER,
-            });
-            try {
-                const doc = await model.save();
-                i++;
-                this.logger.info(`Dev user created ${i} of ${ids.length}.`);
-                Promise.resolve(doc);
-            } catch (err) {
-                this.logger.error(`Failed to create user ${userId}:${err}.`);
-                Promise.reject(err);
+            const userExists = await userModel.findOne({id: userId});
+            if (!userExists) {
+                const model = new userModel({
+                    id: userId,
+                    accessLevel: AccessLevel.DEVELOPER,
+                });
+                try {
+                    const doc = await model.save();
+                    i++;
+                    this.logger.info(`Dev user created ${i} of ${ids.length}.`);
+                    Promise.resolve(doc);
+                } catch (err) {
+                    this.logger.error(`Failed to create user ${userId}:${err}.`);
+                    Promise.reject(err);
+                }
             }
         }
     }
