@@ -11,23 +11,24 @@ export default class Register extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
             const user = state.getMessageHandle().author;
-            const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
-            if (!doc) {
-                const model = new DBUserSchema().getModelForClass(DBUserSchema);
-                try {
+            try {
+                const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
+                if (!doc) {
+                    const model = new DBUserSchema().getModelForClass(DBUserSchema);
                     await model.createNewUser(user.id);
                     state.getMessageHandle().reply(
                         "Successfully registered!" +
                         " You now have access to **Level 1** Commands",
                     );
                     return true;
-                } catch (err) {
-                    state.getMessageHandle().reply("Failed to register.");
-                    return false;
+                } else {
+                    state.getMessageHandle().reply("You are already registered.");
+                    return true;
                 }
-            } else {
-                state.getMessageHandle().reply("You are already registered.");
-                return true;
+            } catch (err) {
+                state.getMessageHandle().reply("Failed to register.");
+                this.logger.warn(err);
+                return false;
             }
         });
     }
