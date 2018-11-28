@@ -3,7 +3,8 @@ image:
   - Visual Studio 2017
 branches:
   only:
-    - rework
+    - master
+    - dev
 cache:
   - node_modules
 install:
