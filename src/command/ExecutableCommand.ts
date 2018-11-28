@@ -1,16 +1,16 @@
-import { ICommand } from "../command/ICommand";
-import { Command } from "../command/Command";
-import { FortniteBotAction } from "../action/FortniteBotAction";
+import Command from "./Command";
+import AccessLevel from "user/AccessLevel";
+import IHasAction from "action/IHasAction";
 
-export class ExecutableCommand extends Command implements ICommand {
+export default class ExecutableCommand extends Command implements IHasAction {
     /**
      * @classdesc Commands which must be executed by a user to run.
      * @param commandString - The string required to execute this command.
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(commandString: string, accessLevel: number,
-                       action: FortniteBotAction) {
-        super(commandString, accessLevel, action);
+    public constructor(commandString: string, accessLevel: AccessLevel, argLength: number, description: string) {
+        super(accessLevel, argLength, description);
+        this.commandString = commandString;
     }
 }

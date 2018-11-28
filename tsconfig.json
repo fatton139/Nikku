@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2017",
     "moduleResolution": "node",
-    "baseUrl": "src",
+    "rootDir": "./",
+    "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
     "removeComments": true,
-    "noImplicitAny": false
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
   },
   "exclude": [
     "node_modules"

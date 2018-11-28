@@ -1,32 +1,40 @@
-import * as Discord from "discord.js";
-import { ICommand } from "../command/ICommand";
-import { User } from "../user/User";
-import { UnauthorizedCommandException } from "../exceptions/UnauthorizedCommandException";
-import { FortniteBotAction } from "../action/FortniteBotAction";
-import { FortniteBotException } from "../exceptions/FortniteBotException";
-import { fortniteBotCore } from "../../fortniteBot";
-import { fortniteBotCore as activeCore } from "../../fortniteBot";
+import * as winston from "winston";
+import Logger from "log/Logger";
+import DBUserSchema from "database/schemas/DBUserSchema";
+import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
+import Action from "action/Action";
+import NikkuException from "exception/NikkuException";
+import NikkuCore from "core/NikkuCore";
+import AccessLevel from "user/AccessLevel";
+import IHasAction from "action/IHasAction";
 
-export class Command implements ICommand {
+export default class Command implements IHasAction {
+    protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.
      */
-    public commandString?: string;
+    protected commandString: string;
 
     /**
      * The required access level to execute this command.
      */
-    public readonly accessLevel: number;
+    private readonly accessLevel: AccessLevel;
 
     /**
      * An action to execute.
      */
-    public action: FortniteBotAction;
+    protected action: Action;
+
+    private readonly argLength: number;
 
     /**
      * Arguments to execute the action with.
      */
-    public args: string[];
+    private args: string[];
+
+    private isEnabled: boolean;
+
+    private description: string;
 
     /**
      * @classdesc Base command class for the bot.
@@ -34,11 +42,11 @@ export class Command implements ICommand {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(commandString: string, accessLevel: number,
-                       action: FortniteBotAction) {
-        this.action = action;
+    public constructor(accessLevel: AccessLevel, argLength: number, description?: string) {
+        this.action = this.setCustomAction();
         this.accessLevel = accessLevel;
-        this.commandString = commandString;
+        this.argLength = argLength;
+        this.description = description;
     }
 
     /**
@@ -46,29 +54,70 @@ export class Command implements ICommand {
      * @param args - New arguments for the command.
      */
     public setArgs(args: string[]): void {
-        this.args = args;
+        this.args = args ? args : [];
+    }
+
+    public getCommandString(): string {
+        return this.commandString;
     }
 
     /**
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public executeAction(user: User): void {
+    public async executeAction(core: NikkuCore, user?: DBUserSchema): Promise<void> {
         if (user.accessLevel < this.accessLevel) {
-            const m = activeCore.getCoreState().getHandle() as Discord.Message;
-            m.reply(
-                "You do not have the required access level to this command.\n" +
-                "Your access level: **" + user.accessLevel + "**\n" +
-                "Command access level: **" + this.accessLevel + "**"
-            );
-            throw new UnauthorizedCommandException("Unauthorized Execution of " +
-                "Command of " + this.commandString);
+            throw new UnauthorizedCommandException(core.getCoreState(), this, user);
         }
-        if (!this.args) {
-            this.args = [];
+        try {
+            const status = await this.action.execute(core.getCoreState(), this.args);
+            if (!status) {
+                throw new NikkuException(core.getCoreState(), "Failed execution.");
+            }
+        } catch (err) {
+            throw err;
         }
-        if (!this.action.execute(fortniteBotCore.getCoreState(), this.args)) {
-            throw new FortniteBotException("Failed Execution");
+
+    }
+
+    public async executeActionNoUser(core: NikkuCore): Promise<void> {
+        const tempUser = new DBUserSchema();
+        if (AccessLevel.UNREGISTERED >= this.accessLevel) {
+            return await this.executeAction(core, tempUser);
         }
+    }
+
+    public executeActionNoWarning(core: NikkuCore, user?: DBUserSchema): void {
+        if (user.accessLevel >= this.accessLevel) {
+            this.action.execute(core.getCoreState(), this.args);
+        }
+    }
+
+    public setEnabled(enabled: boolean): void {
+        this.isEnabled = enabled;
+    }
+
+    public getEnabled(): boolean {
+        return this.isEnabled;
+    }
+
+    public getArgs(): string[] {
+        return this.args;
+    }
+
+    public getArgLength(): number {
+        return this.argLength;
+    }
+
+    public getAccessLevel(): AccessLevel {
+        return this.accessLevel;
+    }
+
+    public getDescription(): string {
+        return this.description;
+    }
+
+    public setCustomAction(): Action {
+        return;
     }
 }
