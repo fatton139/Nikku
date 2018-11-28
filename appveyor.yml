@@ -1,8 +1,9 @@
+build: off
 branches:
   only:
     - master
 cache:
-  - node_modules 
+  - node_modules
 install:
   - node --version
   - npm --version
