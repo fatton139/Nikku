@@ -1,13 +1,16 @@
 build: off
+image:
+  - Visual Studio 2017
 branches:
   only:
-    - master
+    - rework
 cache:
   - node_modules
 install:
   - node --version
   - npm --version
   - npm install
+  - npm install typescript -g
 configuration: Release
 before_test:
   - tsc -v
