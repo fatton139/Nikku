@@ -15,7 +15,7 @@ export default class UnauthorizedCommandException extends NikkuException {
         super(state, message);
         state.getMessageHandle().reply(
             "You do not have the required access level to this command.\n" +
-            `Your access level: **${user.getAccessLevel()}** (${AccessLevel[user.getAccessLevel()]})\n` +
+            `Your access level: **${user.accessLevel}** (${AccessLevel[user.accessLevel]})\n` +
             `Command access level: **${command.getAccessLevel()}** (${AccessLevel[command.getAccessLevel()]})\n`,
         );
     }

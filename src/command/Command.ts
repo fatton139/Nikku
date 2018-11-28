@@ -63,7 +63,7 @@ export default class Command implements IHasAction {
      * @param user - The user attempting to execute this command.
      */
     public async executeAction(core: NikkuCore, user?: DBUserSchema): Promise<void> {
-        if (user.getAccessLevel() < this.accessLevel) {
+        if (user.accessLevel < this.accessLevel) {
             throw new UnauthorizedCommandException(core.getCoreState(), this, user);
         }
         try {
@@ -80,13 +80,13 @@ export default class Command implements IHasAction {
     public async executeActionNoUser(core: NikkuCore): Promise<void> {
         const tempUser = new DBUserSchema();
         tempUser.setAccessLevel(AccessLevel.UNREGISTERED);
-        if (tempUser.getAccessLevel() >= this.accessLevel) {
+        if (tempUser.accessLevel >= this.accessLevel) {
             return await this.executeAction(core, tempUser);
         }
     }
 
     public executeActionNoWarning(core: NikkuCore, user?: DBUserSchema): void {
-        if (user.getAccessLevel() >= this.accessLevel) {
+        if (user.accessLevel >= this.accessLevel) {
             this.action.execute(core.getCoreState(), this.args);
         }
     }

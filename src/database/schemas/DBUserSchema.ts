@@ -4,43 +4,36 @@ import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod 
 import AccessLevel from "user/AccessLevel";
 
 export default class DBUserSchema extends Typegoose {
-    private static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
+    public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
     @prop({required: true, unique: true})
-    private id: string;
+    public id: string;
 
     @prop({default: AccessLevel.UNREGISTERED})
-    private accessLevel?: AccessLevel;
+    public accessLevel?: AccessLevel;
 
     @prop({default: {dotmaCoin: 100, bradCoin: 0}})
-    private currency?: {
+    public currency?: {
         dotmaCoin: number,
         bradCoin: number,
     };
 
     @prop({default: new Date()})
-    private daily?: {
+    public daily?: {
         lastUpdate: Date,
     };
 
     @prop({default: {active: 0, all: ["The Untitled"]}})
-    private title?: {
+    public title?: {
         active: number,
         all: string[];
     };
 
-    @instanceMethod
-    public getId(): string {
-        return this.id;
-    }
+    @prop({default: new Date()})
+    public dateRegistered: Date;
 
     @instanceMethod
     public setAccessLevel(level: AccessLevel): void {
-        this.accessLevel = this.accessLevel;
-    }
-
-    @instanceMethod
-    public getAccessLevel(): AccessLevel {
-        return this.accessLevel ? this.accessLevel : AccessLevel.UNREGISTERED;
+        this.accessLevel = level;
     }
 
     @staticMethod
