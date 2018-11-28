@@ -108,7 +108,7 @@ export default class CommandManager {
 
     private async attemptExecution(command: Command, args: string[], userId: string): Promise<void> {
         if (!this.core.getDbCore().isReady()) {
-            this.logger.warn("Please wait unit database connection has resolved.");
+            this.logger.warn("Please wait until database connection has resolved.");
             return;
         }
         command.setArgs(args);

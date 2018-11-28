@@ -18,7 +18,7 @@ export default class DBGuildPropertySchema extends Typegoose {
         try {
             return await this.save();
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Add target, failed to save document.");
+            DBGuildPropertySchema.logger.error("Failed to save guild targets.");
             throw err;
         }
     }

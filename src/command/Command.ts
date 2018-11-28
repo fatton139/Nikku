@@ -82,8 +82,7 @@ export default class Command implements IHasAction {
 
     public async executeActionNoUser(core: NikkuCore): Promise<void> {
         const tempUser = new DBUserSchema();
-        tempUser.setAccessLevel(AccessLevel.UNREGISTERED);
-        if (tempUser.accessLevel >= this.accessLevel) {
+        if (AccessLevel.UNREGISTERED >= this.accessLevel) {
             return await this.executeAction(core, tempUser);
         }
     }
