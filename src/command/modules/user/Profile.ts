@@ -21,8 +21,8 @@ export default class Profile extends ExecutableCommand {
                     `${user.username} - ${dbUser.title.all[dbUser.title.active]}\n` +
                     `Access Level: ${dbUser.accessLevel} (${AccessLevel[dbUser.accessLevel]})\n` +
                     `Wallet:\n` +
-                    `   DotmaCoins: ${dbUser.currency.dotmaCoin}\n` +
-                    `   BradCoins: ${dbUser.currency.bradCoin}\n` +
+                    `   DotmaCoins: ${dbUser.wallet.dotmaCoin}\n` +
+                    `   BradCoins: ${dbUser.wallet.bradCoin}\n` +
                     `\n` +
                     `You have been registered for ${Math.round(hours)} hour(s).` +
                     `\`\`\``,
