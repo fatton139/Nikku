@@ -1,3 +1,5 @@
+import * as winston from "winston";
+import Logger from "log/Logger";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
@@ -7,6 +9,7 @@ import AccessLevel from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 
 export default class Command implements IHasAction {
+    protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.
      */
