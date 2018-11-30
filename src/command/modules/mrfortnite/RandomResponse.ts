@@ -19,23 +19,17 @@ export default class RandomResponse extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger(async (state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m = state.getMessageHandle();
-            return randInt(0, 100) < 100 && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
+            return randInt(0, 100) < 5 && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
                 && m.content.replace(/\s/g, "").toLowerCase().search("fortnite") === -1;
         });
     }
 
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
-            const m: Discord.Message = state.getMessageHandle();
-            const str = StringFunc.removeStrBothEndsNoSpace(m.content, "mrfortnite");
-            if (str.length === 0) {
-                return false;
-            }
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                await this.botService.sendMessage(str, m.channel as Discord.TextChannel);
-                return true;
+                return await this.botService.sendMessage(state);
             } catch (err) {
                 throw err;
             }

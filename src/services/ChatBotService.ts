@@ -3,6 +3,8 @@ import * as Discord from "discord.js";
 import * as winston from "winston";
 import Config from "config/Config";
 import Logger from "log/Logger";
+import OnMessageState from "state/OnMessageState";
+import StringFunc from "utils/StringFunc";
 
 export default class ChatBotService {
 
@@ -19,13 +21,19 @@ export default class ChatBotService {
         this.bot.setNick(config.Service.CHATBOT_SESSION);
     }
 
-    public async sendMessage(message: string, channel: Discord.TextChannel): Promise<void> {
+    public async sendMessage(state: OnMessageState): Promise<boolean> {
+        const m: Discord.Message = state.getMessageHandle();
+        const str = StringFunc.removeStrBothEndsNoSpace(m.content, "mrfortnite");
+        if (str.length === 0) {
+            return false;
+        }
         try {
-            const response = await this.getResponse(message);
-            channel.send(response);
-            return Promise.resolve();
+            await m.reply(
+                `*${m.content}*\n` +
+                `${await this.getResponse(str)}`,
+            );
+            return true;
         } catch (err) {
-            this.logger.warn(err);
             throw err;
         }
     }

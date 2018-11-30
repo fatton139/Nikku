@@ -26,14 +26,8 @@ export default class AskResponse extends TriggerableCommand {
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
-            const m: Discord.Message = state.getMessageHandle();
-            const str = StringFunc.removeStrBothEndsNoSpace(m.content, "mrfortnite");
-            if (str.length === 0) {
-                return false;
-            }
             try {
-                await this.botService.sendMessage(str, m.channel as Discord.TextChannel);
-                return true;
+                return await this.botService.sendMessage(state);
             } catch (err) {
                 throw err;
             }
