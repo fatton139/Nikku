@@ -28,8 +28,8 @@ export default class ChatBotService {
             return false;
         }
         try {
-            await m.reply(
-                `*${m.content}*\n` +
+            await m.channel.send(
+                `${m.author.username}, *${m.content}*\n` +
                 `${await this.getResponse(str)}`,
             );
             return true;
