@@ -24,6 +24,7 @@ namespace Config {
             "mrfortnite",
             "util",
             "user",
+            "brad",
         ];
     }
     export class Service {
@@ -39,6 +40,9 @@ namespace Config {
     export class DefaultUser {
         public static readonly IDS: string[] = process.env.DEV_IDS ?
             process.env.DEV_IDS.replace(/\s/g, "").split(",") : undefined;
+    }
+    export class Brad {
+        public static readonly DEFAULT_WEIGHT: number = 200;
     }
 }
 
