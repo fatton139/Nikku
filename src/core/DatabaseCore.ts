@@ -60,7 +60,7 @@ export default class DatabaseCore {
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
                 this.getBradPropertyModel().findOne({}).then((doc) => {
-                    this.core.setActivity(`Brad's Weight: ${(doc as any as DBBradPropertySchema).weight}kg`);
+                    this.core.setActivity(`Brad's Weight: ${(doc as any as DBBradPropertySchema).weight.toFixed(4)}kg`);
                 });
             });
         });

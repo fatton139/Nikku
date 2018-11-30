@@ -44,7 +44,7 @@ export default class DBBradPropertySchema extends Typegoose {
             this.weight += parseFloat(Brad.dotmaCoinsToKg(amount).toFixed(4));
             await this.markModified("contributors");
             await this.markModified("contributorsAllTime");
-            core.setActivity(`Brad's Weight: ${this.weight}kg`);
+            core.setActivity(`Brad's Weight: ${this.weight.toFixed(4)}kg`);
             return await this.save();
         } catch (err) {
             throw err;
