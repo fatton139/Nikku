@@ -4,6 +4,11 @@
         "tslint:recommended"
     ],
     "rules": {
+        "typedef": [
+            true,
+            "call-signature",
+            "property-declaration"
+        ],
         "align": false,
         "cyclomatic-complexity": true,
         "newline-before-return": false,
