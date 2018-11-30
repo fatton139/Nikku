@@ -10,7 +10,7 @@ export default class Daily extends ExecutableCommand {
         super("daily", AccessLevel.REGISTERED, 0, "Grab your daily coins.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const user = state.getMessageHandle().author;
             try {
                 const doc = await state.getDbCore().getUserModel().findOne({id: user.id});

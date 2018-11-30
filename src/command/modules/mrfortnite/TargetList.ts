@@ -9,7 +9,7 @@ export default class TargetList extends ExecutableCommand {
         super("targetlist", AccessLevel.UNREGISTERED, 0, "Retrieves the current targets.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const guild = state.getMessageHandle().guild;
             const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guild.id});
             if (!doc) {

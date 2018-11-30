@@ -9,7 +9,7 @@ export default class RemoveTargetSelf extends ExecutableCommand {
         super("removeself", AccessLevel.UNREGISTERED, 0, "Removes yourself from the target list.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const guildId = state.getMessageHandle().guild.id;
             const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
             if (!doc) {

@@ -9,7 +9,7 @@ export default class Register extends ExecutableCommand {
         super("register", AccessLevel.UNREGISTERED, 0, "Register yourself.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const user = state.getMessageHandle().author;
             try {
                 const doc = await state.getDbCore().getUserModel().findOne({id: user.id});

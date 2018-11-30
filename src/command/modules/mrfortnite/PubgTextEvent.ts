@@ -11,7 +11,7 @@ export default class PubgTextEvent extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger(async (state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m: Discord.Message = state.getMessageHandle();
             return m.content.replace(/\s/g, "").toLowerCase().search("pubg") !== -1
                 && m.content[0] !== "!";
@@ -19,7 +19,7 @@ export default class PubgTextEvent extends TriggerableCommand {
     }
 
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             state.getMessageHandle().channel.send("OwO someone said PUBG?").then(() => {
                 return true;
             }, () => {

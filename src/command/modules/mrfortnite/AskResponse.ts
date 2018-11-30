@@ -18,14 +18,14 @@ export default class AskResponse extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger(async (state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m: Discord.Message = state.getMessageHandle();
             return m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") !== -1;
         });
     }
 
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
                 return await this.botService.sendMessage(state);
             } catch (err) {

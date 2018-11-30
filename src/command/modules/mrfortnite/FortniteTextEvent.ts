@@ -12,7 +12,7 @@ export default class FortniteTextEvent extends TriggerableCommand {
     }
 
     public setCustomTrigger(): Trigger {
-        return new Trigger(async (state: OnMessageState) => {
+        return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m: Discord.Message = state.getMessageHandle();
             return m.content.replace(/\s/g, "").toLowerCase().search("fortnite") !== -1
                 && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
@@ -21,7 +21,7 @@ export default class FortniteTextEvent extends TriggerableCommand {
     }
 
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const guildId = state.getMessageHandle().guild.id;
             const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
             if (!doc) {

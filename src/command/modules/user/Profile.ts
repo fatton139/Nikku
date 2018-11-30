@@ -9,7 +9,7 @@ export default class Profile extends ExecutableCommand {
         super("profile", AccessLevel.UNREGISTERED, 0, "View your profile.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState): Promise<boolean> => {
             const user = state.getMessageHandle().author;
             try {
                 const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
