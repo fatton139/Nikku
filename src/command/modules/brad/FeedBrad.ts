@@ -83,7 +83,7 @@ export default class FeedBrad extends ExecutableCommand {
                 if (!DbBrad) {
                     return false;
                 }
-                await Promise.all([DbBrad[0].incrementContributor(user.id, amount), DbUser.removeCurrency(CoinType.DOTMA_COIN, amount)]);
+                await Promise.all([DbBrad.incrementWeight(user.id, amount), DbUser.removeCurrency(CoinType.DOTMA_COIN, amount)]);
                 state.getMessageHandle().reply(
                     `Successfully fed Brad. ` +
                     `Brad has gained **${Brad.dotmaCoinsToKg(amount).toFixed(4)}** kg!`,
