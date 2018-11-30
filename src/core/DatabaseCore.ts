@@ -103,11 +103,24 @@ export default class DatabaseCore {
         Promise.resolve();
     }
 
+    public async generateBradPropertyModel(): Promise<void> {
+        const bradPropertySchema = new DBBradPropertySchema();
+        this.bradPropertyModel = bradPropertySchema.getModelForClass(DBGuildPropertySchema);
+        const doc = await this.bradPropertyModel.find({}) as any as DBBradPropertySchema[];
+        if (doc.length === 0) {
+            this.logger.warn("Brad properties document has not been setup. Creating default profiles.");
+            const migrator = new BradPropertyMigrator(bradPropertySchema);
+            await migrator.createModels();
+        }
+        Promise.resolve();
+    }
+
     public async generateModelsIfEmpty(): Promise<void> {
         await Promise.all([
             this.generateDevUserModel(),
             this.generateGlobalPropertyModel(),
             this.generateGuildPropertyModel(),
+            this.generateBradPropertyModel(),
         ]);
     }
 
@@ -137,6 +150,10 @@ export default class DatabaseCore {
 
     public getGuildPropertyModel(): Mongoose.Model<Mongoose.Document, {}> {
         return this.guildPropertyModel;
+    }
+
+    public getBradPropertyModel(): Mongoose.Model<Mongoose.Document, {}> {
+        return this.bradPropertyModel;
     }
 
     public isReady(): boolean {
