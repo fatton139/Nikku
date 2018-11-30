@@ -4,6 +4,7 @@
         "tslint:recommended"
     ],
     "rules": {
+        "align": false,
         "cyclomatic-complexity": true,
         "newline-before-return": false,
         "no-parameter-properties": false,

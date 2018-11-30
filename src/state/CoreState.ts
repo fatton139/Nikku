@@ -48,4 +48,8 @@ export default class CoreState implements ICoreState {
     public getCommandManager(): CommandManager {
         return this.core.getCommandManager();
     }
+
+    public getCore(): NikkuCore {
+        return this.core;
+    }
 }
