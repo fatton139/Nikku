@@ -4,6 +4,7 @@ import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 import AccessLevel from "user/AccessLevel";
 import CoinType from "user/CoinType";
+import { Skill } from "user/Skill";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
@@ -17,6 +18,12 @@ export default class DBUserSchema extends Typegoose {
     public wallet?: {
         dotmaCoin: number,
         bradCoin: number,
+    };
+
+    @prop({default: {thievexp: 0, thievelevel: 1}})
+    public skills?: {
+        thievexp: number,
+        thievelevel: number,
     };
 
     @prop({default: {lastUpdate: new Date((new Date()).setDate(new Date().getDate() - 1))}})
@@ -64,6 +71,20 @@ export default class DBUserSchema extends Typegoose {
             return await this.save();
         } catch (err) {
             DBUserSchema.logger.error("Failed to save user currency.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async addXp(this: InstanceType<any> & Mongoose.Document, amount: number): Promise<void> {
+        this.skills.thievexp += amount;
+        try {
+            await this.markModified("skills");
+            const x = new Skill("Thieving").getLevelAtExperience(this.skills.thievexp);
+            this.skills.thievelevel = x;
+            return await this.save();
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to update experience.");
             throw err;
         }
     }
