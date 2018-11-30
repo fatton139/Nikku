@@ -9,8 +9,8 @@ export default class ExecutableCommand extends Command implements IHasAction {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(commandString: string, accessLevel: AccessLevel, argLength: number, description: string) {
-        super(accessLevel, argLength, description);
+    public constructor(commandString: string, accessLevel: AccessLevel, argLength: number, description: string, helperText?: string) {
+        super(accessLevel, argLength, description, helperText);
         this.commandString = commandString;
     }
 }

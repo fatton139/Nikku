@@ -189,4 +189,8 @@ export default class CommandManager {
     public getCommandRegistry(): CommandRegistry {
         return this.commandRegistry;
     }
+
+    public getPrefixManager(): PrefixManager {
+        return this.prefixManager;
+    }
 }

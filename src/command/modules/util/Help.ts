@@ -9,13 +9,14 @@ export default class Help extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]) => {
-            let text = "```";
-            const commands = Array.from(state.getCommandRegistry().getCommandMap().values()).sort((a, b) => {
+            let text = `\`\`\`Available prefixes: ${state.getCommandManager().getPrefixManager().getPrefixes()}\n\n`;
+            const commands = Array.from(state.getCommandManager().getCommandRegistry().getCommandMap().values()).sort((a, b) => {
                 if (!a.getCommandString() || !b.getCommandString() || a.getCommandString() === b.getCommandString()) {
                     return 0;
                 }
                 return a.getCommandString() < b.getCommandString() ? -1 : 1;
             });
+            let amount = 0;
             for (const command of commands) {
                 if (command instanceof ExecutableCommand) {
                     let description = command.getDescription();
@@ -23,9 +24,10 @@ export default class Help extends ExecutableCommand {
                         description += "\n";
                     }
                     text += `${command.getCommandString()} - ${description}`;
+                    amount++;
                 }
             }
-            text += "```";
+            text += `\n${amount} Command(s) available\`\`\``;
             state.getMessageHandle().channel.send(text);
             return true;
         });
