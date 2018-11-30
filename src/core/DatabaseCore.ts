@@ -11,6 +11,8 @@ import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
 import GuildPropertyMigrator from "database/migration/GuildPropertyMigrator";
 import NikkuCore from "./NikkuCore";
 import AccessLevel from "user/AccessLevel";
+import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+import BradPropertyMigrator from "database/migration/BradPropertyMigrator";
 
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -24,6 +26,7 @@ export default class DatabaseCore {
     private UserModel: Mongoose.Model<Mongoose.Document, {}>;
     private globalPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
     private guildPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
+    private bradPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
 
     private defaultUsers: string[];
 
@@ -56,6 +59,9 @@ export default class DatabaseCore {
             this.generateModelsIfEmpty().then(() => {
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
+                this.getBradPropertyModel().findOne({}).then((doc) => {
+                    this.core.setActivity(`Brad's Weight: ${(doc as any as DBBradPropertySchema).weight}kg`);
+                });
             });
         });
     }

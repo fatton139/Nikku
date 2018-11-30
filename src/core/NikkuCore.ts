@@ -8,6 +8,7 @@ import CoreState from "state/CoreState";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "command/CommandManager";
+import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 
 export default class NikkuCore {
     /**
@@ -65,9 +66,9 @@ export default class NikkuCore {
                 this.eventCore.listenMessages();
             } catch (err) {
                 this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
+                this.logger.error(err);
                 // no db mode.
             }
-            this.client.user.setActivity("Brad's Weight: NaN");
         });
     }
 
@@ -119,6 +120,10 @@ export default class NikkuCore {
 
     public getConfig(): typeof Config {
         return this.config;
+    }
+
+    public setActivity(str: string): void {
+        this.client.user.setActivity(str);
     }
 
 }
