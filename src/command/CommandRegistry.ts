@@ -38,12 +38,14 @@ export default class CommandRegistry {
         return false;
     }
 
-    public addCommandMulti(commands: Command[]) {
+    public addCommandMulti(commands: Command[]): boolean {
         for (const command of commands) {
             if (!this.addCommand(command)) {
                 this.logger.warn(`Failed to register command "${command.getCommandString()}".`);
+                return false;
             }
         }
+        return true;
     }
 
     private getAutoCommandAmount(): number {

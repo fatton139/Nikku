@@ -11,7 +11,7 @@ export default class ChannelTransport extends Transport {
         super(options);
     }
 
-    public log(info: TransformableInfo, callback: () => any) {
+    public log(info: TransformableInfo, callback: () => any): void {
         setImmediate(() => {
             this.emit("logged", info);
         });
@@ -23,18 +23,18 @@ export default class ChannelTransport extends Transport {
         callback();
     }
 
-    public static setChannels(channels: Discord.TextChannel[]) {
+    public static setChannels(channels: Discord.TextChannel[]): void {
         this.channels = channels;
     }
 
-    public static addChannel(channel: Discord.TextChannel) {
+    public static addChannel(channel: Discord.TextChannel): void {
         if (this.channels === undefined) {
             this.channels = [];
         }
         this.channels.push(channel);
     }
 
-    public static removeChannelById(id: string) {
+    public static removeChannelById(id: string): void {
         let index = 0;
         for (const channel of this.channels) {
             if (channel.id === id) {
