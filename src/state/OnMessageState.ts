@@ -5,10 +5,10 @@ import NikkuCore from "core/NikkuCore";
 export default class OnMessageState extends CoreState {
     public constructor(core: NikkuCore, messageHandle: Discord.Message) {
         super(core);
-        this.messageHandle = messageHandle;
+        this.handle = messageHandle;
     }
 
     public getMessageHandle(): Discord.Message {
-        return this.messageHandle;
+        return this.handle;
     }
 }

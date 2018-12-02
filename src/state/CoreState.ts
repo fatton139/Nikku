@@ -10,8 +10,6 @@ export default class CoreState implements ICoreState {
      */
     protected handle?: any;
 
-    protected messageHandle?: Discord.Message;
-
     protected core: NikkuCore;
 
     /**
@@ -38,7 +36,7 @@ export default class CoreState implements ICoreState {
     }
 
     public getMessageHandle(): Discord.Message {
-        return this.messageHandle;
+        return this.handle;
     }
 
     public getDbCore(): DatabaseCore {

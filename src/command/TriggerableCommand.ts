@@ -3,6 +3,7 @@ import Trigger from "action/Trigger";
 import NikkuCore from "core/NikkuCore";
 import IHasAction from "action/IHasAction";
 import IHasTrigger from "action/IHasTrigger";
+import OnMessageState from "state/OnMessageState";
 
 export default class TriggerableCommand extends Command implements IHasAction, IHasTrigger {
 
@@ -19,8 +20,8 @@ export default class TriggerableCommand extends Command implements IHasAction, I
         this.trigger = this.setCustomTrigger();
     }
 
-    public async tryTrigger(core: NikkuCore): Promise<boolean> {
-        return await this.trigger.execute(core.getCoreState());
+    public async tryTrigger(msg: OnMessageState): Promise<boolean> {
+        return await this.trigger.execute(msg);
     }
 
     public setCustomTrigger(): Trigger {

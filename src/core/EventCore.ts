@@ -31,9 +31,8 @@ export default class EventCore {
             if (message.attachments.size >= 1) {
                 //
             } else if (!message.author.bot) {
-                this.core.setCoreState(new OnMessageState(this.core, message));
                 this.core.getCommandManager().parseLine(message.content,
-                    message.author.id);
+                    message.author.id, new OnMessageState(this.core, message));
             }
         });
     }
