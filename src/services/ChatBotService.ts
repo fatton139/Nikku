@@ -28,10 +28,12 @@ export default class ChatBotService {
             return false;
         }
         try {
-            await m.channel.send(
-                `${m.author.username}, *${m.content}*\n` +
-                `${await this.getResponse(str)}`,
-            );
+            // TODO set as a toggle.
+            // await m.channel.send(
+            //     `${m.author.username}, *${m.content}*\n` +
+            //     `${await this.getResponse(str)}`,
+            // );
+            await m.channel.send(`${await this.getResponse(str)}`);
             return true;
         } catch (err) {
             throw err;
