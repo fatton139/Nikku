@@ -8,20 +8,61 @@ import CoinType from "user/CoinType";
 
 export default class Test extends ExecutableCommand {
     public constructor() {
-        super("thieve", AccessLevel.UNREGISTERED, 0, "Test to yoink");
+        super("thieve", AccessLevel.UNREGISTERED, 0, "Test to thieve");
     }
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
             const user = state.getMessageHandle().author;
-            if (randInt(0, 100) < 50) {
-                const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
-                const dbUser = doc as any as DBUserSchema;
-                state.getMessageHandle().channel.send("yoinked cx");
-                await dbUser.addCurrency(CoinType.DOTMA_COIN, 100);
-                await dbUser.addXp(100);
+            /*if (HAS A PING LMFAO?)  {
+                state.getMessageHandle().channel.send("Correct usage !f thieve @target");
+                return true;
+            }*/
+            const target = state.getMessageHandle().mentions.users.first().id;
+            if (user.id === target) {
+                state.getMessageHandle().channel.send("You cannot thieve yourself.");
+                return true;
+            }
+            const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
+            const targetdoc = await state.getDbCore().getUserModel().findOne({id: target});
+            const dbUser = doc as any as DBUserSchema;
+            if (!doc) {
+                state.getMessageHandle().reply(
+                    `\`\`\`` +
+                    `${user.username} - The unregistered.\n` +
+                    `You are not registered. type "!f register" to register.` +
+                    `\`\`\``,
+                );
+                return true;
+            }
+            const dbTarget = targetdoc as any as DBUserSchema;
+            if (!targetdoc) {
+                state.getMessageHandle().reply(
+                    `\`\`\`` +
+                    `Target is not registered.` +
+                    `\`\`\``,
+                );
+                return true;
+            }
+            const thievedifference = (dbTarget.skills.thievelevel - dbUser.skills.thievelevel);
+            const targetchance = 55 - thievedifference;
+            if (randInt(0, 100) < targetchance) {
+                let coinsthieved = 15 + (dbUser.skills.thievelevel) - thievedifference;
+                let xpgained = 10 +  (dbUser.skills.thievelevel * 10) - thievedifference;
+                if (coinsthieved < 5) {
+                    coinsthieved = 5;
+                }
+                if (xpgained < 30) {
+                    xpgained = 30;
+                }
+                state.getMessageHandle().channel.send("Successfully thieved " + coinsthieved
+                + " coins from <@!"
+                + target + "> and gained " + xpgained + " experience");
+                await dbUser.addCurrency(CoinType.DOTMA_COIN, coinsthieved);
+                await dbUser.addXp(xpgained);
+                await dbTarget.removeCurrency(CoinType.DOTMA_COIN, coinsthieved);
             } else {
-                state.getMessageHandle().channel.send("no yoink cx");
+                state.getMessageHandle().channel.send("Target successfully defended your thieve attempt.");
             }
             return true;
         });
