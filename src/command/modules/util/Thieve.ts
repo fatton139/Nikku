@@ -5,6 +5,7 @@ import OnMessageState from "state/OnMessageState";
 import randInt from "utils/Random";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import CoinType from "user/CoinType";
+import { isNullOrUndefined } from "util";
 
 export default class Test extends ExecutableCommand {
     public constructor() {
@@ -12,12 +13,16 @@ export default class Test extends ExecutableCommand {
     }
 
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState) => {
+        return new Action(async (state: OnMessageState, args: string[]) => {
             const user = state.getMessageHandle().author;
-            /*if (HAS A PING LMFAO?)  {
+            if (state.getMessageHandle().mentions.everyone === true)  {
+                state.getMessageHandle().channel.send("You cant thieve everyone at once. Correct usage !f thieve @target");
+                return true ;
+            }
+            if (args.length === 0) {
                 state.getMessageHandle().channel.send("Correct usage !f thieve @target");
                 return true;
-            }*/
+            }
             const target = state.getMessageHandle().mentions.users.first().id;
             if (user.id === target) {
                 state.getMessageHandle().channel.send("You cannot thieve yourself.");
@@ -27,28 +32,22 @@ export default class Test extends ExecutableCommand {
             const targetdoc = await state.getDbCore().getUserModel().findOne({id: target});
             const dbUser = doc as any as DBUserSchema;
             if (!doc) {
-                state.getMessageHandle().reply(
-                    `\`\`\`` +
-                    `${user.username} - The unregistered.\n` +
-                    `You are not registered. type "!f register" to register.` +
-                    `\`\`\``,
-                );
+                state.getMessageHandle().channel.send("You are not registered. type !f register to register.");
                 return true;
             }
             const dbTarget = targetdoc as any as DBUserSchema;
             if (!targetdoc) {
-                state.getMessageHandle().reply(
-                    `\`\`\`` +
-                    `Target is not registered.` +
-                    `\`\`\``,
-                );
+                state.getMessageHandle().channel.send("Target is not registered.");
                 return true;
             }
             const thievedifference = (dbTarget.skills.thievelevel - dbUser.skills.thievelevel);
-            const targetchance = 55 - thievedifference;
+            let targetchance = 55 - thievedifference;
+            if (targetchance < 5) {
+                targetchance = 5;
+            }
             if (randInt(0, 100) < targetchance) {
-                let coinsthieved = 15 + (dbUser.skills.thievelevel) - thievedifference;
-                let xpgained = 10 +  (dbUser.skills.thievelevel * 10) - thievedifference;
+                let coinsthieved = 15 + (dbUser.skills.thievelevel) + thievedifference;
+                let xpgained = (dbUser.skills.thievelevel * 10) + thievedifference;
                 if (coinsthieved < 5) {
                     coinsthieved = 5;
                 }
