@@ -45,6 +45,9 @@ export default class Test extends ExecutableCommand {
             if (targetchance < 5) {
                 targetchance = 5;
             }
+            if (targetchance < 95) {
+                targetchance = 95;
+            }
             if (randInt(0, 100) < targetchance) {
                 let coinsthieved = 15 + (dbUser.skills.thievelevel) + thievedifference;
                 let xpgained = (dbUser.skills.thievelevel * 10) + thievedifference;
