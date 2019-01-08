@@ -32,6 +32,9 @@ export default class Profile extends ExecutableCommand {
                     `Wallet:\n` +
                     `   DotmaCoins: ${dbUser.wallet.dotmaCoin}\n` +
                     `   BradCoins: ${dbUser.wallet.bradCoin}\n` +
+                    `Skills:\n` +
+                    `   Thieving experience: ${dbUser.skills.thievexp}\n` +
+                    `   Thieving level: ${dbUser.skills.thievelevel}\n` +
                     `\n` +
                     `You have been registered for ${Math.round(hours)} hour(s).` +
                     `\`\`\``,
