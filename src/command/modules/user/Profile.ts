@@ -3,6 +3,7 @@ import AccessLevel from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
+import SkillType from "user/skill/SkillType";
 
 export default class Profile extends ExecutableCommand {
     public constructor() {
@@ -10,6 +11,7 @@ export default class Profile extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
+            const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
             const user = state.getMessageHandle().author;
             try {
                 const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
@@ -22,7 +24,7 @@ export default class Profile extends ExecutableCommand {
                     );
                     return true;
                 }
-                const dbUser = doc as any as DBUserSchema;
+                const dbUser = await userModel.getUser(user.id);
                 const dateDiff = (new Date() as any) - (dbUser.dateRegistered as any);
                 const hours = dateDiff / (1000 * 60 * 60);
                 state.getMessageHandle().reply(
@@ -33,8 +35,8 @@ export default class Profile extends ExecutableCommand {
                     `   DotmaCoins: ${dbUser.wallet.dotmaCoin}\n` +
                     `   BradCoins: ${dbUser.wallet.bradCoin}\n` +
                     `Skills:\n` +
-                    `   Thieving experience: ${dbUser.skills.thievexp}\n` +
-                    `   Thieving level: ${dbUser.skills.thievelevel}\n` +
+                    `   Thieving experience: ${await dbUser.getSkillExperience(SkillType.THIEVING)}\n` +
+                    `   Thieving level: ${await dbUser.getSkillLevel(SkillType.THIEVING)}\n` +
                     `\n` +
                     `You have been registered for ${Math.round(hours)} hour(s).` +
                     `\`\`\``,
