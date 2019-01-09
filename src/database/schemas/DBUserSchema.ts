@@ -95,19 +95,23 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @staticMethod
-    public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<any> {
+    public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<void> {
         const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
         const model = new userModel({
             id,
             accessLevel: AccessLevel.REGISTERED,
         });
         try {
-            const docs = await model.save();
+            await model.save();
             DBUserSchema.logger.info("New user registered.");
-            Promise.resolve(docs);
         } catch (err) {
             DBUserSchema.logger.info(`Failed to register user:${err}`);
-            Promise.reject(err);
         }
     }
+
+    @staticMethod
+    public static async getUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<DBUserSchema> {
+        return new DBUserSchema().getModelForClass(DBUserSchema).findOne({id});
+    }
+
 }
