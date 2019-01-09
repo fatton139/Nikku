@@ -9,6 +9,7 @@ import NikkuCore from "core/NikkuCore";
 import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
+import ExecutableCommand from "./ExecutableCommand";
 
 export default class CommandManager {
     /**
@@ -111,6 +112,12 @@ export default class CommandManager {
         if (!this.core.getDbCore().isReady()) {
             this.logger.warn("Please wait until database connection has resolved.");
             return;
+        }
+        if (command.getArgLength() !== 0 && args.length !== command.getArgLength()) {
+            if (command instanceof ExecutableCommand) {
+                command.displayUsageText(msg);
+                throw new NikkuException(msg, "Invalid arguments.");
+            }
         }
         command.setArgs(args);
         const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();

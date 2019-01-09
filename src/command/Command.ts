@@ -37,20 +37,17 @@ export default class Command implements IHasAction {
 
     private description: string;
 
-    private helperText: string;
-
     /**
      * @classdesc Base command class for the bot.
      * @param commandString - The string required to execute this command.
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(accessLevel: AccessLevel, argLength: number, description?: string, helperText?: string) {
+    public constructor(accessLevel: AccessLevel, argLength: number, description?: string) {
         this.action = this.setCustomAction();
         this.accessLevel = accessLevel;
         this.argLength = argLength;
         this.description = description;
-        this.helperText = helperText;
     }
 
     /**
@@ -123,9 +120,5 @@ export default class Command implements IHasAction {
 
     public setCustomAction(): Action {
         return;
-    }
-
-    public getHelperText(): string {
-        return this.helperText;
     }
 }
