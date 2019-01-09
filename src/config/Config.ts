@@ -25,6 +25,7 @@ namespace Config {
             "util",
             "user",
             "brad",
+            "interactions",
         ];
     }
     export class Service {
