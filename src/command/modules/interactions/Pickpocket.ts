@@ -27,10 +27,6 @@ export default class Pickpocket extends ExecutableCommand {
                 return false;
             }
             const dbUser = await userModel.getUser(userId);
-            if (!dbUser) {
-                state.getMessageHandle().channel.send("You are not registered.");
-                return false;
-            }
             const dbTarget = await userModel.getUser(targetId);
             if (!dbTarget) {
                 state.getMessageHandle().channel.send("Target is not registered.");
