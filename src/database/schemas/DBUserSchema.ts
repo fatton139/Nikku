@@ -4,7 +4,8 @@ import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 import AccessLevel from "user/AccessLevel";
 import CoinType from "user/CoinType";
-import { Skill } from "user/Skill";
+import Skill from "user/skill/Skill";
+import SkillType from "user/skill/SkillType";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
@@ -20,10 +21,10 @@ export default class DBUserSchema extends Typegoose {
         bradCoin: number,
     };
 
-    @prop({default: {thievexp: 0, thievelevel: 1}})
-    public skills?: {
-        thievexp: number,
-        thievelevel: number,
+    // @ts-ignore
+    @prop({enum: SkillType, default: {THIEVING: 0}})
+    public skillsExperienceMap: {
+        THIEVING: number,
     };
 
     @prop({default: {lastUpdate: new Date((new Date()).setDate(new Date().getDate() - 1))}})
@@ -76,15 +77,33 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async addXp(this: InstanceType<any> & Mongoose.Document, amount: number): Promise<void> {
-        this.skills.thievexp += amount;
+    public async addSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType, amount: number): Promise<void> {
         try {
-            await this.markModified("skills");
-            const x = new Skill("Thieving").getLevelAtExperience(this.skills.thievexp);
-            this.skills.thievelevel = x;
+            this.skillsExperienceMap[SkillType[type.toString()]] += amount;
+            await this.markModified("skillsExperienceMap");
             return await this.save();
         } catch (err) {
-            DBUserSchema.logger.error("Failed to update experience.");
+            DBUserSchema.logger.error("Failed to update user experience.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async getSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType): Promise<number> {
+        try {
+            return this.skillsExperienceMap[SkillType[type.toString()]];
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to retrieve user experience.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async getSkillLevel(this: InstanceType<any> & Mongoose.Document, type: SkillType): Promise<number> {
+        try {
+            return Skill.getLevelAtExperience(await this.getSkillExperience(type));
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to retrieve user level.");
             throw err;
         }
     }
