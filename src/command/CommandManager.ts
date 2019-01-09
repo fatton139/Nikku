@@ -10,6 +10,7 @@ import CommandRegistry from "./CommandRegistry";
 import TriggerableCommand from "./TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
 import ExecutableCommand from "./ExecutableCommand";
+import NikkuException from "exception/NikkuException";
 
 export default class CommandManager {
     /**
