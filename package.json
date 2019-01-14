@@ -9,7 +9,9 @@
   "scripts": {
     "start": "cross-env NODE_PATH=./src node main.js",
     "test": "cross-env NODE_ENV=test NODE_PATH=./src mocha test/**/*.js",
-    "postinstall": "tsc"
+    "postinstall": "npm run tsc",
+    "tsc": "tsc",
+    "tscw": "tsc -w"
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",
