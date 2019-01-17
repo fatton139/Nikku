@@ -45,7 +45,7 @@ Want to contribute or create your own build? Follow the following steps!
 1. Clone or Fork the repository
 2. Install dependencies and packages with `npm install`
 3. Compile TypeScript with `tsc` (If you have global installation) or `npm run tsc`. For watch mode use `tsc -w` or `npm run tscw`.
-4. Create a .env file in the project root with `touch .env` and configure it. See [Configuring .env file](#Configuring-the-.env-file)
+4. Create a .env file in the project root with `touch .env` and configure it. See [Configuring .env file](#Configuring-the-env-file)
 5. Run the application with `npm start`
 
 ### Configuring the .env file
