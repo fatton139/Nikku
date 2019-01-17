@@ -23,10 +23,10 @@ export default class UserMigrator {
                     const doc = await model.save();
                     i++;
                     this.logger.info(`Dev user created ${i} of ${ids.length}.`);
-                    Promise.resolve(doc);
+                    return doc;
                 } catch (err) {
                     this.logger.error(`Failed to create user ${userId}:${err}.`);
-                    Promise.reject(err);
+                    throw err;
                 }
             }
         }

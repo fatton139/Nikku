@@ -4,6 +4,8 @@ import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 import AccessLevel from "user/AccessLevel";
 import CoinType from "user/CoinType";
+import Skill from "user/skill/Skill";
+import SkillType from "user/skill/SkillType";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
@@ -17,6 +19,12 @@ export default class DBUserSchema extends Typegoose {
     public wallet?: {
         dotmaCoin: number,
         bradCoin: number,
+    };
+
+    // @ts-ignore
+    @prop({enum: SkillType, default: {THIEVING: 0}})
+    public skillsExperienceMap: {
+        THIEVING: number,
     };
 
     @prop({default: {lastUpdate: new Date((new Date()).setDate(new Date().getDate() - 1))}})
@@ -69,24 +77,60 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
+    public async addSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType, amount: number): Promise<void> {
+        try {
+            this.skillsExperienceMap[SkillType[type.toString()]] += amount;
+            await this.markModified("skillsExperienceMap");
+            return await this.save();
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to update user experience.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async getSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType): Promise<number> {
+        try {
+            return this.skillsExperienceMap[SkillType[type.toString()]];
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to retrieve user experience.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async getSkillLevel(this: InstanceType<any> & Mongoose.Document, type: SkillType): Promise<number> {
+        try {
+            return Skill.getLevelAtExperience(await this.getSkillExperience(type));
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to retrieve user level.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
     public async removeCurrency(this: InstanceType<any> & Mongoose.Document, coinType: CoinType, amount: number): Promise<void> {
         return this.addCurrency(coinType, -1 * amount);
     }
 
     @staticMethod
-    public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<any> {
+    public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<void> {
         const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
         const model = new userModel({
             id,
             accessLevel: AccessLevel.REGISTERED,
         });
         try {
-            const docs = await model.save();
+            await model.save();
             DBUserSchema.logger.info("New user registered.");
-            Promise.resolve(docs);
         } catch (err) {
             DBUserSchema.logger.info(`Failed to register user:${err}`);
-            Promise.reject(err);
         }
     }
+
+    @staticMethod
+    public static async getUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<DBUserSchema> {
+        return new DBUserSchema().getModelForClass(DBUserSchema).findOne({id});
+    }
+
 }
