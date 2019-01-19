@@ -1,0 +1,3 @@
+[submodule "dotma-resources"]
+	path = dotma-resources
+	url = https://github.com/DOT-MA/dotma-resources
