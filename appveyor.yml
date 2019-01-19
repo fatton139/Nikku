@@ -1,21 +1,21 @@
 build: off
+environment:
+  nodejs_version: "10.4.0"
 image:
   - Visual Studio 2017
 branches:
   only:
     - master
     - dev
-cache:
-  - node_modules
 install:
   - node --version
   - npm --version
   - npm install
-  - npm install typescript -g
 configuration: Release
 before_test:
+  - git submodule update --recursive --remote
   - tsc -v
-  - tsc
+  - npm run tsc
 test_script:
   - npm test
 on_success:
