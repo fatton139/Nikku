@@ -28,9 +28,7 @@ export default class EventCore {
      */
     public listenMessages(): void {
         this.client.on("message", (message: Discord.Message) => {
-            if (message.attachments.size >= 1) {
-                //
-            } else if (!message.author.bot) {
+            if (!message.author.bot && message.content.length !== 0) {
                 this.core.getCommandManager().parseLine(message.content,
                     message.author.id, new OnMessageState(this.core, message));
             }
