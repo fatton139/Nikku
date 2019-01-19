@@ -33,7 +33,7 @@ export default class Logger {
                 }),
             ],
         });
-        if (process.env.NODE_ENV === "test") {
+        if (process.env.NODE_ENV === "TEST") {
             for (const t of this.logger.transports) {
                 t.silent = true;
             }
