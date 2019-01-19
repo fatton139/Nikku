@@ -14,6 +14,7 @@ namespace Config {
         public static readonly URL: string = process.env.DATABASE_URL;
     }
     export class Command {
+        public static readonly BOT_RESPONSE_TRIGGER = "Mr Fortnite";
         public static readonly PREFIXES: string[] = process.env.PREFIXES ?
             process.env.PREFIXES.replace(/\s/g, "").split(",") : ["!f"];
         public static readonly COMMAND_SRC: string = "command/modules";

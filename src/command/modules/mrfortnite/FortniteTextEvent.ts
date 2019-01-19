@@ -5,6 +5,7 @@ import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
+import { CommandUtil } from "utils/CommandUtil";
 
 export default class FortniteTextEvent extends TriggerableCommand {
     public constructor() {
@@ -15,7 +16,7 @@ export default class FortniteTextEvent extends TriggerableCommand {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m: Discord.Message = state.getMessageHandle();
             return m.content.replace(/\s/g, "").toLowerCase().search("fortnite") !== -1
-                && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
+                && !CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2)
                 && m.content[0] !== "!";
         });
     }

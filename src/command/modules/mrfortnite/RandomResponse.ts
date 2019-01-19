@@ -7,7 +7,7 @@ import OnMessageState from "state/OnMessageState";
 import randInt from "utils/Random";
 import Config from "config/Config";
 import ChatBotService from "services/ChatBotService";
-import StringFunc from "utils/StringFunc";
+import { CommandUtil } from "utils/CommandUtil";
 
 export default class RandomResponse extends TriggerableCommand {
 
@@ -21,7 +21,7 @@ export default class RandomResponse extends TriggerableCommand {
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m = state.getMessageHandle();
-            return randInt(0, 100) < 5 && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
+            return randInt(0, 100) < 5 && !CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2)
                 && m.content.replace(/\s/g, "").toLowerCase().search("fortnite") === -1;
         });
     }
