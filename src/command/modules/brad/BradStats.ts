@@ -29,7 +29,7 @@ export default class BradStats extends ExecutableCommand {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
                 const DbBrad = await state.getDbCore().getBradPropertyModel().findOne({}) as any as DBBradPropertySchema;
-                const embed = new Discord.RichEmbed();
+                const embed = new Discord.MessageEmbed();
                 embed.setColor(0xFFA600);
                 embed.setTitle("Brad Stats.");
                 embed.addField("Current Weight", `${DbBrad.weight.toFixed(4)}kg.`);

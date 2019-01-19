@@ -26,7 +26,7 @@ export default class FeedBrad extends ExecutableCommand {
         const DbUser = state.getDbCore().getUserModel();
         const channel = state.getMessageHandle().channel;
         const client = state.getCore().getClient();
-        const embed = new Discord.RichEmbed();
+        const embed = new Discord.MessageEmbed();
         embed.setTitle("Brad is pleased.");
         embed.setColor(0x00FFF0);
         for (let i = 0; i < users.length && i < 10; i++) {
