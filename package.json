@@ -9,7 +9,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=PRODUCTION NODE_PATH=./src node main.js",
     "start-dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src node main.js",
-    "test": "cross-env NODE_ENV=TEST NODE_PATH=./src mocha test/**/*.js",
+    "test": "cross-env NODE_ENV=TEST NODE_PATH=./src mocha test/**/*.js --exit",
     "postinstall": "npm run tsc",
     "tsc": "tsc",
     "tscw": "tsc -w"
