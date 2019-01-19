@@ -15,7 +15,6 @@ install:
 configuration: Release
 before_test:
   - git submodule update --recursive --remote
-  - tsc -v
 test_script:
   - npm test
 on_success:
