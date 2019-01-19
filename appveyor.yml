@@ -8,6 +8,7 @@ branches:
     - master
     - dev
 install:
+  - ps: Install-Product node $env:nodejs_version
   - node --version
   - npm --version
   - npm install
@@ -15,7 +16,6 @@ configuration: Release
 before_test:
   - git submodule update --recursive --remote
   - tsc -v
-  - npm run tsc
 test_script:
   - npm test
 on_success:
