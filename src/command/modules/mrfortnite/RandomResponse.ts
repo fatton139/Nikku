@@ -7,7 +7,7 @@ import OnMessageState from "state/OnMessageState";
 import randInt from "utils/Random";
 import Config from "config/Config";
 import ChatBotService from "services/ChatBotService";
-import { LevenshteinDistance } from "math/LevenshteinDistance";
+import StringFunc from "utils/StringFunc";
 
 export default class RandomResponse extends TriggerableCommand {
 
@@ -22,7 +22,7 @@ export default class RandomResponse extends TriggerableCommand {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m = state.getMessageHandle();
             return randInt(0, 100) < 5 && m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") === -1
-                && LevenshteinDistance(m.content.replace(/\s/g, "").toLowerCase(), "mrfortnite") > 2;
+                && m.content.replace(/\s/g, "").toLowerCase().search("fortnite") === -1;
         });
     }
 

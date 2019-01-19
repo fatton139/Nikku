@@ -6,7 +6,7 @@ import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import Config from "config/Config";
 import ChatBotService from "services/ChatBotService";
-import { LevenshteinDistance } from "math/LevenshteinDistance";
+import StringFunc from "utils/StringFunc";
 
 export default class AskResponse extends TriggerableCommand {
 
@@ -20,7 +20,7 @@ export default class AskResponse extends TriggerableCommand {
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m: Discord.Message = state.getMessageHandle();
-            return LevenshteinDistance(m.content.replace(/\s/g, "").toLowerCase(), "mrfortnite") <= 2;
+            return m.content.replace(/\s/g, "").toLowerCase().search("mrfortnite") !== -1;
         });
     }
 
