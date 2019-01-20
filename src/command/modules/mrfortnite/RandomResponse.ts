@@ -4,7 +4,7 @@ import { AccessLevel } from "user/AccessLevel";
 import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
-import randInt from "utils/Random";
+import { MathUtil } from "math/MathUtil";
 import { Config } from "config/Config";
 import ChatBotService from "services/ChatBotService";
 import { CommandUtil } from "utils/CommandUtil";
@@ -21,7 +21,7 @@ export default class RandomResponse extends TriggerableCommand {
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
             const m = state.getMessageHandle();
-            return randInt(0, 100) < 5 && !CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2)
+            return MathUtil.randInt(0, 100) < 5 && !CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2)
                 && m.content.replace(/\s/g, "").toLowerCase().search("fortnite") === -1;
         });
     }

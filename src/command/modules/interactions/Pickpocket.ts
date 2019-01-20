@@ -2,7 +2,7 @@ import { AccessLevel } from "user/AccessLevel";
 import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
-import randInt from "utils/Random";
+import { MathUtil } from "math/MathUtil";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import { CoinType } from "user/CoinType";
 import SkillType from "user/skill/SkillType";
@@ -38,7 +38,7 @@ export default class Pickpocket extends ExecutableCommand {
                 let targetChance = 55 - levelDifference;
                 targetChance = targetChance < 5 ? 5 : targetChance;
                 targetChance = targetChance > 95 ? 95 : targetChance;
-                if (randInt(0, 100) < targetChance) {
+                if (MathUtil.randInt(0, 100) < targetChance) {
                     let coinsStolen = 15 + (await dbUser.getSkillLevel(SkillType.THIEVING)) + levelDifference;
                     coinsStolen = coinsStolen < 5 ? 5 : coinsStolen;
                     let experienceGained = (await dbUser.getSkillLevel(SkillType.THIEVING) * 10) + levelDifference;
