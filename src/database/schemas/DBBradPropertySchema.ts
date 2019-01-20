@@ -1,7 +1,7 @@
 import * as Mongoose from "mongoose";
 import { Typegoose, prop, arrayProp, instanceMethod } from "typegoose";
 import Brad from "entities/Brad";
-import Config from "config/Config";
+import { Config } from "config/Config";
 import { core } from "core/NikkuCore";
 
 export class IdContributionPair {

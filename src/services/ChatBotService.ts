@@ -1,7 +1,7 @@
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import Config from "config/Config";
+import { Config } from "config/Config";
 import Logger from "log/Logger";
 import OnMessageState from "state/OnMessageState";
 import StringFunc from "utils/StringFunc";

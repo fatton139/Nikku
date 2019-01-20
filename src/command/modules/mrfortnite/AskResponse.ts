@@ -4,7 +4,7 @@ import AccessLevel from "user/AccessLevel";
 import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
-import Config from "config/Config";
+import { Config } from "config/Config";
 import ChatBotService from "services/ChatBotService";
 import { CommandUtil } from "utils/CommandUtil";
 

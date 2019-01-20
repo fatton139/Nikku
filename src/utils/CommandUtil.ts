@@ -1,4 +1,4 @@
-import Config from "config/Config";
+import { Config } from "config/Config";
 import { LevenshteinDistance } from "math/LevenshteinDistance";
 
 export namespace CommandUtil {

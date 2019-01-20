@@ -2,7 +2,7 @@ import "mocha";
 import * as Discord from "discord.js";
 import { expect } from "chai";
 import NikkuCore from "core/NikkuCore";
-import Config from "config/Config";
+import { Config } from "config/Config";
 import ChannelTransport from "log/ChannelTransport";
 
 describe("Nikku Core", () => {

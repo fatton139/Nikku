@@ -2,7 +2,7 @@ import { config as dotenvConfig } from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
 
-namespace Config {
+export namespace Config {
     dotenvConfig();
     const pjson = JSON.parse(fs.readFileSync("package.json", "utf8"));
     export class Discord {
@@ -47,5 +47,3 @@ namespace Config {
         public static readonly DEFAULT_WEIGHT: number = 200;
     }
 }
-
-export default Config;

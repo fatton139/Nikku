@@ -3,7 +3,7 @@ import * as winston from "winston";
 import NikkuException from "exception/NikkuException";
 import EventCore from "core/EventCore";
 import DatabaseCore from "core/DatabaseCore";
-import Config from "config/Config";
+import { Config } from "config/Config";
 import CoreState from "state/CoreState";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
