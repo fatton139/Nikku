@@ -5,7 +5,7 @@ import UnauthorizedCommandException from "exception/UnauthorizedCommandException
 import Action from "action/Action";
 import NikkuException from "exception/NikkuException";
 import NikkuCore from "core/NikkuCore";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
 

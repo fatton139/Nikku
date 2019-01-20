@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import TriggerableCommand from "command/TriggerableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Trigger from "action/Trigger";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";

@@ -1,11 +1,11 @@
 import * as Discord from "discord.js";
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import DBBradPropertySchema, { IdContributionPair } from "database/schemas/DBBradPropertySchema";
-import CoinType from "user/CoinType";
+import { CoinType } from "user/CoinType";
 import Brad from "entities/Brad";
 
 export default class FeedBrad extends ExecutableCommand {

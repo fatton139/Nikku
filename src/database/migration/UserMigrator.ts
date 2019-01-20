@@ -1,7 +1,7 @@
 import * as winston from "winston";
 import Logger from "log/Logger";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 
 export default class UserMigrator {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();

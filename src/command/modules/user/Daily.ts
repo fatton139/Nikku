@@ -1,9 +1,9 @@
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import CoinType from "user/CoinType";
+import { CoinType } from "user/CoinType";
 
 export default class Daily extends ExecutableCommand {
     public constructor() {

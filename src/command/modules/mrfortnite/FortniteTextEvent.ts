@@ -1,5 +1,5 @@
 import * as Discord from "discord.js";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import TriggerableCommand from "command/TriggerableCommand";
 import Trigger from "action/Trigger";
 import Action from "action/Action";

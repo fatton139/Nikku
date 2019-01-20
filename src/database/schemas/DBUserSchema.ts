@@ -2,8 +2,8 @@ import * as winston from "winston";
 import * as Mongoose from "mongoose";
 import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
-import AccessLevel from "user/AccessLevel";
-import CoinType from "user/CoinType";
+import { AccessLevel } from "user/AccessLevel";
+import { CoinType } from "user/CoinType";
 import Skill from "user/skill/Skill";
 import SkillType from "user/skill/SkillType";
 

@@ -1,5 +1,5 @@
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";

@@ -10,7 +10,7 @@ import UserMigrator from "database/migration/UserMigrator";
 import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
 import GuildPropertyMigrator from "database/migration/GuildPropertyMigrator";
 import NikkuCore from "./NikkuCore";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 import BradPropertyMigrator from "database/migration/BradPropertyMigrator";
 

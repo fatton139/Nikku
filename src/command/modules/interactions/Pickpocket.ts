@@ -1,10 +1,10 @@
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import randInt from "utils/Random";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import CoinType from "user/CoinType";
+import { CoinType } from "user/CoinType";
 import SkillType from "user/skill/SkillType";
 import Skill from "user/skill/Skill";
 

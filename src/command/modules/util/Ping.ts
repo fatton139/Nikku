@@ -1,4 +1,4 @@
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";

@@ -127,7 +127,7 @@ Here we will extend the *ExecutableCommand* class which is the base for a comman
 SampleCommand.ts
 ```
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 
@@ -152,7 +152,7 @@ super(
 Your command file should now look something like this.
 ```
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 
@@ -204,7 +204,7 @@ public setCustomAction(): Action {
 The final file should look something like this.
 ```
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 

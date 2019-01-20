@@ -1,5 +1,5 @@
 import Command from "./Command";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
 

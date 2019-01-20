@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import ExecutableCommand from "command/ExecutableCommand";
-import AccessLevel from "user/AccessLevel";
+import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBBradPropertySchema, { IdContributionPair } from "database/schemas/DBBradPropertySchema";
