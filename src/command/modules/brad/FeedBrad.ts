@@ -10,7 +10,7 @@ import Brad from "entities/Brad";
 
 export default class FeedBrad extends ExecutableCommand {
     public constructor() {
-        super("feedbrad", AccessLevel.REGISTERED, 1, "Feed Brad.");
+        super("feedbrad", AccessLevel.REGISTERED, 1, "Feed Brad.", "!f feedbrad [amount]");
     }
 
     private generateString(users: IdContributionPair[], client: Discord.Client): string {

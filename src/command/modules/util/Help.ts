@@ -5,10 +5,10 @@ import OnMessageState from "state/OnMessageState";
 
 export default class Help extends ExecutableCommand {
     public constructor() {
-        super("help", AccessLevel.UNREGISTERED, 1, "Displays the help message.");
+        super("help", AccessLevel.UNREGISTERED, 0, "Displays the help message.");
     }
     public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState, args: string[]) => {
+        return new Action(async (state: OnMessageState) => {
             let text = `\`\`\`Available prefixes: ${state.getCommandManager().getPrefixManager().getPrefixes()}\n\n`;
             const commands = Array.from(state.getCommandManager().getCommandRegistry().getCommandMap().values()).sort((a, b) => {
                 if (!a.getCommandString() || !b.getCommandString() || a.getCommandString() === b.getCommandString()) {
@@ -23,7 +23,7 @@ export default class Help extends ExecutableCommand {
                     if (description[description.length - 1] !== "\n") {
                         description += "\n";
                     }
-                    text += `${command.getCommandString()} - ${description}`;
+                    text += `${command.getCommandString()}${command.getUsage() ? ` (${command.getUsage()})` : ""} - ${description}`;
                     amount++;
                 }
             }
