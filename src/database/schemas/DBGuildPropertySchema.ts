@@ -78,12 +78,14 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     @instanceMethod
-    public async getBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string): Promise<boolean> {
+    public async getBooleanConfig(this: InstanceType<any> & Mongoose.Document,
+            configName: GuildConfig.BooleanConfig.Options): Promise<boolean> {
+        const enumOptions = GuildConfig.BooleanConfig.Options;
         try {
-            if (isUndefined(this.booleanConfig[configName])) {
+            if (isUndefined(this.booleanConfig[enumOptions[configName]])) {
                 throw new NikkuException(undefined, "Undefined config name.");
             }
-            return this.booleanConfig[configName];
+            return this.booleanConfig[enumOptions[configName]];
         } catch (err) {
             DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
             throw err;
