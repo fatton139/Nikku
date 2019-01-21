@@ -5,6 +5,9 @@ import { Config } from "config/Config";
 import Logger from "log/Logger";
 import OnMessageState from "state/OnMessageState";
 import StringFunc from "utils/StringFunc";
+import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
+import { GuildConfig } from "config/GuildBooleanConfig";
+import { isUndefined } from "util";
 
 export default class ChatBotService {
 
@@ -28,12 +31,11 @@ export default class ChatBotService {
             return false;
         }
         try {
-            // TODO set as a toggle.
-            // await m.channel.send(
-            //     `${m.author.username}, *${m.content}*\n` +
-            //     `${await this.getResponse(str)}`,
-            // );
-            await m.channel.send(`${await this.getResponse(str)}`);
+            const guild = await DBGuildPropertySchema.getModel().getGuildById(state.getMessageHandle().guild.id);
+            const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
+            await m.channel.send(`${await this.getResponse(str)}`, {
+                tts: isUndefined(ttsEnabled) ? false : ttsEnabled,
+            });
             return true;
         } catch (err) {
             throw err;
