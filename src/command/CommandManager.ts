@@ -13,9 +13,7 @@ import ExecutableCommand from "./ExecutableCommand";
 import NikkuException from "exception/NikkuException";
 
 export default class CommandManager {
-    /**
-     * The prefix required to begin calling a command.
-     */
+
     private prefixManager: PrefixManager;
 
     private commandRegistry: CommandRegistry;
@@ -42,10 +40,8 @@ export default class CommandManager {
             const commandClass = await import(`${src}/${path}`);
             if (!commandClass.default) {
                 this.logger.warn(`Fail to register command. "${src}/${path}" has no default export.`);
-                break;
             } else if (!(new commandClass.default() instanceof Command)) {
                 this.logger.warn(`Fail to register command. "${src}/${path}" exported class is not of type "Command".`);
-                break;
             } else {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
@@ -64,13 +60,12 @@ export default class CommandManager {
                 if (error.code === "ENOENT") {
                     this.logger.warn(`No such directory "${path}".`);
                 } else {
-                    this.logger.warn(`FS System Error while reading "${path}".`);
+                    this.logger.warn(`FS error while reading "${path}".`);
                 }
                 break;
             }
             if (files.length === 0) {
                 this.logger.verbose(`Empty command directory "${path}".`);
-                break;
             }
             for (const file of files) {
                 const fileName = file.split(".")[0];
