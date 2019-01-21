@@ -8,7 +8,7 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 import Logger from "log/Logger";
 import UserMigrator from "database/migration/UserMigrator";
 import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
-import GuildPropertyMigrator from "database/migration/GuildPropertyMigrator";
+import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
 import NikkuCore from "./NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
@@ -94,19 +94,7 @@ export default class DatabaseCore {
     }
 
     public async generateGuildPropertyModel(): Promise<void> {
-        const guildPropertySchema = new DBGuildPropertySchema();
-        this.guildPropertyModel = guildPropertySchema.getModelForClass(DBGuildPropertySchema);
-        const docs = await this.guildPropertyModel.find({}) as any as DBGuildPropertySchema[];
-        for (const guild of this.client.guilds) {
-            if (docs.findIndex((sGuild) => sGuild.id === guild[1].id) === -1) {
-                const model = new this.guildPropertyModel({
-                    id: guild[1].id,
-                });
-                this.logger.warn(`Unregistered guild detected. Creating server property document for "${guild[1].name}".`);
-                await model.save();
-            }
-        }
-        Promise.resolve();
+        await GuildPropertyMigration.verifyGuildConfig();
     }
 
     public async generateBradPropertyModel(): Promise<void> {

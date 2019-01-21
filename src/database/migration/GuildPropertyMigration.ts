@@ -22,9 +22,8 @@ export namespace GuildPropertyMigration {
     };
 
     export const verifyGuildConfig = async (): Promise<void> => {
-        const keys = Object.keys(GuildConfig.BooleanConfig.Options).filter((key) => isNaN(Number(key)));
         for (const guild of await LocalPropertyModel.find({})) {
-            for (const key of keys) {
+            for (const key of GuildConfig.BooleanConfig.keys) {
                 if (!(await guild.booleanConfigExists(key))) {
                     await guild.addBooleanConfig(key);
                 }
