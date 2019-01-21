@@ -2,6 +2,9 @@ import * as winston from "winston";
 import Logger from "log/Logger";
 import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 import * as Mongoose from "mongoose";
+import { GuildConfig } from "config/GuildBooleanConfig";
+import { isUndefined } from "util";
+import NikkuException from "exception/NikkuException";
 
 export default class DBGuildPropertySchema extends Typegoose {
     private static readonly logger: winston.Logger = new Logger(DBGuildPropertySchema.constructor.name).getLogger();
@@ -11,6 +14,9 @@ export default class DBGuildPropertySchema extends Typegoose {
 
     @arrayProp({default: [], items: String})
     public targets: string[];
+
+    @prop({default: {}})
+    public booleanConfig: any;
 
     @instanceMethod
     public async addTarget(this: InstanceType<any> & Mongoose.Document, target: string): Promise<void> {
@@ -37,5 +43,81 @@ export default class DBGuildPropertySchema extends Typegoose {
             DBGuildPropertySchema.logger.error("Remove target, failed to save document.");
             throw err;
         }
+    }
+
+    @instanceMethod
+    public async addBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string, initValue?: boolean): Promise<void> {
+        try {
+            await this.markModified("booleanConfig");
+            if (!this.booleanConfig) {
+                this.booleanConfig = {};
+            }
+            if (isUndefined(this.booleanConfig[configName])) {
+                this.booleanConfig[configName] = initValue ? initValue : false;
+            }
+            return await this.save();
+        } catch (err) {
+            DBGuildPropertySchema.logger.error("Failed to add new configuration.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async booleanConfigExists(this: InstanceType<any> & Mongoose.Document, configName: string): Promise<boolean> {
+        try {
+            return !isUndefined(this.booleanConfig[configName]);
+        } catch (err) {
+            DBGuildPropertySchema.logger.error("Failed to retrieve configuration.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async getAllBooleanConfig(this: InstanceType<any> & Mongoose.Document): Promise<boolean> {
+        return this.booleanConfig;
+    }
+
+    @instanceMethod
+    public async getBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string): Promise<boolean> {
+        try {
+            if (isUndefined(this.booleanConfig[configName])) {
+                throw new NikkuException(undefined, "Undefined config name.");
+            }
+            return this.booleanConfig[configName];
+        } catch (err) {
+            DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async setBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string, value: boolean): Promise<boolean> {
+        try {
+            if (isUndefined(this.booleanConfig[configName])) {
+                throw new NikkuException(undefined, "Undefined config name.");
+            }
+            await this.markModified("booleanConfig");
+            this.booleanConfig[configName] = value;
+            return await this.save();
+        } catch (err) {
+            DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
+            throw err;
+        }
+    }
+
+    @staticMethod
+    public static async getGuildById(this: ModelType<DBGuildPropertySchema> & typeof DBGuildPropertySchema, id: string):
+            Promise<DBGuildPropertySchema> {
+        return await (new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema).findOne({id}));
+    }
+
+    @staticMethod
+    public static async getAllGuild(this: ModelType<DBGuildPropertySchema> & typeof DBGuildPropertySchema):
+            Promise<DBGuildPropertySchema[]> {
+        return await (new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema).find({}));
+    }
+
+    public static getModel(): Mongoose.Model<InstanceType<DBGuildPropertySchema>> & DBGuildPropertySchema & typeof DBGuildPropertySchema {
+        return new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema);
     }
 }
