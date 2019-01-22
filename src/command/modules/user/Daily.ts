@@ -13,7 +13,7 @@ export default class Daily extends ExecutableCommand {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             const user = state.getMessageHandle().author;
             try {
-                const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
+                const doc = await DBUserSchema.getUserById(user.id);
                 const dbUser = doc as any as DBUserSchema;
                 const dateDiff = (new Date() as any) - (dbUser.daily.lastUpdate as any);
                 const hours = dateDiff / (1000 * 60 * 60);

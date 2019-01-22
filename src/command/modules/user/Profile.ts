@@ -14,7 +14,7 @@ export default class Profile extends ExecutableCommand {
             const userModel = DBUserSchema.getModel();
             const user = state.getMessageHandle().author;
             try {
-                const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
+                const doc = await DBUserSchema.getUserById(user.id);
                 if (!doc) {
                     state.getMessageHandle().reply(
                         `\`\`\`` +

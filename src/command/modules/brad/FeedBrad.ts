@@ -23,14 +23,13 @@ export default class FeedBrad extends ExecutableCommand {
     }
 
     private async awardUsers(state: OnMessageState, users: IdContributionPair[], DbBrad: DBBradPropertySchema): Promise<void> {
-        const DbUser = state.getDbCore().getUserModel();
         const channel = state.getMessageHandle().channel;
         const client = state.getCore().getClient();
         const embed = new Discord.MessageEmbed();
         embed.setTitle("Brad is pleased.");
         embed.setColor(0x00FFF0);
         for (let i = 0; i < users.length && i < 10; i++) {
-            const user = await DbUser.findOne({id: users[i].id}) as any as DBUserSchema;
+            const user = await DBUserSchema.getUserById(users[i].id);
             if (i === 0) {
                 await user.addCurrency(CoinType.DOTMA_COIN, 1500);
                 await user.addCurrency(CoinType.BRAD_COIN, 1);
@@ -71,7 +70,7 @@ export default class FeedBrad extends ExecutableCommand {
                     state.getMessageHandle().reply("Amount must be positive.");
                     return false;
                 }
-                const DbUser = await state.getDbCore().getUserModel().findOne({id: user.id}) as any as DBUserSchema;
+                const DbUser = await DBUserSchema.getUserById(user.id);
                 if (!DbUser) {
                     return false;
                 }
@@ -79,7 +78,7 @@ export default class FeedBrad extends ExecutableCommand {
                     state.getMessageHandle().reply("You do not have sufficient DotmaCoins.");
                     return false;
                 }
-                const DbBrad = await state.getDbCore().getBradPropertyModel().findOne({}) as any as DBBradPropertySchema;
+                const DbBrad = await DBBradPropertySchema.getBrad();
                 if (!DbBrad) {
                     return false;
                 }

@@ -12,7 +12,7 @@ export default class Register extends ExecutableCommand {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             const user = state.getMessageHandle().author;
             try {
-                const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
+                const doc = await DBUserSchema.getUserById(user.id);
                 if (!doc) {
                     const model = new DBUserSchema().getModelForClass(DBUserSchema);
                     await model.createNewUser(user.id);

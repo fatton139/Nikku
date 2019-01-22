@@ -28,18 +28,18 @@ export default class BradStats extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                const DbBrad = await state.getDbCore().getBradPropertyModel().findOne({}) as any as DBBradPropertySchema;
+                const dbBrad = await DBBradPropertySchema.getBrad();
                 const embed = new Discord.MessageEmbed();
                 embed.setColor(0xFFA600);
                 embed.setTitle("Brad Stats.");
-                embed.addField("Current Weight", `${DbBrad.weight.toFixed(4)}kg.`);
-                if (DbBrad.contributors.length !== 0) {
+                embed.addField("Current Weight", `${dbBrad.weight.toFixed(4)}kg.`);
+                if (dbBrad.contributors.length !== 0) {
                     embed.addField(`Top Contributors (Current Run)`,
-                    `${this.getUserString(state, DbBrad.contributors)}`);
+                    `${this.getUserString(state, dbBrad.contributors)}`);
                 }
-                if (DbBrad.contributorsAllTime.length !== 0) {
+                if (dbBrad.contributorsAllTime.length !== 0) {
                     embed.addField(`Top Contributors (All time)`,
-                    `${this.getUserString(state, DbBrad.contributorsAllTime)}`);
+                    `${this.getUserString(state, dbBrad.contributorsAllTime)}`);
                 }
                 state.getMessageHandle().channel.send(embed);
                 return true;
