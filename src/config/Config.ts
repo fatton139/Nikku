@@ -27,6 +27,7 @@ export namespace Config {
             "brad",
             "interactions",
             "config",
+            "guild",
         ];
     }
     export namespace Service {
