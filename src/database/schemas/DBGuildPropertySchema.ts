@@ -115,6 +115,33 @@ export default class DBGuildPropertySchema extends Typegoose {
         return await (this.getModel().find({}));
     }
 
+    public static async registerGuild(id: string): Promise<void> {
+        const Model = this.getModel();
+        const model = new Model({
+            id,
+            targets: [],
+            booleanConfig: {},
+        });
+        try {
+            for (const key of GuildConfig.BooleanConfig.keys) {
+                if (!(await model.booleanConfigExists(key))) {
+                    await model.addBooleanConfig(key);
+                }
+            }
+            await model.save();
+            this.logger.info("Setup guild properties document.");
+        } catch (err) {
+            this.logger.error("Failed to setup guild properties document.");
+            throw err;
+        }
+    }
+
+    public static async registerGuildIfNotExist(id: string): Promise<void> {
+        if (!(await this.getGuildById(id))) {
+            await this.registerGuild(id);
+        }
+    }
+
     public static getModel(): Mongoose.Model<InstanceType<DBGuildPropertySchema>> & DBGuildPropertySchema & typeof DBGuildPropertySchema {
         return new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema);
     }
