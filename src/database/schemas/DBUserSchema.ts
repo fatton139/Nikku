@@ -54,7 +54,7 @@ export default class DBUserSchema extends Typegoose {
 
     @instanceMethod
     public async setDaily(this: InstanceType<any> & Mongoose.Document): Promise<void> {
-        this.daily.lastUpdate = new Date();
+        this.daily.lastUpdate = new Date().setHours(0, 0, 0, 0);
         try {
             await this.markModified("daily");
             return await this.save();
