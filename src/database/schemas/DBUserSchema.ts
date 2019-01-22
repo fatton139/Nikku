@@ -6,6 +6,7 @@ import { AccessLevel } from "user/AccessLevel";
 import { CoinType } from "user/CoinType";
 import Skill from "user/skill/Skill";
 import SkillType from "user/skill/SkillType";
+import { DatabaseException } from "exception/DatabaseException";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
@@ -65,18 +66,6 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async addCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
-        this.wallet[type] += amount;
-        try {
-            await this.markModified("wallet");
-            return await this.save();
-        } catch (err) {
-            DBUserSchema.logger.error("Failed to save user currency.");
-            throw err;
-        }
-    }
-
-    @instanceMethod
     public async addSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType, amount: number): Promise<void> {
         try {
             this.skillsExperienceMap[SkillType[type.toString()]] += amount;
@@ -109,8 +98,29 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async removeCurrency(this: InstanceType<any> & Mongoose.Document, coinType: CoinType, amount: number): Promise<void> {
-        return this.addCurrency(coinType, -1 * amount);
+    public async addCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
+        if (this.wallet[type] + amount > Number.MAX_SAFE_INTEGER) {
+            throw new DatabaseException("Addition of currency will cause value to be greater than MAX_SAFE_INTEGER");
+        }
+        this.wallet[type] += amount;
+        try {
+            await this.markModified("wallet");
+            return await this.save();
+        } catch (err) {
+            DBUserSchema.logger.error("Failed to save user currency.");
+            throw err;
+        }
+    }
+
+    @instanceMethod
+    public async removeCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
+        if (amount > 0) {
+            throw new DatabaseException("Amount must be positive.");
+        }
+        if (this.wallet[type] - amount < 0) {
+            throw new DatabaseException("Removal of currency will cause value to go below zero.");
+        }
+        return this.addCurrency(type, -1 * amount);
     }
 
     @staticMethod
@@ -129,8 +139,12 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @staticMethod
-    public static async getUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<DBUserSchema> {
-        return new DBUserSchema().getModelForClass(DBUserSchema).findOne({id});
+    public static async getUserById(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<DBUserSchema> {
+        return await (new DBUserSchema().getModelForClass(DBUserSchema).findOne({id}));
+    }
+
+    public static getModel(): Mongoose.Model<InstanceType<DBUserSchema>> & DBUserSchema & typeof DBUserSchema {
+        return new DBUserSchema().getModelForClass(DBUserSchema);
     }
 
 }

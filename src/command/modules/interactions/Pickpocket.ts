@@ -16,7 +16,7 @@ export default class Pickpocket extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
             try {
-                const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
+                const userModel = DBUserSchema.getModel();
                 const userId = state.getMessageHandle().author.id;
                 if (state.getMessageHandle().mentions.everyone)  {
                     state.getMessageHandle().channel.send("You cannot thieve everyone at once.");
@@ -27,8 +27,8 @@ export default class Pickpocket extends ExecutableCommand {
                     state.getMessageHandle().channel.send("You cannot thieve yourself.");
                     return false;
                 }
-                const dbUser = await userModel.getUser(userId);
-                const dbTarget = await userModel.getUser(targetId);
+                const dbUser = await userModel.getUserById(userId);
+                const dbTarget = await userModel.getUserById(targetId);
                 if (!dbTarget) {
                     state.getMessageHandle().channel.send("Target is not registered.");
                     return false;

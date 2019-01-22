@@ -11,7 +11,7 @@ export default class Profile extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
+            const userModel = DBUserSchema.getModel();
             const user = state.getMessageHandle().author;
             try {
                 const doc = await state.getDbCore().getUserModel().findOne({id: user.id});
@@ -24,7 +24,7 @@ export default class Profile extends ExecutableCommand {
                     );
                     return true;
                 }
-                const dbUser = await userModel.getUser(user.id);
+                const dbUser = await userModel.getUserById(user.id);
                 const dateDiff = (new Date() as any) - (dbUser.dateRegistered as any);
                 const hours = dateDiff / (1000 * 60 * 60);
                 state.getMessageHandle().reply(
