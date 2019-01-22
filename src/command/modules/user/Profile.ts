@@ -24,7 +24,7 @@ export default class Profile extends ExecutableCommand {
                     );
                     return true;
                 }
-                const dbUser = await userModel.getUserById(user.id);
+                const dbUser = await DBUserSchema.getUserById(user.id);
                 const dateDiff = (new Date() as any) - (dbUser.dateRegistered as any);
                 const hours = dateDiff / (1000 * 60 * 60);
                 state.getMessageHandle().reply(

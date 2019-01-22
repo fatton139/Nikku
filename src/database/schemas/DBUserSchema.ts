@@ -125,7 +125,7 @@ export default class DBUserSchema extends Typegoose {
 
     @staticMethod
     public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<void> {
-        const userModel = new DBUserSchema().getModelForClass(DBUserSchema);
+        const userModel = this.getModel();
         const model = new userModel({
             id,
             accessLevel: AccessLevel.REGISTERED,
