@@ -116,8 +116,7 @@ export default class CommandManager {
             }
         }
         command.setArgs(args);
-        const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
-        const user = await users.findOne({id: userId});
+        const user = await DBUserSchema.getUserById(userId);
         if (user) {
             this.logger.info(`Executing command "${command.getCommandString()}".`);
             try {
@@ -161,30 +160,26 @@ export default class CommandManager {
      * Attempt to invoke the action by testing if the trigger conditions are met.
      * @param id - The discord id of the user invoking the command.
      */
-    public triggerAction(userId: string, msg: OnMessageState): void {
-        const users: Mongoose.Model<Mongoose.Document, {}> = this.core.getDbCore().getUserModel();
+    public async triggerAction(userId: string, msg: OnMessageState): Promise<void> {
         for (const pair of this.commandRegistry.getCommandMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1] as TriggerableCommand;
-                command.tryTrigger(msg).then((status: boolean) => {
-                    if (status) {
-                        users.findOne({id: userId}).then((user: Mongoose.Document) => {
-                            try {
-                                if (user) {
-                                    this.logger.info(`Triggering auto command "${command.constructor.name}". NO_WARN.`);
-                                    command.executeActionNoWarning(msg, user as any as DBUserSchema);
-                                }
-                                else {
-                                    this.logger.info(`Triggering auto command "${command.constructor.name}". NO_REG_USER.`);
-                                    command.executeActionNoUser(msg);
-                                }
-                            } catch (err) {
-                                this.logger.verbose(`Auto execution of "${command.constructor.name}"` +
-                                    `failed, ${err.constructor.name}.`);
-                            }
-                        });
+                if (await command.tryTrigger(msg)) {
+                    const user = await DBUserSchema.getUserById(userId);
+                    try {
+                        if (user) {
+                            this.logger.info(`Triggering auto command "${command.constructor.name}". NO_WARN.`);
+                            command.executeActionNoWarning(msg, user);
+                        }
+                        else {
+                            this.logger.info(`Triggering auto command "${command.constructor.name}". NO_REG_USER.`);
+                            command.executeActionNoUser(msg);
+                        }
+                    } catch (err) {
+                        this.logger.verbose(`Auto execution of "${command.constructor.name}"` +
+                            `failed, ${err.constructor.name}.`);
                     }
-                });
+                }
             }
         }
     }
