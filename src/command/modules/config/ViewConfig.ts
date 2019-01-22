@@ -13,8 +13,7 @@ export default class ViewConfig extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                const model = DBGuildPropertySchema.getModel();
-                const guild = await model.getGuildById(state.getMessageHandle().guild.id);
+                const guild = await DBGuildPropertySchema.getGuildById(state.getMessageHandle().guild.id);
                 const configs = await guild.getAllBooleanConfig();
                 const embed = new Discord.MessageEmbed();
                 embed.setTitle("Bot Configurations.");

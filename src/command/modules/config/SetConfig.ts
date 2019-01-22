@@ -17,8 +17,7 @@ export default class SetConfig extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
             try {
-                const model = DBGuildPropertySchema.getModel();
-                const guild = await model.getGuildById(state.getMessageHandle().guild.id);
+                const guild = await DBGuildPropertySchema.getGuildById(state.getMessageHandle().guild.id);
                 if (GuildConfig.BooleanConfig.keys.indexOf(args[Args.CONFIG_NAME]) !== -1) {
                     if (args[Args.CONFIG_VALUE].toLowerCase() === "true") {
                         guild.setBooleanConfig(args[Args.CONFIG_NAME], true);

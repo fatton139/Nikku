@@ -123,8 +123,7 @@ export default class DBUserSchema extends Typegoose {
         return this.addCurrency(type, -1 * amount);
     }
 
-    @staticMethod
-    public static async createNewUser(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<void> {
+    public static async createNewUser(id: string): Promise<void> {
         const userModel = this.getModel();
         const model = new userModel({
             id,

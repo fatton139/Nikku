@@ -21,12 +21,3 @@ export namespace GlobalPropertyMigration {
         }
     };
 }
-
-export default class GlobalPropertyMigrator {
-    private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
-    private schema: DBGlobalPropertySchema;
-    public constructor(schema: DBGlobalPropertySchema) {
-        this.schema = schema;
-    }
-
-}

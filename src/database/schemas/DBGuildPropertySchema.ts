@@ -107,16 +107,12 @@ export default class DBGuildPropertySchema extends Typegoose {
         }
     }
 
-    @staticMethod
-    public static async getGuildById(this: ModelType<DBGuildPropertySchema> & typeof DBGuildPropertySchema, id: string):
-            Promise<DBGuildPropertySchema> {
-        return await (new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema).findOne({id}));
+    public static async getGuildById(id: string): Promise<DBGuildPropertySchema> {
+        return await (this.getModel().findOne({id}));
     }
 
-    @staticMethod
-    public static async getAllGuild(this: ModelType<DBGuildPropertySchema> & typeof DBGuildPropertySchema):
-            Promise<DBGuildPropertySchema[]> {
-        return await (new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema).find({}));
+    public static async getAllGuild(): Promise<DBGuildPropertySchema[]> {
+        return await (this.getModel().find({}));
     }
 
     public static getModel(): Mongoose.Model<InstanceType<DBGuildPropertySchema>> & DBGuildPropertySchema & typeof DBGuildPropertySchema {
