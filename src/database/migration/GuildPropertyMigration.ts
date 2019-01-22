@@ -5,7 +5,7 @@ import { GuildConfig } from "config/GuildBooleanConfig";
 
 export namespace GuildPropertyMigration {
     const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
-    const LocalPropertyModel = new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema);
+    const LocalPropertyModel = DBGuildPropertySchema.getModel();
 
     export const createModels = async (): Promise<void> => {
         const model = new LocalPropertyModel({

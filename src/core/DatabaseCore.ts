@@ -4,15 +4,14 @@ import * as winston from "winston";
 import * as Discord from "discord.js";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
-import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 import Logger from "log/Logger";
-import UserMigrator from "database/migration/UserMigrator";
-import GlobalPropertyMigrator from "database/migration/GlobalPropertyMigrator";
+import { UserMigration } from "database/migration/UserMigration";
+import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
+import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
 import NikkuCore from "./NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
-import BradPropertyMigrator from "database/migration/BradPropertyMigrator";
 
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -22,11 +21,6 @@ export default class DatabaseCore {
      * Database connection.
      */
     private connection: Mongoose.Connection;
-
-    private UserModel: Mongoose.Model<Mongoose.Document, {}>;
-    private globalPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
-    private guildPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
-    private bradPropertyModel: Mongoose.Model<Mongoose.Document, {}>;
 
     private defaultUsers: string[];
 
@@ -59,7 +53,7 @@ export default class DatabaseCore {
             this.generateModelsIfEmpty().then(() => {
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
-                this.getBradPropertyModel().findOne({}).then((doc) => {
+                DBBradPropertySchema.getModel().findOne({}).then((doc) => {
                     this.core.setActivity(`Brad's Weight: ${(doc as any as DBBradPropertySchema).weight.toFixed(4)}kg`);
                 });
             });
@@ -70,27 +64,21 @@ export default class DatabaseCore {
         if (!this.core.getConfig().DefaultUser.IDS) {
             return Promise.resolve();
         }
-        const userSchema: DBUserSchema = new DBUserSchema();
-        this.UserModel = userSchema.getModelForClass(DBUserSchema);
-        const doc: Mongoose.Document[] = await this.UserModel.find({accessLevel: AccessLevel.DEVELOPER});
+        const userModel = DBUserSchema.getModel();
+        const doc: Mongoose.Document[] = await userModel.find({accessLevel: AccessLevel.DEVELOPER});
         if (doc.length !== this.defaultUsers.length) {
             this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
-            const migrator = new UserMigrator(userSchema);
-            await migrator.createModels(this.defaultUsers);
+            await UserMigration.createModels(this.defaultUsers);
         }
-        Promise.resolve();
     }
 
     public async generateGlobalPropertyModel(): Promise<void> {
-        const globalPropertySchema = new DBGlobalPropertySchema();
-        this.globalPropertyModel = globalPropertySchema.getModelForClass(DBGlobalPropertySchema);
-        const doc: Mongoose.Document[] = await this.globalPropertyModel.find({});
+        const globalPropertyModel = DBGlobalPropertySchema.getModel();
+        const doc: Mongoose.Document[] = await globalPropertyModel.find({});
         if (doc.length === 0) {
             this.logger.warn("Global properties document has not been setup. Creating default profiles.");
-            const migrator = new GlobalPropertyMigrator(globalPropertySchema);
-            await migrator.createModels();
+            await GlobalPropertyMigration.createModels();
         }
-        Promise.resolve();
     }
 
     public async generateGuildPropertyModel(): Promise<void> {
@@ -98,15 +86,10 @@ export default class DatabaseCore {
     }
 
     public async generateBradPropertyModel(): Promise<void> {
-        const bradPropertySchema = new DBBradPropertySchema();
-        this.bradPropertyModel = bradPropertySchema.getModelForClass(DBGuildPropertySchema);
-        const doc = await this.bradPropertyModel.find({}) as any as DBBradPropertySchema[];
-        if (doc.length === 0) {
+        if (!(await DBBradPropertySchema.getBrad())) {
             this.logger.warn("Brad properties document has not been setup. Creating default profiles.");
-            const migrator = new BradPropertyMigrator(bradPropertySchema);
-            await migrator.createModels();
+            await BradPropertyMigration.createModels();
         }
-        Promise.resolve();
     }
 
     public async generateModelsIfEmpty(): Promise<void> {
@@ -132,22 +115,6 @@ export default class DatabaseCore {
         this.logger.warn("Connection to DB closed.");
         this.connection.close();
         this.ready = false;
-    }
-
-    public getUserModel(): Mongoose.Model<Mongoose.Document, {}> {
-        return this.UserModel;
-    }
-
-    public getGlobalPropertyModel(): Mongoose.Model<Mongoose.Document, {}> {
-        return this.globalPropertyModel;
-    }
-
-    public getGuildPropertyModel(): Mongoose.Model<Mongoose.Document, {}> {
-        return this.guildPropertyModel;
-    }
-
-    public getBradPropertyModel(): Mongoose.Model<Mongoose.Document, {}> {
-        return this.bradPropertyModel;
     }
 
     public isReady(): boolean {
