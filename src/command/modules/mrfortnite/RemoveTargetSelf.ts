@@ -10,21 +10,19 @@ export default class RemoveTargetSelf extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const guildId = state.getMessageHandle().guild.id;
-            const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
+            const guild = state.getMessageHandle().guild;
+            const doc = await DBGuildPropertySchema.getGuildById(guild.id);
             if (!doc) {
-                state.getMessageHandle().reply(`Hmmm, your guild is not in the database. Adding...`);
-                await state.getDbCore().generateGuildPropertyModel();
-                return false;
+                state.getMessageHandle().reply(`Cannot use this command,`
+                        + ` this guild is not registered. Register with \`!f registerguild\`.`);
             } else {
-                const guild = doc as any as DBGuildPropertySchema;
                 const id: string = state.getMessageHandle().author.id;
-                if (guild.targets.indexOf(id) === -1) {
+                if (doc.targets.indexOf(id) === -1) {
                     state.getMessageHandle().reply("You are not on the target list.");
                     return true;
                 }
                 try {
-                    await guild.removeTarget(id);
+                    await doc.removeTarget(id);
                     state.getMessageHandle().reply("Successfully removed from the target list");
                     return true;
                 } catch (err) {

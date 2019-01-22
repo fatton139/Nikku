@@ -23,19 +23,16 @@ export default class FortniteTextEvent extends TriggerableCommand {
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const guildId = state.getMessageHandle().guild.id;
-            const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guildId});
+            const guild = state.getMessageHandle().guild;
+            const doc = await DBGuildPropertySchema.getGuildById(guild.id);
             if (!doc) {
-                await state.getDbCore().generateGuildPropertyModel();
                 state.getMessageHandle().channel.send("<@!455679698610159616> fortnite?");
-                return false;
             } else {
-                const guild = doc as any as DBGuildPropertySchema;
                 let targetString = "OwO someone said fortnite? ";
-                for (const target of guild.targets) {
+                for (const target of doc.targets) {
                     targetString += "<@!" + target + "> ";
                 }
-                targetString += guild.targets.length === 0 ? "<@!455679698610159616> fortnite?" : "fortnite?";
+                targetString += doc.targets.length === 0 ? "<@!455679698610159616> fortnite?" : "fortnite?";
                 state.getMessageHandle().channel.send(targetString);
             }
             return false;

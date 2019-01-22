@@ -11,11 +11,10 @@ export default class TargetList extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             const guild = state.getMessageHandle().guild;
-            const doc = await state.getDbCore().getGuildPropertyModel().findOne({id: guild.id});
+            const doc = await DBGuildPropertySchema.getGuildById(guild.id);
             if (!doc) {
-                state.getMessageHandle().reply(`Hmmm, your guild is not in the database. Adding...`);
-                await state.getDbCore().generateGuildPropertyModel();
-                return false;
+                state.getMessageHandle().reply(`Cannot use this command,`
+                        + ` this guild is not registered. Register with \`!f registerguild\`.`);
             } else {
                 const guildProp = doc as any as DBGuildPropertySchema;
                 let userList = `\`\`\`Current Targets: ${guildProp.targets.length}\n`;
