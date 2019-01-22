@@ -138,13 +138,15 @@ export default class DBUserSchema extends Typegoose {
         }
     }
 
-    @staticMethod
-    public static async getUserById(this: ModelType<DBUserSchema> & typeof DBUserSchema, id: string): Promise<DBUserSchema> {
-        return await (new DBUserSchema().getModelForClass(DBUserSchema).findOne({id}));
+    public static async getUserById(id: string): Promise<DBUserSchema> {
+        return await (this.getModel().findOne({id}));
+    }
+
+    public static async getAllUser(): Promise<DBUserSchema[]> {
+        return await (this.getModel().find({}));
     }
 
     public static getModel(): Mongoose.Model<InstanceType<DBUserSchema>> & DBUserSchema & typeof DBUserSchema {
         return new DBUserSchema().getModelForClass(DBUserSchema);
     }
-
 }

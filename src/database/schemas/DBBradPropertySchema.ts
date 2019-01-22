@@ -1,5 +1,5 @@
 import * as Mongoose from "mongoose";
-import { Typegoose, prop, arrayProp, instanceMethod } from "typegoose";
+import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 import Brad from "entities/Brad";
 import { Config } from "config/Config";
 import { core } from "core/NikkuCore";
@@ -71,4 +71,12 @@ export default class DBBradPropertySchema extends Typegoose {
              throw err;
          }
      }
+
+     public static async getBrad(): Promise<DBBradPropertySchema> {
+         return await (this.getModel().findOne({}));
+     }
+
+     public static getModel(): Mongoose.Model<InstanceType<DBBradPropertySchema>> & DBBradPropertySchema & typeof DBBradPropertySchema {
+        return new DBBradPropertySchema().getModelForClass(DBBradPropertySchema);
+    }
 }

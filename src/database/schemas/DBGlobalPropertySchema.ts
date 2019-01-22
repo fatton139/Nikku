@@ -1,4 +1,5 @@
-import { prop, Typegoose } from "typegoose";
+import * as Mongoose from "mongoose";
+import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
 
 /** Singleton schema for storing global properties. */
 export default class DBGlobalPropertySchema extends Typegoose {
@@ -7,4 +8,9 @@ export default class DBGlobalPropertySchema extends Typegoose {
 
     @prop({default: new Date()})
     private shopLastUpdate: Date;
+
+    public static getModel():
+            Mongoose.Model<InstanceType<DBGlobalPropertySchema>> & DBGlobalPropertySchema & typeof DBGlobalPropertySchema {
+        return new DBGlobalPropertySchema().getModelForClass(DBGlobalPropertySchema);
+    }
 }
