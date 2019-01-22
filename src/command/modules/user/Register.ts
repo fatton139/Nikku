@@ -14,8 +14,7 @@ export default class Register extends ExecutableCommand {
             try {
                 const doc = await DBUserSchema.getUserById(user.id);
                 if (!doc) {
-                    const model = new DBUserSchema().getModelForClass(DBUserSchema);
-                    await model.createNewUser(user.id);
+                    await DBUserSchema.createNewUser(user.id);
                     state.getMessageHandle().reply(
                         "Successfully registered!" +
                         " You now have access to **Level 1** Commands",

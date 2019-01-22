@@ -118,12 +118,12 @@ export default class CommandManager {
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
+        if (user && msg.getMessageHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
+                && user.accessLevel !== AccessLevel.DEVELOPER) {
+            await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+            msg.getMessageHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
+        }
         if (user) {
-            if (msg.getMessageHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
-                    && user.accessLevel !== AccessLevel.DEVELOPER) {
-                await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-                msg.getMessageHandle().reply("You are a server administrator. Your access level has been to set to ADMINISTRATOR.");
-            }
             this.logger.info(`Executing command "${command.getCommandString()}".`);
             try {
                 await command.executeAction(msg, user);
