@@ -11,6 +11,7 @@ import TriggerableCommand from "./TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
 import ExecutableCommand from "./ExecutableCommand";
 import NikkuException from "exception/NikkuException";
+import { AccessLevel } from "user/AccessLevel";
 
 export default class CommandManager {
 
@@ -117,10 +118,15 @@ export default class CommandManager {
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
+        if (msg.getMessageHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
+                && user.accessLevel !== AccessLevel.DEVELOPER) {
+            await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+            msg.getMessageHandle().reply("You are a server administrator. Your access level has been to set to ADMINISTRATOR.");
+        }
         if (user) {
             this.logger.info(`Executing command "${command.getCommandString()}".`);
             try {
-                await command.executeAction(msg, user as any as DBUserSchema);
+                await command.executeAction(msg, user);
             } catch (err) {
                 throw err;
             }

@@ -10,8 +10,8 @@ export namespace UserMigration {
     export const createModels = async (ids: string[]): Promise<void> => {
         let i = 0;
         for (const userId of ids) {
-            const userExists = await userModel.findOne({id: userId});
-            if (!userExists) {
+            const user = await DBUserSchema.getUserById(userId);
+            if (!user) {
                 const newModel = new userModel({
                     id: userId,
                     accessLevel: AccessLevel.DEVELOPER,
@@ -23,6 +23,10 @@ export namespace UserMigration {
                 } catch (err) {
                     logger.error(`Failed to create user ${userId}:${err}.`);
                     throw err;
+                }
+            } else {
+                if (user.accessLevel < AccessLevel.DEVELOPER) {
+                    user.setAccessLevel(AccessLevel.DEVELOPER);
                 }
             }
         }
