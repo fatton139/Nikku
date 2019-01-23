@@ -43,26 +43,27 @@ export default class DatabaseCore {
      * Attempts to connect to the host.
      */
     public async connectDb(): Promise<void> {
-        Mongoose.connect(this.URL, { useNewUrlParser: true });
-        this.connection = Mongoose.connection;
-        this.connection.on("error", (err) => {
-            this.logger.error("Error connecting to DB:" + err + ".");
-            throw new Error("Connection Error");
-        });
-        this.connection.once("open", () => {
-            this.generateModelsIfEmpty().then(() => {
+        return new Promise((resolve, reject) => {
+            Mongoose.connect(this.URL, { useNewUrlParser: true });
+            this.connection = Mongoose.connection;
+            this.connection.on("error", (err) => {
+                this.logger.error(`Error connecting to DB: ${err}.`);
+                reject(err);
+            });
+            this.connection.once("open", async () => {
+                await this.generateModelsIfEmpty();
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
-                DBBradPropertySchema.getModel().findOne({}).then((doc) => {
-                    this.core.setActivity(`Brad's Weight: ${(doc as any as DBBradPropertySchema).weight.toFixed(4)}kg`);
-                });
+                const doc = await DBBradPropertySchema.getBrad();
+                resolve();
             });
         });
+
     }
 
     public async generateDevUserModel(): Promise<void> {
         if (!this.core.getConfig().DefaultUser.IDS) {
-            return Promise.resolve();
+            return;
         }
         const userModel = DBUserSchema.getModel();
         const doc: Mongoose.Document[] = await userModel.find({accessLevel: AccessLevel.DEVELOPER});

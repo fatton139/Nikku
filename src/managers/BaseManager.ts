@@ -1,7 +1,7 @@
 import * as winston from "winston";
 import Logger from "log/Logger";
-import NikkuCore from "core/NikkuCore";
 import { Config } from "config/Config";
+import NikkuCore, { core } from "core/NikkuCore";
 
 export default class BaseManager {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -12,6 +12,7 @@ export default class BaseManager {
 
     public constructor() {
         this.logger.debug(`${this.constructor.name} manager initialized.`);
+        this.core = core;
         this.config = Config;
     }
 

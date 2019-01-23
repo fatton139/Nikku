@@ -9,6 +9,7 @@ import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "managers/CommandManager";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+import ObjectManager from "managers/ObjectManager";
 
 export default class NikkuCore {
     /**
@@ -29,6 +30,8 @@ export default class NikkuCore {
     private state: CoreState;
 
     private commandManager: CommandManager;
+
+    private objectManager: ObjectManager;
 
     private config: typeof Config;
 
@@ -57,25 +60,31 @@ export default class NikkuCore {
                 this.logger.error("No command prefixes detected.");
                 process.exit(1);
             }
-            this.initializeComponents();
+            await this.initializeComponents();
             try {
                 await this.databaseCore.connectDb();
-                await this.commandManager.loadCommands(this.config.Command.COMMAND_FULL_PATH,
-                    this.config.Command.COMMAND_SRC, this.config.Command.COMMAND_PATHS);
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
-                this.eventCore.listenMessages();
             } catch (err) {
                 this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
                 this.logger.error(err);
                 // no db mode.
             }
+            this.eventCore.listenMessages();
         });
     }
 
-    public initializeComponents(): void {
+    public async initializeComponents(): Promise<void> {
         this.eventCore = new EventCore(this);
         this.databaseCore = new DatabaseCore(this);
         this.commandManager = new CommandManager();
+        this.objectManager = new ObjectManager();
+        try {
+            await this.commandManager.loadCommands(this.config.Command.COMMAND_FULL_PATH,
+                this.config.Command.COMMAND_SRC, this.config.Command.COMMAND_PATHS);
+            await this.objectManager.loadObjects();
+        } catch (err) {
+            this.logger.error(err);
+        }
     }
 
     public setDebugLogChannels(): void {
