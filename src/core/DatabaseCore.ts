@@ -55,6 +55,7 @@ export default class DatabaseCore {
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
                 const doc = await DBBradPropertySchema.getBrad();
+                this.core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
                 resolve();
             });
         });
