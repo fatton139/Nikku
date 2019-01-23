@@ -1,35 +1,28 @@
-import * as Mongoose from "mongoose";
-import * as winston from "winston";
 import * as fs from "fs";
 import Command from "command/Command";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import PrefixManager from "command/PrefixManager";
-import Logger from "log/Logger";
+import PrefixManager from "managers/PrefixManager";
 import NikkuCore from "core/NikkuCore";
-import CommandRegistry from "./CommandRegistry";
-import TriggerableCommand from "./TriggerableCommand";
+import CommandRegistry from "../registries/CommandRegistry";
+import TriggerableCommand from "../command/TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
-import ExecutableCommand from "./ExecutableCommand";
+import ExecutableCommand from "../command/ExecutableCommand";
 import NikkuException from "exception/NikkuException";
 import { AccessLevel } from "user/AccessLevel";
+import BaseManager from "./BaseManager";
 
-export default class CommandManager {
+export default class CommandManager extends BaseManager {
 
     private prefixManager: PrefixManager;
 
     private commandRegistry: CommandRegistry;
 
-    private core: NikkuCore;
-
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
-
     /**
      * @classdesc Class to handle import and execution of commands.
      */
-    public constructor(core: NikkuCore) {
-        this.logger.debug("Command Manager created.");
-        this.core = core;
-        this.prefixManager = new PrefixManager(core.getConfig().Command.PREFIXES);
+    public constructor() {
+        super();
+        this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
     }
 

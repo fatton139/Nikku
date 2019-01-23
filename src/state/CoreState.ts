@@ -2,7 +2,7 @@ import NikkuCore from "core/NikkuCore";
 import { ICoreState } from "./ICoreState";
 import * as Discord from "discord.js";
 import DatabaseCore from "core/DatabaseCore";
-import CommandManager from "command/CommandManager";
+import CommandManager from "managers/CommandManager";
 
 export default class CoreState implements ICoreState {
     /**

@@ -7,7 +7,7 @@ import { Config } from "config/Config";
 import CoreState from "state/CoreState";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
-import CommandManager from "command/CommandManager";
+import CommandManager from "managers/CommandManager";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 
 export default class NikkuCore {
@@ -75,7 +75,7 @@ export default class NikkuCore {
     public initializeComponents(): void {
         this.eventCore = new EventCore(this);
         this.databaseCore = new DatabaseCore(this);
-        this.commandManager = new CommandManager(this);
+        this.commandManager = new CommandManager();
     }
 
     public setDebugLogChannels(): void {

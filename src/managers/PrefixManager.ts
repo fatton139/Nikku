@@ -1,20 +1,18 @@
-import * as winston from "winston";
-import Logger from "log/Logger";
+import BaseManager from "./BaseManager";
 
-export default class PrefixManager {
+export default class PrefixManager extends BaseManager {
     /**
      * An array of prefixes accepted by the bot.
      */
     private prefixes: string[];
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * @classdesc Initial configuration for commands.
      * @param prefix - The array of prefixes used to call commands.
      */
-    public constructor(prefixes: string[]) {
-        this.logger.debug("Prefix Manager created.");
+    public constructor() {
+        super();
         this.prefixes = [];
-        for (const prefix of prefixes) {
+        for (const prefix of this.config.Command.PREFIXES) {
             this.addPrefix(prefix);
         }
     }
