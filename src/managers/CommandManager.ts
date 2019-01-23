@@ -40,7 +40,7 @@ export default class CommandManager extends BaseManager {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
         }
-        this.logger.info(`Successfully imported ${this.commandRegistry.getCommandSize()} ` +
+        this.logger.info(`Successfully imported ${this.commandRegistry.getRegistrySize()} ` +
                 `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
     }
 
