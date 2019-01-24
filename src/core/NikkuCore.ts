@@ -27,8 +27,6 @@ export default class NikkuCore {
      */
     private databaseCore: DatabaseCore;
 
-    private state: CoreState;
-
     private commandManager: CommandManager;
 
     private objectManager: ObjectManager;
@@ -44,7 +42,6 @@ export default class NikkuCore {
         this.logger.debug("Core Started.");
         this.config = config;
         this.client = new Discord.Client();
-        this.state = new CoreState(this);
     }
 
     /**
@@ -106,14 +103,6 @@ export default class NikkuCore {
      */
     public getDbCore(): DatabaseCore {
         return this.databaseCore;
-    }
-
-    public setCoreState(state: CoreState): void {
-        this.state = state;
-    }
-
-    public getCoreState(): CoreState {
-        return this.state;
     }
 
     public getClient(): Discord.Client {

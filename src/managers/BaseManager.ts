@@ -12,7 +12,4 @@ export default class BaseManager {
         this.core = core;
     }
 
-    public getManager(): BaseManager {
-        return this;
-    }
 }

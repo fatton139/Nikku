@@ -11,21 +11,21 @@ export default class RegisterGuild extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const user = state.getMessageHandle().author;
-            const guild = state.getMessageHandle().member.guild;
+            const user = state.getHandle().author;
+            const guild = state.getHandle().member.guild;
             try {
                 const doc = await DBGuildPropertySchema.getGuildById(guild.id);
                 if (!doc) {
                     await DBGuildPropertySchema.registerGuild(guild.id);
-                    state.getMessageHandle().reply(
+                    state.getHandle().reply(
                         "Guild successfully registered!");
                     return true;
                 } else {
-                    state.getMessageHandle().reply("This guild is already registered.");
+                    state.getHandle().reply("This guild is already registered.");
                     return true;
                 }
             } catch (err) {
-                state.getMessageHandle().reply("Failed to register guild.");
+                state.getHandle().reply("Failed to register guild.");
                 this.logger.warn(err);
                 return false;
             }

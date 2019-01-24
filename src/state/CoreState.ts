@@ -4,11 +4,11 @@ import * as Discord from "discord.js";
 import DatabaseCore from "core/DatabaseCore";
 import CommandManager from "managers/CommandManager";
 
-export default class CoreState implements ICoreState {
+export default class CoreState<T> implements ICoreState<T> {
     /**
      * Hander for the state.
      */
-    protected handle?: any;
+    protected handle?: T;
 
     protected core: NikkuCore;
 
@@ -24,27 +24,15 @@ export default class CoreState implements ICoreState {
      * Sets the handle of the state.
      * @param handle - New handle to set.
      */
-    public setHandle(handle: object): void {
+    public setHandle(handle: T): void {
         this.handle = handle;
     }
 
     /**
      * Gets the current handle.
      */
-    public getHandle(): any {
+    public getHandle(): T {
         return this.handle;
-    }
-
-    public getMessageHandle(): Discord.Message {
-        return this.handle;
-    }
-
-    public getDbCore(): DatabaseCore {
-        return this.core.getDbCore();
-    }
-
-    public getCommandManager(): CommandManager {
-        return this.core.getCommandManager();
     }
 
     public getCore(): NikkuCore {

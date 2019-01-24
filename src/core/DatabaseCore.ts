@@ -15,12 +15,13 @@ import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
-    private client: Discord.Client;
+
     private readonly URL: string;
+
     /**
      * Database connection.
      */
-    private connection: Mongoose.Connection;
+    private static connection: Mongoose.Connection;
 
     private defaultUsers: string[];
 
@@ -33,10 +34,17 @@ export default class DatabaseCore {
     public constructor(core: NikkuCore) {
         this.URL = core.getConfig().Database.URL;
         this.defaultUsers = core.getConfig().DefaultUser.IDS;
-        this.client = core.getClient();
         this.core = core;
         this.ready = false;
         this.logger.debug("Database Core created.");
+    }
+
+    public static setConnection(connection: Mongoose.Connection): void {
+        this.connection = connection;
+    }
+
+    public static getConnection(): Mongoose.Connection {
+        return this.connection;
     }
 
     /**
@@ -45,12 +53,13 @@ export default class DatabaseCore {
     public async connectDb(): Promise<{}> {
         return new Promise((resolve, reject) => {
             Mongoose.connect(this.URL, { useNewUrlParser: true });
-            this.connection = Mongoose.connection;
-            this.connection.on("error", (err) => {
+            DatabaseCore.setConnection(Mongoose.connection);
+            const connection = DatabaseCore.getConnection();
+            connection.on("error", (err) => {
                 this.logger.error(`Error connecting to DB: ${err}.`);
                 reject(err);
             });
-            this.connection.once("open", async () => {
+            connection.once("open", async () => {
                 await this.generateModelsIfEmpty();
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
@@ -59,7 +68,6 @@ export default class DatabaseCore {
                 resolve();
             });
         });
-
     }
 
     public async generateDevUserModel(): Promise<void> {
@@ -106,7 +114,7 @@ export default class DatabaseCore {
     /**
      * Gets the current database.
      */
-    public getDb(): MongoDb.Db {
+    public static getDb(): MongoDb.Db {
         return this.connection.db;
     }
 
@@ -115,7 +123,7 @@ export default class DatabaseCore {
      */
     public closeConnection(): void {
         this.logger.warn("Connection to DB closed.");
-        this.connection.close();
+        DatabaseCore.getConnection().close();
         this.ready = false;
     }
 

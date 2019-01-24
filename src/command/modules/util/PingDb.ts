@@ -2,6 +2,7 @@ import { AccessLevel } from "user/AccessLevel";
 import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
+import DatabaseCore from "core/DatabaseCore";
 
 export default class PingDb extends ExecutableCommand {
     public constructor() {
@@ -12,9 +13,9 @@ export default class PingDb extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
             const start: Date = new Date();
-            await state.getDbCore().getDb().stats();
+            await DatabaseCore.getDb().stats();
             const diff = (new Date().getTime() as any) - (start.getTime() as any);
-            state.getMessageHandle().channel.send(`pong in \`${diff}ms\`.`);
+            state.getHandle().channel.send(`pong in \`${diff}ms\`.`);
             return true;
         });
     }

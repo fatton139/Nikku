@@ -73,7 +73,7 @@ export default class Command implements IHasAction {
         try {
             const status = await this.action.execute(msg, this.args);
             if (!status) {
-                throw new NikkuException(msg, "Failed execution.");
+                throw new NikkuException("Failed execution.");
             }
         } catch (err) {
             throw err;

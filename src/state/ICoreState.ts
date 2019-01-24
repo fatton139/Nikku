@@ -1,4 +1,4 @@
-export interface ICoreState {
-    getHandle(): any;
-    setHandle(obj: any): void;
+export interface ICoreState<T> {
+    getHandle(): T;
+    setHandle(obj: T): void;
 }

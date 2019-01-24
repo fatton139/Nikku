@@ -41,10 +41,10 @@ export default class BradStats extends ExecutableCommand {
                     embed.addField(`Top Contributors (All time)`,
                     `${this.getUserString(state, dbBrad.contributorsAllTime)}`);
                 }
-                state.getMessageHandle().channel.send(embed);
+                state.getHandle().channel.send(embed);
                 return true;
             } catch (err) {
-                state.getMessageHandle().reply("Could not retrieve Brad data.");
+                state.getHandle().reply("Could not retrieve Brad data.");
                 this.logger.warn(err);
                 return false;
             }

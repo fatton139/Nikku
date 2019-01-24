@@ -1,17 +1,18 @@
+import * as Discord from "discord.js";
 import CoreState from "state/CoreState";
 
 export default class Action {
     /**
      * An action to invoke.
      */
-    private action: (stateHandle: CoreState, args: string[]) => Promise<boolean>;
+    private action: (state: CoreState<Discord.Message>, args: string[]) => Promise<boolean>;
 
     /**
      * @classdesc Base class for a standard action executed by the bot.
      * @param argLength - Number of arguments the action requires.
      * @param action - An action to invoke.
      */
-    public constructor(action: (stateHandle: CoreState, args: string[]) => Promise<boolean>) {
+    public constructor(action: (state: CoreState<Discord.Message>, args: string[]) => Promise<boolean>) {
         this.action = action;
     }
 
@@ -21,7 +22,7 @@ export default class Action {
      * @param args - Arguments to execute the action with.
      * @returns true if the command was successfully executed.
      */
-    public async execute(state: CoreState, args: string[]): Promise<boolean> {
+    public async execute(state: CoreState<Discord.Message>, args: string[]): Promise<boolean> {
         try {
             return await this.action(state, args);
         } catch (err) {

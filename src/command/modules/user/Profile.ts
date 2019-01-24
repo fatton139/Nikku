@@ -12,11 +12,11 @@ export default class Profile extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             const userModel = DBUserSchema.getModel();
-            const user = state.getMessageHandle().author;
+            const user = state.getHandle().author;
             try {
                 const doc = await DBUserSchema.getUserById(user.id);
                 if (!doc) {
-                    state.getMessageHandle().reply(
+                    state.getHandle().reply(
                         `\`\`\`` +
                         `${user.username} - The unregistered.\n` +
                         `You are not registered. type "!f register" to register.` +
@@ -27,7 +27,7 @@ export default class Profile extends ExecutableCommand {
                 const dbUser = await DBUserSchema.getUserById(user.id);
                 const dateDiff = (new Date() as any) - (dbUser.dateRegistered as any);
                 const hours = dateDiff / (1000 * 60 * 60);
-                state.getMessageHandle().reply(
+                state.getHandle().reply(
                     `\`\`\`` +
                     `${user.username} - ${dbUser.title.all[dbUser.title.active]}\n` +
                     `Access Level: ${dbUser.accessLevel} (${AccessLevel[dbUser.accessLevel]})\n` +
@@ -43,7 +43,7 @@ export default class Profile extends ExecutableCommand {
                 );
                 return true;
             } catch (err) {
-                state.getMessageHandle().reply("Could not retrieve user data.");
+                state.getHandle().reply("Could not retrieve user data.");
                 this.logger.warn(err);
                 return false;
             }

@@ -19,7 +19,7 @@ export default class AskResponse extends TriggerableCommand {
 
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
-            return CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2);
+            return CommandUtil.isResponseTrigger(state.getHandle().content, 2);
         });
     }
 

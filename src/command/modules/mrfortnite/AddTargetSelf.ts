@@ -10,24 +10,24 @@ export default class AddTargetSelf extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const guild = state.getMessageHandle().guild;
+            const guild = state.getHandle().guild;
             const doc = await DBGuildPropertySchema.getGuildById(guild.id);
             if (!doc) {
-                state.getMessageHandle().reply(`Cannot use this command,`
+                state.getHandle().reply(`Cannot use this command,`
                         + ` this guild is not registered. Register with \`!f registerguild\`.`);
             } else {
-                const id: string = state.getMessageHandle().author.id;
+                const id: string = state.getHandle().author.id;
                 if (doc.targets.indexOf(id) === -1) {
                     try {
                         await doc.addTarget(id);
-                        state.getMessageHandle().reply(`Added to target list.`);
+                        state.getHandle().reply(`Added to target list.`);
                     } catch (err) {
-                        state.getMessageHandle().reply(`Failed to add to target list.`);
+                        state.getHandle().reply(`Failed to add to target list.`);
                         throw err;
                     }
                     return true;
                 } else {
-                    state.getMessageHandle().reply(`You are already on the target list.`);
+                    state.getHandle().reply(`You are already on the target list.`);
                 }
             }
         });

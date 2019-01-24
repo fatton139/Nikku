@@ -20,8 +20,8 @@ export default class RandomResponse extends TriggerableCommand {
 
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
-            const m = state.getMessageHandle();
-            return MathUtil.randInt(0, 100) < 5 && !CommandUtil.isResponseTrigger(state.getMessageHandle().content, 2)
+            const m = state.getHandle();
+            return MathUtil.randInt(0, 100) < 5 && !CommandUtil.isResponseTrigger(state.getHandle().content, 2)
                 && m.content.replace(/\s/g, "").toLowerCase().search("fortnite") === -1;
         });
     }

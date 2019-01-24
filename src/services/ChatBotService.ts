@@ -25,13 +25,13 @@ export default class ChatBotService {
     }
 
     public async sendMessage(state: OnMessageState): Promise<boolean> {
-        const m: Discord.Message = state.getMessageHandle();
+        const m: Discord.Message = state.getHandle();
         const str = StringFunc.removeStrBothEndsNoSpace(m.content, "mrfortnite");
         if (str.length === 0) {
             return false;
         }
         try {
-            const guild = await DBGuildPropertySchema.getGuildById(state.getMessageHandle().guild.id);
+            const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
             const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
             await m.channel.send(`${await this.getResponse(str)}`, {
                 tts: isUndefined(ttsEnabled) ? false : ttsEnabled,

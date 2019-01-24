@@ -2,6 +2,7 @@ import ExecutableCommand from "command/ExecutableCommand";
 import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
+import { core } from "core/NikkuCore";
 
 export default class Help extends ExecutableCommand {
     public constructor() {
@@ -9,8 +10,8 @@ export default class Help extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
-            let text = `\`\`\`Available prefixes: ${state.getCommandManager().getPrefixManager().getPrefixes()}\n\n`;
-            const commands = Array.from(state.getCommandManager().getCommandRegistry().getCommandMap().values()).sort((a, b) => {
+            let text = `\`\`\`Available prefixes: ${core.getCommandManager().getPrefixManager().getPrefixes()}\n\n`;
+            const commands = Array.from(core.getCommandManager().getCommandRegistry().getRegistryMap().values()).sort((a, b) => {
                 if (!a.getCommandString() || !b.getCommandString() || a.getCommandString() === b.getCommandString()) {
                     return 0;
                 }
@@ -28,7 +29,7 @@ export default class Help extends ExecutableCommand {
                 }
             }
             text += `\n${amount} Command(s) available\`\`\``;
-            state.getMessageHandle().channel.send(text);
+            state.getHandle().channel.send(text);
             return true;
         });
     }

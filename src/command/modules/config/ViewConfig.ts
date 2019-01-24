@@ -13,7 +13,7 @@ export default class ViewConfig extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                const guild = await DBGuildPropertySchema.getGuildById(state.getMessageHandle().guild.id);
+                const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
                 const configs = await guild.getAllBooleanConfig();
                 const embed = new Discord.MessageEmbed();
                 embed.setTitle("Bot Configurations.");
@@ -27,7 +27,7 @@ export default class ViewConfig extends ExecutableCommand {
                 embed.addField("Boolean Configurations", values);
                 embed.setTimestamp(new Date());
                 embed.setFooter(Config.Command.BOT_RESPONSE_TRIGGER);
-                state.getMessageHandle().channel.send(embed);
+                state.getHandle().channel.send(embed);
                 return true;
             } catch (err) {
                 throw err;

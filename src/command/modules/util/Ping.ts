@@ -10,7 +10,7 @@ export default class Ping extends ExecutableCommand {
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
-            state.getMessageHandle().channel.send("pong");
+            state.getHandle().channel.send("pong");
             return true;
         });
     }

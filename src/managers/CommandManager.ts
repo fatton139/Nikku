@@ -78,15 +78,15 @@ export default class CommandManager extends DynamicImportManager {
         if (command.getArgLength() !== 0 && args.length !== command.getArgLength()) {
             if (command instanceof ExecutableCommand) {
                 command.displayUsageText(msg);
-                throw new NikkuException(msg, "Invalid arguments.");
+                throw new NikkuException("Invalid arguments.");
             }
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
-        if (user && msg.getMessageHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
+        if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
                 && user.accessLevel !== AccessLevel.DEVELOPER) {
             await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-            msg.getMessageHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
+            msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
         }
         if (user) {
             this.logger.info(`Executing command "${command.getCommandString()}".`);
@@ -162,4 +162,5 @@ export default class CommandManager extends DynamicImportManager {
     public getPrefixManager(): PrefixManager {
         return this.prefixManager;
     }
+
 }

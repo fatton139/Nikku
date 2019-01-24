@@ -15,7 +15,6 @@ describe("Nikku Core", () => {
     it("Initializes correctly", () => {
         expect(core.getConfig()).to.be.equal(Config);
         expect(core.getClient()).to.be.not.equal(undefined);
-        expect(core.getCoreState()).to.be.not.equal(undefined);
     });
 
     it("Initializes components correctly", () => {

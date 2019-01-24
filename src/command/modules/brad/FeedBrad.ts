@@ -23,7 +23,7 @@ export default class FeedBrad extends ExecutableCommand {
     }
 
     private async awardUsers(state: OnMessageState, users: IdContributionPair[], DbBrad: DBBradPropertySchema): Promise<void> {
-        const channel = state.getMessageHandle().channel;
+        const channel = state.getHandle().channel;
         const client = state.getCore().getClient();
         const embed = new Discord.MessageEmbed();
         embed.setTitle("Brad is pleased.");
@@ -59,15 +59,15 @@ export default class FeedBrad extends ExecutableCommand {
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
-            const user = state.getMessageHandle().author;
+            const user = state.getHandle().author;
             try {
                 if (isNaN(args[0] as any)) {
-                    state.getMessageHandle().reply("Usage: PREFIX feedbrad `amount`");
+                    state.getHandle().reply("Usage: PREFIX feedbrad `amount`");
                     return false;
                 }
                 const amount: number = parseInt(args[0], 10);
                 if (amount <= 0) {
-                    state.getMessageHandle().reply("Amount must be positive.");
+                    state.getHandle().reply("Amount must be positive.");
                     return false;
                 }
                 const DbUser = await DBUserSchema.getUserById(user.id);
@@ -75,7 +75,7 @@ export default class FeedBrad extends ExecutableCommand {
                     return false;
                 }
                 if (DbUser.wallet.dotmaCoin < amount) {
-                    state.getMessageHandle().reply("You do not have sufficient DotmaCoins.");
+                    state.getHandle().reply("You do not have sufficient DotmaCoins.");
                     return false;
                 }
                 const DbBrad = await DBBradPropertySchema.getBrad();
@@ -83,7 +83,7 @@ export default class FeedBrad extends ExecutableCommand {
                     return false;
                 }
                 await Promise.all([DbBrad.incrementWeight(user.id, amount), DbUser.removeCurrency(CoinType.DOTMA_COIN, amount)]);
-                state.getMessageHandle().reply(
+                state.getHandle().reply(
                     `Successfully fed Brad. ` +
                     `Brad has gained **${Brad.dotmaCoinsToKg(amount).toFixed(4)}** kg!`,
                 );
@@ -94,7 +94,7 @@ export default class FeedBrad extends ExecutableCommand {
                 }
                 return true;
             } catch (err) {
-                state.getMessageHandle().reply("Failed to feed Brad :(.");
+                state.getHandle().reply("Failed to feed Brad :(.");
                 if (err) {
                     this.logger.warn(err);
                 }

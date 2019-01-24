@@ -22,6 +22,6 @@ export default class ExecutableCommand extends Command implements IHasAction {
     }
 
     public displayUsageText(msg: OnMessageState): void {
-        msg.getMessageHandle().reply(this.usage);
+        msg.getHandle().reply(this.usage);
     }
 }
