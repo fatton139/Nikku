@@ -17,9 +17,8 @@ export namespace Config {
         export const BOT_RESPONSE_TRIGGER = "Mr Fortnite";
         export const PREFIXES: string[] = process.env.PREFIXES ?
             process.env.PREFIXES.replace(/\s/g, "").split(",") : ["!f"];
-        export const COMMAND_SRC = "command/modules";
-        export const COMMAND_FULL_PATH = `${path.dirname(require.main.filename)}/src/${Command.COMMAND_SRC}`;
-        export const COMMAND_PATHS: string[] =
+        export const DIR_PATH = "command/modules";
+        export const MODULE_PATHS: string[] =
         [
             "mrfortnite",
             "util",
@@ -28,6 +27,13 @@ export namespace Config {
             "interactions",
             "config",
             "guild",
+        ];
+    }
+    export namespace Items {
+        export const DIR_PATH = "objects/items";
+        export const MODULE_PATHS: string[] =
+        [
+            "mrfortnite",
         ];
     }
     export namespace Service {

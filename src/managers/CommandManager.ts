@@ -1,17 +1,16 @@
-import * as fs from "fs";
 import Command from "command/Command";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import PrefixManager from "managers/PrefixManager";
-import NikkuCore from "core/NikkuCore";
 import CommandRegistry from "../registries/CommandRegistry";
 import TriggerableCommand from "../command/TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
 import ExecutableCommand from "../command/ExecutableCommand";
 import NikkuException from "exception/NikkuException";
 import { AccessLevel } from "user/AccessLevel";
-import BaseManager from "./BaseManager";
+import DynamicImportManager from "./DynamicImportManager";
+import { Config } from "config/Config";
 
-export default class CommandManager extends BaseManager {
+export default class CommandManager extends DynamicImportManager {
 
     private prefixManager: PrefixManager;
 
@@ -21,55 +20,28 @@ export default class CommandManager extends BaseManager {
      * @classdesc Class to handle import and execution of commands.
      */
     public constructor() {
-        super();
+        super(Config.Command.DIR_PATH, Config.Command.MODULE_PATHS);
         this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
+        this.loadCommands();
     }
 
-    public async loadCommands(commandPath: string, src: string, paths: string[]): Promise<void> {
-        const importPaths: string[] = this.getImportPaths(commandPath, paths);
+    private async loadCommands(): Promise<void> {
+        const importPaths: string[] = this.getImportPaths();
         this.logger.info(`Detected ${importPaths.length}` +
                 ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
         for (const path of importPaths) {
-            const commandClass = await import(`${src}/${path}`);
+            const commandClass = await import(`${this.DIR_PATH}/${path}`);
             if (!commandClass.default) {
-                this.logger.warn(`Fail to register command. "${src}/${path}" has no default export.`);
+                this.logger.warn(`Fail to register command. "${this.DIR_PATH}/${path}" has no default export.`);
             } else if (!(new commandClass.default() instanceof Command)) {
-                this.logger.warn(`Fail to register command. "${src}/${path}" exported class is not of type "Command".`);
+                this.logger.warn(`Fail to register command. "${this.DIR_PATH}/${path}" exported class is not of type "Command".`);
             } else {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
         }
         this.logger.info(`Successfully imported ${this.commandRegistry.getRegistrySize()} ` +
                 `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
-    }
-
-    private getImportPaths(commandPath: string, paths: string[]): string[] {
-        const filePaths: string[] = [];
-        for (const path of paths) {
-            let files: string[];
-            try {
-                files = fs.readdirSync(`${commandPath}/${path}`);
-            } catch (error) {
-                if (error.code === "ENOENT") {
-                    this.logger.warn(`No such directory "${path}".`);
-                } else {
-                    this.logger.warn(`FS error while reading "${path}".`);
-                }
-                break;
-            }
-            if (files.length === 0) {
-                this.logger.verbose(`Empty command directory "${path}".`);
-            }
-            for (const file of files) {
-                const fileName = file.split(".")[0];
-                if (filePaths.indexOf(`${path}/${fileName}`) === -1) {
-                    filePaths.push(`${path}/${fileName}`);
-                    this.logger.info(`Command path detected "${path}/${fileName}".`);
-                }
-            }
-        }
-        return filePaths;
     }
 
     /**

@@ -1,4 +1,5 @@
 import BaseManager from "./BaseManager";
+import { Config } from "config/Config";
 
 export default class PrefixManager extends BaseManager {
     /**
@@ -12,7 +13,7 @@ export default class PrefixManager extends BaseManager {
     public constructor() {
         super();
         this.prefixes = [];
-        for (const prefix of this.config.Command.PREFIXES) {
+        for (const prefix of Config.Command.PREFIXES) {
             this.addPrefix(prefix);
         }
     }

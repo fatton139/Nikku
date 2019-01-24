@@ -1,11 +1,12 @@
-import BaseManager from "./BaseManager";
 import ObjectRegistry from "registries/ObjectRegistry";
+import DynamicImportManager from "./DynamicImportManager";
+import { Config } from "config/Config";
 
-export default class ObjectManager extends BaseManager {
+export default class ObjectManager extends DynamicImportManager {
     private objectRegistry: ObjectRegistry;
 
     public constructor() {
-        super();
+        super(Config.Items.DIR_PATH, Config.Items.MODULE_PATHS);
         this.objectRegistry = new ObjectRegistry();
     }
 

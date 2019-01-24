@@ -74,14 +74,11 @@ export default class NikkuCore {
     }
 
     public async initializeComponents(): Promise<void> {
-        this.eventCore = new EventCore(this);
-        this.databaseCore = new DatabaseCore(this);
-        this.commandManager = new CommandManager();
-        this.objectManager = new ObjectManager();
         try {
-            await this.commandManager.loadCommands(this.config.Command.COMMAND_FULL_PATH,
-                this.config.Command.COMMAND_SRC, this.config.Command.COMMAND_PATHS);
-            await this.objectManager.loadObjects();
+            this.eventCore = new EventCore(this);
+            this.databaseCore = new DatabaseCore(this);
+            this.commandManager = new CommandManager();
+            this.objectManager = new ObjectManager();
         } catch (err) {
             this.logger.error(err);
         }
