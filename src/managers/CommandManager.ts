@@ -84,7 +84,7 @@ export default class CommandManager extends BaseManager {
                 if (!commandString) {
                     return;
                 }
-                const command: Command = this.commandRegistry.getCommand(commandString);
+                const command: Command = this.commandRegistry.getElementByKey(commandString);
                 if (command) {
                     this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id, msg).catch((err) => {
                         this.logger.verbose(
@@ -160,7 +160,7 @@ export default class CommandManager extends BaseManager {
      * @param id - The discord id of the user invoking the command.
      */
     public async triggerAction(userId: string, msg: OnMessageState): Promise<void> {
-        for (const pair of this.commandRegistry.getCommandMap().entries()) {
+        for (const pair of this.commandRegistry.getRegistryMap().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1] as TriggerableCommand;
                 if (await command.tryTrigger(msg)) {

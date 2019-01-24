@@ -42,7 +42,7 @@ export default class DatabaseCore {
     /**
      * Attempts to connect to the host.
      */
-    public async connectDb(): Promise<void> {
+    public async connectDb(): Promise<{}> {
         return new Promise((resolve, reject) => {
             Mongoose.connect(this.URL, { useNewUrlParser: true });
             this.connection = Mongoose.connection;

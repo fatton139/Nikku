@@ -2,10 +2,9 @@ import Command from "command/Command";
 import TriggerableCommand from "command/TriggerableCommand";
 import BaseRegistry from "./BaseRegistry";
 
-export default class CommandRegistry extends BaseRegistry {
+export default class CommandRegistry extends BaseRegistry<Command> {
     public constructor() {
         super();
-        this.registry = new Map<string, Command>();
     }
 
     public addCommand(command: Command): boolean {
@@ -75,17 +74,5 @@ export default class CommandRegistry extends BaseRegistry {
             return true;
         }
         return false;
-    }
-
-    public commandExists(name: string): boolean {
-        return super.keyExists(name);
-    }
-
-    public getCommandMap(): Map<string, Command> {
-        return super.getRegistryMap();
-    }
-
-    public getCommand(name: string): Command {
-        return super.getElementByKey(name);
     }
 }
