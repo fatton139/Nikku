@@ -23,10 +23,9 @@ export default class CommandManager extends DynamicImportManager {
         super(Config.Command.DIR_PATH, Config.Command.MODULE_PATHS);
         this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
-        this.loadCommands();
     }
 
-    private async loadCommands(): Promise<void> {
+    public async loadCommands(): Promise<void> {
         const importPaths: string[] = this.getImportPaths();
         this.logger.info(`Detected ${importPaths.length}` +
                 ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);

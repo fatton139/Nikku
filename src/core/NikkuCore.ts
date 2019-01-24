@@ -1,14 +1,11 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import NikkuException from "exception/NikkuException";
 import EventCore from "core/EventCore";
 import DatabaseCore from "core/DatabaseCore";
 import { Config } from "config/Config";
-import CoreState from "state/CoreState";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "managers/CommandManager";
-import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 import ObjectManager from "managers/ObjectManager";
 
 export default class NikkuCore {
@@ -76,6 +73,8 @@ export default class NikkuCore {
             this.databaseCore = new DatabaseCore(this);
             this.commandManager = new CommandManager();
             this.objectManager = new ObjectManager();
+            await this.commandManager.loadCommands();
+            await this.objectManager.loadItems();
         } catch (err) {
             this.logger.error(err);
         }

@@ -30,10 +30,10 @@ export namespace Config {
         ];
     }
     export namespace Items {
-        export const DIR_PATH = "objects/items";
+        export const DIR_PATH = "objects";
         export const MODULE_PATHS: string[] =
         [
-            "mrfortnite",
+            "items",
         ];
     }
     export namespace Service {
