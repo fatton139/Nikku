@@ -10,9 +10,9 @@ import { CoinType } from "user/CoinType";
  * 
  * returns boolean indicating success of command.
  */
-export default class Pickpocket extends ExecutableCommand {
+export default class Kiss extends ExecutableCommand {
     public constructor() {
-        super("pickpocket", AccessLevel.REGISTERED, 1, "Attempt to steal coins from someone.", "!f thieve [target]");
+        super("kiss", AccessLevel.REGISTERED, 1, "Attempt to kiss someone.", "!f kiss [target]");
     }
 
     public setCustomAction(): Action {
