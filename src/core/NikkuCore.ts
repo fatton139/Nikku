@@ -60,7 +60,7 @@ export default class NikkuCore {
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
             } catch (err) {
                 this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
-                this.logger.error(err);
+                this.logger.error(err.message);
                 // no db mode.
             }
             this.eventCore.listenMessages();
@@ -76,7 +76,7 @@ export default class NikkuCore {
             await this.commandManager.loadCommands();
             await this.objectManager.loadItems();
         } catch (err) {
-            this.logger.error(err);
+            this.logger.error(err.message);
         }
     }
 
