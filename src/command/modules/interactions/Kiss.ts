@@ -3,11 +3,9 @@ import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import { CoinType } from "user/CoinType";
 
 /**
  * Allows a user to kiss another user :)
- * 
  * returns boolean indicating success of command.
  */
 export default class Kiss extends ExecutableCommand {
@@ -35,7 +33,7 @@ export default class Kiss extends ExecutableCommand {
                     state.getMessageHandle().channel.send("Kissing Target is not registered.");
                     return false;
                 }
-                state.getMessageHandle().channel.send(`<@!${userId}> kissed <@!${targetId}> OwO kawaii!`);
+                state.getMessageHandle().channel.send(`<@!${userId}> ( ˘ ³˘)♥  <@!${targetId}> `);
                 return true;
             } catch (err) {
                 this.logger.warn(err);
