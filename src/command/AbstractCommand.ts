@@ -7,6 +7,7 @@ import NikkuException from "exception/NikkuException";
 import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
+import { CommandConstructorData } from "./CommandConstructorData";
 
 export default abstract class AbstractCommand implements IHasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -42,11 +43,11 @@ export default abstract class AbstractCommand implements IHasAction {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(accessLevel: AccessLevel, argLength: number, description?: string) {
+    public constructor(data: CommandConstructorData.IBase) {
         this.action = this.setCustomAction();
-        this.accessLevel = accessLevel;
-        this.argLength = argLength;
-        this.description = description;
+        this.accessLevel = data.accessLevel;
+        this.argLength = data.argLength;
+        this.description = data.description;
     }
 
     /**

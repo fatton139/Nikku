@@ -6,8 +6,12 @@ import DatabaseCore from "core/DatabaseCore";
 
 export default class PingDb extends ExecutableCommand {
     public constructor() {
-        super("pingdb", AccessLevel.UNREGISTERED, 0,
-            "Test command, calculates the time it takes to get a response from the database.");
+        super({
+            commandString: "pingdb",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Test command, calculates the time it takes to get a response from the database.",
+        });
     }
 
     public setCustomAction(): Action {

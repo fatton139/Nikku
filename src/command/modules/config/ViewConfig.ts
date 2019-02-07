@@ -8,7 +8,12 @@ import { Config } from "config/Config";
 
 export default class ViewConfig extends ExecutableCommand {
     public constructor() {
-        super("viewconfig", AccessLevel.MODERATOR, 0, "View bot configurations.");
+        super({
+            commandString: "viewconfig",
+            accessLevel: AccessLevel.MODERATOR,
+            argLength: 0,
+            description: "View bot configurations.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {

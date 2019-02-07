@@ -6,7 +6,12 @@ import { core } from "core/NikkuCore";
 
 export default class Help extends ExecutableCommand {
     public constructor() {
-        super("help", AccessLevel.UNREGISTERED, 0, "Displays the help message.");
+        super({
+            commandString: "help",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Displays the help message.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {

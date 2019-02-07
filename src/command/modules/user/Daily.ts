@@ -7,7 +7,12 @@ import { CoinType } from "user/CoinType";
 
 export default class Daily extends ExecutableCommand {
     public constructor() {
-        super("daily", AccessLevel.REGISTERED, 0, "Grab your daily coins.");
+        super({
+            commandString: "daily",
+            accessLevel: AccessLevel.REGISTERED,
+            argLength: 0,
+            description: "Grab your daily DOTMA coins.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {

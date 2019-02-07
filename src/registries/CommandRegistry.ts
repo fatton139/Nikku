@@ -1,13 +1,13 @@
-import Command from "command/AbstractCommand";
+import AbstractCommand from "command/AbstractCommand";
 import TriggerableCommand from "command/TriggerableCommand";
 import BaseRegistry from "./BaseRegistry";
 
-export default class CommandRegistry extends BaseRegistry<Command> {
+export default class CommandRegistry extends BaseRegistry<AbstractCommand> {
     public constructor() {
         super();
     }
 
-    public addCommand(command: Command): boolean {
+    public addCommand(command: AbstractCommand): boolean {
         const name: string = command.getCommandString();
         if (command instanceof TriggerableCommand) {
             if (this.registry.has(command.constructor.name)) {
@@ -32,7 +32,7 @@ export default class CommandRegistry extends BaseRegistry<Command> {
         return false;
     }
 
-    public addCommandMulti(commands: Command[]): boolean {
+    public addCommandMulti(commands: AbstractCommand[]): boolean {
         for (const command of commands) {
             if (!this.addCommand(command)) {
                 this.logger.warn(`Failed to register command "${command.getCommandString()}".`);

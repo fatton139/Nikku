@@ -8,7 +8,12 @@ import Brad from "entities/Brad";
 
 export default class BradStats extends ExecutableCommand {
     public constructor() {
-        super("bradstats", AccessLevel.UNREGISTERED, 0, "View Brad stats.");
+        super({
+            commandString: "bradstats",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "View Brad stats.",
+        });
     }
 
     private getUserString(state: OnMessageState, users: IdContributionPair[]): string {

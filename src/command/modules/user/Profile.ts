@@ -7,11 +7,15 @@ import SkillType from "user/skill/SkillType";
 
 export default class Profile extends ExecutableCommand {
     public constructor() {
-        super("profile", AccessLevel.UNREGISTERED, 0, "View your profile.");
+        super({
+            commandString: "profile",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "View your profile.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const userModel = DBUserSchema.getModel();
             const user = state.getHandle().author;
             try {
                 const doc = await DBUserSchema.getUserById(user.id);

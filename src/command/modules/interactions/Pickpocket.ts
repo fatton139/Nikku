@@ -10,7 +10,13 @@ import Skill from "user/skill/Skill";
 
 export default class Pickpocket extends ExecutableCommand {
     public constructor() {
-        super("pickpocket", AccessLevel.REGISTERED, 1, "Attempt to steal coins from someone.", "!f thieve [target]");
+        super({
+            commandString: "pickpocket",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 1,
+            description: "Attempt to steal coins from someone.",
+            usage: "!f thieve [target]",
+        });
     }
 
     public setCustomAction(): Action {

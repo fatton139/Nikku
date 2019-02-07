@@ -6,7 +6,13 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class UseOn extends ExecutableCommand {
     public constructor() {
-        super("useon", AccessLevel.UNREGISTERED, 2, "Use item on another user.", "!f useon [itemName] [target]");
+        super({
+            commandString: "useon",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 2,
+            description: "Use item on another user.",
+            usage: "!f useon [itemName] [target]",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {

@@ -6,7 +6,12 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 
 export default class Register extends ExecutableCommand {
     public constructor() {
-        super("register", AccessLevel.UNREGISTERED, 0, "Register yourself.");
+        super({
+            commandString: "register",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Register yourself.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {

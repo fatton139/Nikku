@@ -6,7 +6,12 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class TargetList extends ExecutableCommand {
     public constructor() {
-        super("targetlist", AccessLevel.UNREGISTERED, 0, "Retrieves the current targets.");
+        super({
+            commandString: "targetlist",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Retrieves the current targets.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {

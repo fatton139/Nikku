@@ -7,7 +7,12 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class RegisterGuild extends ExecutableCommand {
     public constructor() {
-        super("registerguild", AccessLevel.ADMINISTRATOR, 0, "Register this guild.");
+        super({
+            commandString: "registerguild",
+            accessLevel: AccessLevel.ADMINISTRATOR,
+            argLength: 0,
+            description: "Register this guild.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {

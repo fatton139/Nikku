@@ -12,7 +12,13 @@ enum Args {
 
 export default class SetConfig extends ExecutableCommand {
     public constructor() {
-        super("setconfig", AccessLevel.ADMINISTRATOR, 2, "Set bot configurations.", "Usage: !f setconfig [config_name] [value]");
+        super({
+            commandString: "setconfig",
+            accessLevel: AccessLevel.ADMINISTRATOR,
+            argLength: 2,
+            description: "Set bot configurations.",
+            usage: "Usage: !f setconfig [config_name] [value]",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
