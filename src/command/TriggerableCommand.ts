@@ -1,6 +1,5 @@
-import Command from "./Command";
+import Command from "./AbstractCommand";
 import Trigger from "action/Trigger";
-import NikkuCore from "core/NikkuCore";
 import IHasAction from "action/IHasAction";
 import IHasTrigger from "action/IHasTrigger";
 import OnMessageState from "state/OnMessageState";

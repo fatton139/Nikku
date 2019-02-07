@@ -2,7 +2,7 @@ import * as Discord from "discord.js";
 import NikkuException from "./NikkuException";
 import CoreState from "state/CoreState";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import Command from "command/Command";
+import Command from "command/AbstractCommand";
 import { AccessLevel } from "user/AccessLevel";
 
 export default class UnauthorizedCommandException extends NikkuException {

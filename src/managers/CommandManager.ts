@@ -1,4 +1,4 @@
-import Command from "command/Command";
+import Command from "command/AbstractCommand";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import PrefixManager from "managers/PrefixManager";
 import CommandRegistry from "../registries/CommandRegistry";

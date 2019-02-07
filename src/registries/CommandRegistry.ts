@@ -1,4 +1,4 @@
-import Command from "command/Command";
+import Command from "command/AbstractCommand";
 import TriggerableCommand from "command/TriggerableCommand";
 import BaseRegistry from "./BaseRegistry";
 

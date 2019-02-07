@@ -4,12 +4,11 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
 import NikkuException from "exception/NikkuException";
-import NikkuCore from "core/NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
 
-export default class Command implements IHasAction {
+export default abstract class AbstractCommand implements IHasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.
