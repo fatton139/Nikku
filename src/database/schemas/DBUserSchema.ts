@@ -114,8 +114,8 @@ export default class DBUserSchema extends Typegoose {
 
     @instanceMethod
     public async removeCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
-        if (amount > 0) {
-            throw new DatabaseException("Amount must be positive.");
+        if (amount <= 0) {
+            throw new DatabaseException("Amount should be positive.");
         }
         if (this.wallet[type] - amount < 0) {
             throw new DatabaseException("Removal of currency will cause value to go below zero.");
