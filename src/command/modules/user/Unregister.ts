@@ -15,7 +15,7 @@ export default class Unregister extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const user = state.getMessageHandle().author;
+            const user = state.getHandle().author;
             try {
                 // Check user does currently exist
                 const doc = await DBUserSchema.getUserById(user.id);
@@ -26,11 +26,11 @@ export default class Unregister extends ExecutableCommand {
                         return true;
                     }
                 } else {
-                    state.getMessageHandle().reply("You are not currently registered.");
+                    state.getHandle().reply("You are not currently registered.");
                     return true;
                 }
             } catch (err) {
-                state.getMessageHandle().reply("Failed to unregister.");
+                state.getHandle().reply("Failed to unregister.");
                 this.logger.warn(err);
                 return false;
             }

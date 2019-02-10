@@ -142,10 +142,8 @@ export default class DBUserSchema extends Typegoose {
     }
 
     public static async removeUser(id: string): Promise<boolean> {
-        const userModel = this.getModel();
         try {
-            userModel.remove({id});
-            await userModel.save();
+            await this.getModel().findOne({id}).remove();
             DBUserSchema.logger.info("User unregistered.");
             return true;
         } catch (err) {
