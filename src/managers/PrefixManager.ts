@@ -1,7 +1,7 @@
-import BaseManager from "./BaseManager";
+import AbstractManager from "./AbstractManager";
 import { Config } from "config/Config";
 
-export default class PrefixManager extends BaseManager {
+export default class PrefixManager extends AbstractManager {
     /**
      * An array of prefixes accepted by the bot.
      */

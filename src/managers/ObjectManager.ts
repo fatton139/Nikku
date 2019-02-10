@@ -1,7 +1,7 @@
 import ObjectRegistry from "registries/ObjectRegistry";
 import DynamicImportManager from "./DynamicImportManager";
 import { Config } from "config/Config";
-import BaseObject from "objects/BaseObject";
+import BaseObject from "objects/AbstractBaseObject";
 
 export default class ObjectManager extends DynamicImportManager {
     private objectRegistry: ObjectRegistry;
@@ -27,5 +27,9 @@ export default class ObjectManager extends DynamicImportManager {
         }
         this.logger.info(`Successfully imported ${this.objectRegistry.getRegistrySize()} ` +
                 `out of ${importPaths.length} ${importPaths.length === 1 ? "item" : "items"}.`);
+    }
+
+    public async useItem(itemName: string, target: string): Promise<void> {
+        //
     }
 }

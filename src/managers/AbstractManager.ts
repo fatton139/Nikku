@@ -2,7 +2,7 @@ import * as winston from "winston";
 import Logger from "log/Logger";
 import NikkuCore, { core } from "core/NikkuCore";
 
-export default class BaseManager {
+export default abstract class AbstractManager {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     protected core: NikkuCore;
