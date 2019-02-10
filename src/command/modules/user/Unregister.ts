@@ -6,7 +6,12 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 
 export default class Unregister extends ExecutableCommand {
     public constructor() {
-        super("unregister", AccessLevel.UNREGISTERED, 0, "Unregister yourself.");
+        super({
+            commandString: "unregister",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Unregister yourself.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
@@ -21,7 +26,7 @@ export default class Unregister extends ExecutableCommand {
                         return true;
                     }
                 } else {
-                    state.getMessageHandle().reply("You are not currently regeristered.");
+                    state.getMessageHandle().reply("You are not currently registered.");
                     return true;
                 }
             } catch (err) {
