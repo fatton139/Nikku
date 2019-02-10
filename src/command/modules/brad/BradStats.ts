@@ -20,7 +20,11 @@ export default class BradStats extends ExecutableCommand {
         let str = "";
         let index = 1;
         for (const pair of users.sort((a, b) => b.contribution - a.contribution)) {
-            str += `(${index}) ${state.getCore().getClient().users.get(pair.id).username}: ` +
+            const user = state.getCore().getClient().users.get(pair.id);
+            if (!user) {
+                continue;
+            }
+            str += `(${index}) ${user.username}: ` +
             `${Brad.dotmaCoinsToKg(pair.contribution).toFixed(4)}kg\n`;
             index++;
             if (index === 11) {
@@ -50,7 +54,8 @@ export default class BradStats extends ExecutableCommand {
                 return true;
             } catch (err) {
                 state.getHandle().reply("Could not retrieve Brad data.");
-                this.logger.warn(err);
+                console.log(err.message);
+                this.logger.warn(err.message);
                 return false;
             }
         });

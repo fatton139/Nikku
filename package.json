@@ -1,6 +1,6 @@
 {
   "name": "NikkuBot",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "fortnite?",
   "engines": {
     "node": "10.4"
@@ -11,7 +11,7 @@
     "start:dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src ts-node main",
     "start:hot": "nodemon -e ts --exec npm run start:dev",
     "test": "cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
-    "clean": "del \".\\src\\*.js\" \".\\test\\*.js\""
+    "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js"
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",

@@ -22,7 +22,11 @@ export default class FeedBrad extends ExecutableCommand {
     private generateString(users: IdContributionPair[], client: Discord.Client): string {
         let str = "";
         for (const user of users) {
-            str += `**${client.users.get(user.id).username}** ` +
+            const u = client.users.get(user.id);
+            if (!u) {
+                continue;
+            }
+            str += `**${u.username}** ` +
             `contributing ${Brad.dotmaCoinsToKg(user.contribution).toFixed(4)}kg to Brad's weight.\n`;
         }
         return str;
@@ -34,31 +38,37 @@ export default class FeedBrad extends ExecutableCommand {
         const embed = new Discord.MessageEmbed();
         embed.setTitle("Brad is pleased.");
         embed.setColor(0x00FFF0);
+        let awardIndex = 0;
         for (let i = 0; i < users.length && i < 10; i++) {
-            const user = await DBUserSchema.getUserById(users[i].id);
-            if (i === 0) {
-                await user.addCurrency(CoinType.DOTMA_COIN, 1500);
-                await user.addCurrency(CoinType.BRAD_COIN, 1);
+            const dbUser = await DBUserSchema.getUserById(users[i].id);
+            const user = client.users.get(users[i].id);
+            if (!dbUser || !user) {
+                continue;
+            }
+            if (awardIndex === 0) {
+                // await dbUser.addCurrency(CoinType.DOTMA_COIN, 1500);
+                // await dbUser.addCurrency(CoinType.BRAD_COIN, 1);
                 embed.addField("First Place!",
-                    `Congrats to **${client.users.get(users[i].id).username}** ` +
+                    `Congrats to **${user.username}** ` +
                     `contributing ${Brad.dotmaCoinsToKg(users[i].contribution).toFixed(4)}kg to Brad's weight.\n` +
                     `Brad donates 1 **BradCoin**™© and 1500 **DotmaCoins**™©.`,
                 );
-            } else if (i < 5 && i > 0) {
-                await user.addCurrency(CoinType.DOTMA_COIN, 1000);
+            } else if (awardIndex < 5 && awardIndex > 0) {
+                // await dbUser.addCurrency(CoinType.DOTMA_COIN, 1000);
                 embed.addField("Second to Fifth Place!",
                     `Congrats to\n` +
                     `${this.generateString(users.slice(1, 5), client)}` +
                     `Brad donates 1000 **DotmaCoins**™© to each.`,
                 );
             } else {
-                await user.addCurrency(CoinType.DOTMA_COIN, 500);
+                // await dbUser.addCurrency(CoinType.DOTMA_COIN, 500);
                 embed.addField("Sixth to Tenth Place!",
                     `Congrats to\n` +
                     `${this.generateString(users.slice(6, 10), client)}\n` +
                     `Brad donates 500 **DotmaCoins**™© each.`,
                 );
             }
+            awardIndex++;
         }
         channel.send(embed);
     }
@@ -102,7 +112,7 @@ export default class FeedBrad extends ExecutableCommand {
             } catch (err) {
                 state.getHandle().reply("Failed to feed Brad :(.");
                 if (err) {
-                    this.logger.warn(err);
+                    this.logger.warn(err.message);
                 }
                 return false;
             }

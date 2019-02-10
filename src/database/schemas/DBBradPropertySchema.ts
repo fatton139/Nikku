@@ -54,7 +54,7 @@ export default class DBBradPropertySchema extends Typegoose {
     @instanceMethod
     public async setNewWeightGoal(this: InstanceType<any> & Mongoose.Document): Promise<void> {
        try {
-            this.weightGoal = Math.floor(this.weight) + 1;
+            this.weightGoal = Math.floor(this.weight) + 2;
             return await this.save();
         } catch (err) {
             throw err;
