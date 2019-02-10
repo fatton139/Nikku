@@ -23,6 +23,7 @@ export default class SampleCommand extends ExecutableCommand {
             accessLevel: AccessLevel.REGISTERED,
             argLength: 1,
             description: "Download or delete your user data from NikkuBot's database.",
+            usage: "!f gdpr (update / download / delete)",
         });
     }
 
@@ -30,41 +31,46 @@ export default class SampleCommand extends ExecutableCommand {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
             const user = state.getHandle().author;
 
-            if (!args[0]) { // If the user doesn't specify an argument
+            if (!args[0]) { // If the user doesn't specify an argument - shouldn't technically see this
                 state.getHandle().channel.send("No argument specified - Please specify an argument.");
                 return false;
+
             } else if (args[0] === "update") { // If the user wants to update their information
-                state.getHandle().channel.send("NikkuBot does not store any information that can be modified by users. Please modify your \
-                                                user data through Discord and it will be updated in NikkuBot.");
+                state.getHandle().channel.send("NikkuBot does not store any information that can be modified by users. Please modify" +
+                                               " your user data through Discord and it will be updated in NikkuBot.");
                 return true;
+
             } else if (args[0] === "download") { // If the user wants to download their information
                 const doc = await DBUserSchema.getUserById(user.id); // get user's data from db
                 if (!doc) { // somehow the user isn't registered?
-                    state.getHandle().channel.send("Error: User isn't registered - you shouldn't be seeing this, so do the ha ha if you \
-                                                    are seeing this. Quick, bjoy react this message!"); // if u see this alex is a clown
+                    state.getHandle().channel.send("Error: User isn't registered - you shouldn't be seeing this, so do the ha ha if you" +
+                                                   "are seeing this. Quick, bjoy react this message!"); // if u see this alex is a clown
                     return false;
+
                 } else { // what actually should happen 100% of the time
-                    const dbOut = doc.toString(); // just put the whole thing in a string lmao
-                    const dbStrArray = dbOut.match(/.{1,1990}/g); // split to 1990 chars because of discord's limit
-
-                    state.getHandle().author.send(`Here's your user data, current as of ${moment().format()} - we've split it in to \
-                                                   ${dbStrArray.length.toString()} parts to send through Discord.`);
-
-                    for (const entry of dbStrArray) { // time to spam the user
-                        state.getHandle().author.send(`\`\`\`${entry}\`\`\``); // code blocks lmao!!
+                    try {
+                        state.getHandle().reply("we're sending your data via direct message now.");
+                        state.getHandle().author.send(`Here's your user data, current as of ${moment().format()}.`);
+                        state.getHandle().author.send(`\`\`\`${doc.toString()}\`\`\``);
+                        return true; // ye we done lmao
+                    } catch (err) {
+                        state.getHandle().reply("we couldn't send you a direct message. Please enable DMs from me or the server.");
+                        this.logger.warn(err.message);
+                        return false;
                     }
-
-                    return true; // ye we done lmao
                 }
+
             } else if (args[0] === "delete") {
-                state.getHandle().channel.send("To confirm deletion of your user data, please type \`!f unregister\` in chat.\
-                                                Be careful! This will permanently remove all of your user data from NikkuBot immediately.\
-                                                Your user data on Discord will not be affected.");
+                state.getHandle().channel.send("To confirm deletion of your user data, please type \`!f unregister\` in chat. " +
+                "Be careful! This will permanently remove all of your user data from NikkuBot immediately. " +
+                "Your user data on Discord will not be affected.");
                 return true;
+
             } else { // arg other than one that's specified
                 state.getHandle().channel.send("Please specify an argument.");
                 return false;
             }
+
             return false; // ye shouldn't get here at all but better safe than sorry lmao!!
         });
     }
