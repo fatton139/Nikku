@@ -1,7 +1,9 @@
-import BaseObject from "objects/BaseObject";
+import BaseObject from "objects/AbstractBaseObject";
 
 export default class Test extends BaseObject {
     public constructor() {
-        super("testItem");
+        super({
+            name: "test",
+        });
     }
 }
