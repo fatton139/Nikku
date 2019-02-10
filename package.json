@@ -17,6 +17,12 @@
   "author": "aXises",
   "license": "MIT",
   "dependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/mongodb": "^3.1.14",
+    "@types/mongoose": "^5.3.1",
+    "@types/node": "^10.12.9",
+    "@types/winston": "^2.4.4",
     "audit": "0.0.6",
     "cleverbot.io": "^1.0.4",
     "cross-env": "^5.2.0",
@@ -35,12 +41,6 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.5",
-    "@types/mongodb": "^3.1.14",
-    "@types/mongoose": "^5.3.1",
-    "@types/node": "^10.12.9",
-    "@types/winston": "^2.4.4",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "tslint": "^5.11.0"
