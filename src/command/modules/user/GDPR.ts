@@ -14,7 +14,7 @@ import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import moment from "moment";
+import * as moment from "moment";
 
 export default class GDPRCommand extends ExecutableCommand {
     public constructor() {
