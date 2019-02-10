@@ -54,7 +54,6 @@ export default class BradStats extends ExecutableCommand {
                 return true;
             } catch (err) {
                 state.getHandle().reply("Could not retrieve Brad data.");
-                console.log(err.message);
                 this.logger.warn(err.message);
                 return false;
             }
