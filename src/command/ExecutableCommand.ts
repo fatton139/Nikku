@@ -23,6 +23,8 @@ export default class ExecutableCommand extends AbstractCommand implements IHasAc
     }
 
     public displayUsageText(msg: OnMessageState): void {
-        msg.getHandle().reply(this.usage);
+        msg.getHandle().reply(this.usage ? this.usage : "Looks like this command went wrong and did not have a usage string."
+            + "Sad reacts only.",
+        );
     }
 }
