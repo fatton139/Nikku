@@ -30,7 +30,7 @@ export default class Kiss extends ExecutableCommand {
                 const dbUser = await userModel.getUserById(userId);
                 const dbTarget = await userModel.getUserById(targetId);
                 if (!dbTarget) {
-                    state.getMessageHandle().channel.send("Kissing Target is not registered.");
+                    state.getMessageHandle().channel.send("Kissing Target is not registered ♥!.");
                     return false;
                 }
                 state.getMessageHandle().channel.send(`<@!${userId}> ( ˘ ³˘)♥  <@!${targetId}> `);
