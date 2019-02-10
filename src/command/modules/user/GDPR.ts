@@ -14,7 +14,7 @@ import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import * as moment from "moment";
+import moment from "moment";
 
 export default class SampleCommand extends ExecutableCommand {
     public constructor() {
