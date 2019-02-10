@@ -1,4 +1,4 @@
-# Fortnite Bot (Nikku 2)
+# Mr Fortnite (Nikku 2)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e12d96ca6dfd4a80a4063eb97cd24837)](https://app.codacy.com/app/aXises/fortniteBot?utm_source=github.com&utm_medium=referral&utm_content=aXises/fortniteBot&utm_campaign=badger)
 ![CodeFactor](https://www.codefactor.io/repository/github/axises/fortnitebot/badge)
