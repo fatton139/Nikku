@@ -16,7 +16,7 @@ import OnMessageState from "state/OnMessageState";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import moment from "moment";
 
-export default class SampleCommand extends ExecutableCommand {
+export default class GDPRCommand extends ExecutableCommand {
     public constructor() {
         super({
             commandString: "gdpr",
@@ -50,8 +50,8 @@ export default class SampleCommand extends ExecutableCommand {
                 } else { // what actually should happen 100% of the time
                     try {
                         state.getHandle().reply("we're sending your data via direct message now.");
-                        state.getHandle().author.send(`Here's your user data, current as of ${moment().format()}.`);
-                        state.getHandle().author.send(`\`\`\`${doc.toString()}\`\`\``);
+                        await state.getHandle().author.send(`Here's your user data, current as of ${moment().format()}.`);
+                        await state.getHandle().author.send(`\`\`\`${doc.toString()}\`\`\``);
                         return true; // ye we done lmao
                     } catch (err) {
                         state.getHandle().reply("we couldn't send you a direct message. Please enable DMs from me or the server.");
