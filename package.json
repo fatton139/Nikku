@@ -1,18 +1,17 @@
 {
   "name": "NikkuBot",
-  "version": "2.1.111",
+  "version": "2.4.5",
   "description": "fortnite?",
   "engines": {
     "node": "10.4"
   },
   "main": "main.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=PRODUCTION NODE_PATH=./src node main.js",
-    "start-dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src node main.js",
-    "test": "cross-env NODE_ENV=TEST NODE_PATH=./src mocha test/**/*.js --exit",
-    "postinstall": "npm run tsc",
-    "tsc": "tsc",
-    "tscw": "tsc -w"
+    "start": "cross-env NODE_ENV=PRODUCTION NODE_PATH=./src ts-node main",
+    "start:dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src ts-node main",
+    "start:hot": "nodemon -e ts --exec npm run start:dev",
+    "test": "cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
+    "clean": "del \".\\src\\*.js\" \".\\test\\*.js\""
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",
@@ -29,6 +28,8 @@
     "mongodb": "^3.1.10",
     "mongoose": "^5.3.12",
     "request": "^2.88.0",
+    "ts-mocha": "^2.0.0",
+    "ts-node": "^8.0.2",
     "typegoose": "^5.4.1",
     "winston": "^3.1.0"
   },

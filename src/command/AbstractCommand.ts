@@ -4,12 +4,12 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
 import NikkuException from "exception/NikkuException";
-import NikkuCore from "core/NikkuCore";
 import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
+import { CommandConstructorData } from "./CommandConstructorData";
 
-export default class Command implements IHasAction {
+export default abstract class AbstractCommand implements IHasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.
@@ -43,11 +43,11 @@ export default class Command implements IHasAction {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(accessLevel: AccessLevel, argLength: number, description?: string) {
+    public constructor(data: CommandConstructorData.IBase) {
         this.action = this.setCustomAction();
-        this.accessLevel = accessLevel;
-        this.argLength = argLength;
-        this.description = description;
+        this.accessLevel = data.accessLevel;
+        this.argLength = data.argLength;
+        this.description = data.description;
     }
 
     /**
@@ -73,7 +73,7 @@ export default class Command implements IHasAction {
         try {
             const status = await this.action.execute(msg, this.args);
             if (!status) {
-                throw new NikkuException(msg, "Failed execution.");
+                throw new NikkuException("Failed execution.");
             }
         } catch (err) {
             throw err;

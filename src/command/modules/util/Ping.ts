@@ -5,12 +5,17 @@ import OnMessageState from "state/OnMessageState";
 
 export default class Ping extends ExecutableCommand {
     public constructor() {
-        super("ping", AccessLevel.UNREGISTERED, 0, "Test command, responds with pong.");
+        super({
+            commandString: "ping",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Test command, responds with pong.",
+        });
     }
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
-            state.getMessageHandle().channel.send("pong");
+            state.getHandle().channel.send("pong");
             return true;
         });
     }

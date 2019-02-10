@@ -6,14 +6,19 @@ import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 
 export default class TargetList extends ExecutableCommand {
     public constructor() {
-        super("targetlist", AccessLevel.UNREGISTERED, 0, "Retrieves the current targets.");
+        super({
+            commandString: "targetlist",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Retrieves the current targets.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const guild = state.getMessageHandle().guild;
+            const guild = state.getHandle().guild;
             const doc = await DBGuildPropertySchema.getGuildById(guild.id);
             if (!doc) {
-                state.getMessageHandle().reply(`Cannot use this command,`
+                state.getHandle().reply(`Cannot use this command,`
                         + ` this guild is not registered. Register with \`!f registerguild\`.`);
             } else {
                 const guildProp = doc as any as DBGuildPropertySchema;
@@ -25,7 +30,7 @@ export default class TargetList extends ExecutableCommand {
                     }
                 }
                 userList += "```";
-                state.getMessageHandle().channel.send(userList);
+                state.getHandle().channel.send(userList);
                 return true;
             }
         });

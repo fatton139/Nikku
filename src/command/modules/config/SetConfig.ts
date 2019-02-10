@@ -12,19 +12,25 @@ enum Args {
 
 export default class SetConfig extends ExecutableCommand {
     public constructor() {
-        super("setconfig", AccessLevel.ADMINISTRATOR, 2, "Set bot configurations.", "Usage: !f setconfig [config_name] [value]");
+        super({
+            commandString: "setconfig",
+            accessLevel: AccessLevel.ADMINISTRATOR,
+            argLength: 2,
+            description: "Set bot configurations.",
+            usage: "Usage: !f setconfig [config_name] [value]",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
             try {
-                const guild = await DBGuildPropertySchema.getGuildById(state.getMessageHandle().guild.id);
+                const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
                 if (GuildConfig.BooleanConfig.keys.indexOf(args[Args.CONFIG_NAME]) !== -1) {
                     if (args[Args.CONFIG_VALUE].toLowerCase() === "true") {
                         guild.setBooleanConfig(args[Args.CONFIG_NAME], true);
                     } else if (args[Args.CONFIG_VALUE].toLowerCase() === "false") {
                         guild.setBooleanConfig(args[Args.CONFIG_NAME], false);
                     } else {
-                        state.getMessageHandle().reply("Config value must be a boolean.");
+                        state.getHandle().reply("Config value must be a boolean.");
                         return false;
                     }
                 } else {
@@ -32,14 +38,14 @@ export default class SetConfig extends ExecutableCommand {
                     for (const key of GuildConfig.BooleanConfig.keys) {
                         keys += key + "\n";
                     }
-                    state.getMessageHandle().reply(`Not a valid configuration name. Available names include:`
+                    state.getHandle().reply(`Not a valid configuration name. Available names include:`
                             + `\`\`\``
                             + keys
                             + `\`\`\``,
                     );
                     return false;
                 }
-                state.getMessageHandle().reply(`**${args[Args.CONFIG_NAME]}**`
+                state.getHandle().reply(`**${args[Args.CONFIG_NAME]}**`
                         + ` successfully set to **${args[Args.CONFIG_VALUE].toLowerCase()}**.`);
                 return true;
             } catch (err) {

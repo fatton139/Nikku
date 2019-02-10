@@ -192,10 +192,10 @@ In this example we will send the first argument back to the user if it is a numb
 public setCustomAction(): Action {
     return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
         if (isNaN(args[0])) {
-            state.getMessageHandle().send("That's not a number!);
+            state.getHandle().send("That's not a number!);
             return false; // Command failed.
         }
-        state.getMessageHandle().send(args[0]);
+        state.getHandle().send(args[0]);
         return true; // Command succeeded.
     });
 }
@@ -216,10 +216,10 @@ export default class SampleCommand extends ExecutableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
             if (isNaN(args[0])) {
-                state.getMessageHandle().channel.send("That's not a number!);
+                state.getHandle().channel.send("That's not a number!);
                 return false; // Command failed.
             }
-            state.getMessageHandle().send(args[0]);
+            state.getHandle().send(args[0]);
             return true; // Command succeeded.
         });
     }

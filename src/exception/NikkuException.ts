@@ -8,7 +8,7 @@ export default class NikkuException extends Error {
      * @param message - Message associated with the error.
      * @param stack - Stack associated with the error.
      */
-    constructor(state?: CoreState, message?: string, stack?: string) {
+    constructor(message?: string, stack?: string) {
         super(stack);
         this.message = message ? message : "No error message specified.";
     }

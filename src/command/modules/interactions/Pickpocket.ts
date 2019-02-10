@@ -10,27 +10,33 @@ import Skill from "user/skill/Skill";
 
 export default class Pickpocket extends ExecutableCommand {
     public constructor() {
-        super("pickpocket", AccessLevel.REGISTERED, 1, "Attempt to steal coins from someone.", "!f thieve [target]");
+        super({
+            commandString: "pickpocket",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 1,
+            description: "Attempt to steal coins from someone.",
+            usage: "!f thieve [target]",
+        });
     }
 
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
             try {
                 const userModel = DBUserSchema.getModel();
-                const userId = state.getMessageHandle().author.id;
-                if (state.getMessageHandle().mentions.everyone)  {
-                    state.getMessageHandle().channel.send("You cannot thieve everyone at once.");
+                const userId = state.getHandle().author.id;
+                if (state.getHandle().mentions.everyone)  {
+                    state.getHandle().channel.send("You cannot thieve everyone at once.");
                     return false;
                 }
-                const targetId = state.getMessageHandle().mentions.users.first().id;
+                const targetId = state.getHandle().mentions.users.first().id;
                 if (userId === targetId) {
-                    state.getMessageHandle().channel.send("You cannot thieve yourself.");
+                    state.getHandle().channel.send("You cannot thieve yourself.");
                     return false;
                 }
                 const dbUser = await userModel.getUserById(userId);
                 const dbTarget = await userModel.getUserById(targetId);
                 if (!dbTarget) {
-                    state.getMessageHandle().channel.send("Target is not registered.");
+                    state.getHandle().channel.send("Target is not registered.");
                     return false;
                 }
                 const levelDifference = (await dbTarget.getSkillLevel(SkillType.THIEVING)) -
@@ -43,13 +49,13 @@ export default class Pickpocket extends ExecutableCommand {
                     coinsStolen = coinsStolen < 5 ? 5 : coinsStolen;
                     let experienceGained = (await dbUser.getSkillLevel(SkillType.THIEVING) * 10) + levelDifference;
                     experienceGained = experienceGained < 30 ? 30 : experienceGained;
-                    state.getMessageHandle().channel.send(`Successfully thieved ${coinsStolen} coins from <@!${targetId}>. `
+                    state.getHandle().channel.send(`Successfully thieved ${coinsStolen} coins from <@!${targetId}>. `
                     + `Gained ${experienceGained} experience.`);
                     await dbUser.addSkillExperience(SkillType.THIEVING, experienceGained);
                     await dbUser.addCurrency(CoinType.DOTMA_COIN, coinsStolen);
                     await dbTarget.removeCurrency(CoinType.DOTMA_COIN, coinsStolen);
                 } else {
-                    state.getMessageHandle().channel.send("You failed to pickpocket.");
+                    state.getHandle().channel.send("You failed to pickpocket.");
                 }
                 return true;
             } catch (err) {

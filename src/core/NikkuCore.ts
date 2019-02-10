@@ -1,14 +1,12 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import NikkuException from "exception/NikkuException";
 import EventCore from "core/EventCore";
 import DatabaseCore from "core/DatabaseCore";
 import { Config } from "config/Config";
-import CoreState from "state/CoreState";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
-import CommandManager from "command/CommandManager";
-import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+import CommandManager from "managers/CommandManager";
+import ObjectManager from "managers/ObjectManager";
 
 export default class NikkuCore {
     /**
@@ -26,9 +24,9 @@ export default class NikkuCore {
      */
     private databaseCore: DatabaseCore;
 
-    private state: CoreState;
-
     private commandManager: CommandManager;
+
+    private objectManager: ObjectManager;
 
     private config: typeof Config;
 
@@ -41,7 +39,6 @@ export default class NikkuCore {
         this.logger.debug("Core Started.");
         this.config = config;
         this.client = new Discord.Client();
-        this.state = new CoreState(this);
     }
 
     /**
@@ -57,25 +54,30 @@ export default class NikkuCore {
                 this.logger.error("No command prefixes detected.");
                 process.exit(1);
             }
-            this.initializeComponents();
+            await this.initializeComponents();
             try {
                 await this.databaseCore.connectDb();
-                await this.commandManager.loadCommands(this.config.Command.COMMAND_FULL_PATH,
-                    this.config.Command.COMMAND_SRC, this.config.Command.COMMAND_PATHS);
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
-                this.eventCore.listenMessages();
             } catch (err) {
                 this.logger.warn(`Nikku v${this.config.Info.VERSION} started without an database.`);
-                this.logger.error(err);
+                this.logger.error(err.message);
                 // no db mode.
             }
+            this.eventCore.listenMessages();
         });
     }
 
-    public initializeComponents(): void {
-        this.eventCore = new EventCore(this);
-        this.databaseCore = new DatabaseCore(this);
-        this.commandManager = new CommandManager(this);
+    public async initializeComponents(): Promise<void> {
+        try {
+            this.eventCore = new EventCore(this);
+            this.databaseCore = new DatabaseCore(this);
+            this.commandManager = new CommandManager();
+            this.objectManager = new ObjectManager();
+            await this.commandManager.loadCommands();
+            await this.objectManager.loadItems();
+        } catch (err) {
+            this.logger.error(err.message);
+        }
     }
 
     public setDebugLogChannels(): void {
@@ -100,14 +102,6 @@ export default class NikkuCore {
      */
     public getDbCore(): DatabaseCore {
         return this.databaseCore;
-    }
-
-    public setCoreState(state: CoreState): void {
-        this.state = state;
-    }
-
-    public getCoreState(): CoreState {
-        return this.state;
     }
 
     public getClient(): Discord.Client {

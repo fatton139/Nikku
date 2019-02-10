@@ -8,7 +8,12 @@ import Brad from "entities/Brad";
 
 export default class BradStats extends ExecutableCommand {
     public constructor() {
-        super("bradstats", AccessLevel.UNREGISTERED, 0, "View Brad stats.");
+        super({
+            commandString: "bradstats",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "View Brad stats.",
+        });
     }
 
     private getUserString(state: OnMessageState, users: IdContributionPair[]): string {
@@ -41,10 +46,10 @@ export default class BradStats extends ExecutableCommand {
                     embed.addField(`Top Contributors (All time)`,
                     `${this.getUserString(state, dbBrad.contributorsAllTime)}`);
                 }
-                state.getMessageHandle().channel.send(embed);
+                state.getHandle().channel.send(embed);
                 return true;
             } catch (err) {
-                state.getMessageHandle().reply("Could not retrieve Brad data.");
+                state.getHandle().reply("Could not retrieve Brad data.");
                 this.logger.warn(err);
                 return false;
             }

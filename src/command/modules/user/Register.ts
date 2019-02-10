@@ -6,26 +6,31 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 
 export default class Register extends ExecutableCommand {
     public constructor() {
-        super("register", AccessLevel.UNREGISTERED, 0, "Register yourself.");
+        super({
+            commandString: "register",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Register yourself.",
+        });
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
-            const user = state.getMessageHandle().author;
+            const user = state.getHandle().author;
             try {
                 const doc = await DBUserSchema.getUserById(user.id);
                 if (!doc) {
                     await DBUserSchema.createNewUser(user.id);
-                    state.getMessageHandle().reply(
+                    state.getHandle().reply(
                         "Successfully registered!" +
                         " You now have access to **Level 1** Commands",
                     );
                     return true;
                 } else {
-                    state.getMessageHandle().reply("You are already registered.");
+                    state.getHandle().reply("You are already registered.");
                     return true;
                 }
             } catch (err) {
-                state.getMessageHandle().reply("Failed to register.");
+                state.getHandle().reply("Failed to register.");
                 this.logger.warn(err);
                 return false;
             }

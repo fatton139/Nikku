@@ -1,11 +1,10 @@
-import Command from "./Command";
+import AbstractCommand from "./AbstractCommand";
 import Trigger from "action/Trigger";
-import NikkuCore from "core/NikkuCore";
 import IHasAction from "action/IHasAction";
 import IHasTrigger from "action/IHasTrigger";
 import OnMessageState from "state/OnMessageState";
 
-export default class TriggerableCommand extends Command implements IHasAction, IHasTrigger {
+export default class TriggerableCommand extends AbstractCommand implements IHasAction, IHasTrigger {
 
     protected trigger: Trigger;
 
@@ -16,7 +15,10 @@ export default class TriggerableCommand extends Command implements IHasAction, I
      * @param trigger - The condition required to execute the action.
      */
     public constructor(accessLevel: number) {
-        super(accessLevel, 0);
+        super({
+            accessLevel,
+            argLength: 0,
+        });
         this.trigger = this.setCustomTrigger();
     }
 
