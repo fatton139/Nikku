@@ -24,6 +24,7 @@ Despite its name, the main focus of the bot is to provide a flexible command sys
 - Inventory
 - Items
 - Combat
+- ABT (Alex Bullying Tools)
 
 ## Contributing
 All contributions are welcome. Adhering to tslint style is recommended.
@@ -140,13 +141,13 @@ Next we will setup the constructor.
 
 The constructor super call contains the information required to run the command.
 ```
-super(
-    "sample",                   // The name of the command, we can invoke it with "prefix sample" e.g "!f sample"
-    AccessLevel.UNREGISTERED,   // The access level of the user required to invoke this command.
-    1,                          // The amount of argument required to run this command excluding the prefix and command name.
-    "Sample command for demo.", // The description of this command. Used in the help command.
-    "!f sample \"number\""      // Usage of this command. Will be sent to the user if wrong types or invalid argument length is passed.
-);
+super({
+    commandString: "sample",                 // The name of the command, we can invoke it with "prefix sample" e.g "!f sample"
+    accessLevel: AccessLevel.UNREGISTERED,   // The access level of the user required to invoke this command.
+    argLength: 1,                            // The amount of argument required/expected to run this command excluding the prefix and command name.
+    description: "Sample command for demo.", // The description of this command. Used in the help command.
+    usage: "!f sample [number]",             // Usage of this command. Will be sent to the user if wrong types or invalid argument length is passed.
+});
 ```
 
 Your command file should now look something like this.
