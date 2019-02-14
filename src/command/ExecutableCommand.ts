@@ -2,8 +2,8 @@ import AbstractCommand from "./AbstractCommand";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
 import { CommandConstructorData } from "./CommandConstructorData";
-
-export default class ExecutableCommand extends AbstractCommand implements IHasAction {
+import Action from "action/Action";
+export default abstract class ExecutableCommand extends AbstractCommand implements IHasAction {
     private usage: string;
 
     /**
@@ -17,6 +17,8 @@ export default class ExecutableCommand extends AbstractCommand implements IHasAc
         this.commandString = data.commandString;
         this.usage = data.usage;
     }
+
+    public abstract setCustomAction(): Action;
 
     public getUsage(): string {
         return this.usage;
