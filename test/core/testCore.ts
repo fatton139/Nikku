@@ -4,6 +4,8 @@ import { expect } from "chai";
 import NikkuCore from "core/NikkuCore";
 import { Config } from "config/Config";
 import ChannelTransport from "log/ChannelTransport";
+import ObjectManager from "managers/ObjectManager";
+import CommandManager from "managers/CommandManager";
 
 describe("Nikku Core", () => {
     let core: NikkuCore;
@@ -21,7 +23,8 @@ describe("Nikku Core", () => {
         core.initializeComponents();
         expect(core.getEventCore()).to.be.not.equal(undefined);
         expect(core.getDbCore()).to.be.not.equal(undefined);
-        expect(core.getCommandManager()).to.be.not.equal(undefined);
+        expect(core.getManager(ObjectManager)).to.be.not.equal(undefined);
+        expect(core.getManager(CommandManager)).to.be.not.equal(undefined);
     });
 
     it("Sets debug logging channels correctly", () => {

@@ -3,6 +3,7 @@ import { AccessLevel } from "user/AccessLevel";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 import { core } from "core/NikkuCore";
+import CommandManager from "managers/CommandManager";
 
 export default class Help extends ExecutableCommand {
     public constructor() {
@@ -15,8 +16,9 @@ export default class Help extends ExecutableCommand {
     }
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState) => {
-            let text = `\`\`\`Available prefixes: ${core.getCommandManager().getPrefixManager().getPrefixes()}\n\n`;
-            const commands = Array.from(core.getCommandManager().getCommandRegistry().getRegistryMap().values()).sort((a, b) => {
+            const commandManager = core.getManager(CommandManager);
+            let text = `\`\`\`Available prefixes: ${commandManager.getPrefixManager().getPrefixes()}\n\n`;
+            const commands = Array.from(commandManager.getCommandRegistry().getRegistryMap().values()).sort((a, b) => {
                 if (!a.getCommandString() || !b.getCommandString() || a.getCommandString() === b.getCommandString()) {
                     return 0;
                 }

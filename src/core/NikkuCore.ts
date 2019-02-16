@@ -7,6 +7,7 @@ import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "managers/CommandManager";
 import ObjectManager from "managers/ObjectManager";
+import AbstractManager from "managers/AbstractManager";
 
 export default class NikkuCore {
     /**
@@ -24,14 +25,11 @@ export default class NikkuCore {
      */
     private databaseCore: DatabaseCore;
 
-    private commandManager: CommandManager;
-
-    private objectManager: ObjectManager;
-
     private config: typeof Config;
 
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
+    private managers: Map<string, AbstractManager>;
     /**
      * @classdesc The main class of the bot. Initializes most of the main methods.
      */
@@ -39,6 +37,7 @@ export default class NikkuCore {
         this.logger.debug("Core Started.");
         this.config = config;
         this.client = new Discord.Client();
+        this.managers = new Map<string, AbstractManager>();
     }
 
     /**
@@ -54,8 +53,9 @@ export default class NikkuCore {
                 this.logger.error("No command prefixes detected.");
                 process.exit(1);
             }
-            await this.initializeComponents();
             try {
+                await this.initializeComponents();
+                await this.loadModules();
                 await this.databaseCore.connectDb();
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
             } catch (err) {
@@ -71,10 +71,17 @@ export default class NikkuCore {
         try {
             this.eventCore = new EventCore(this);
             this.databaseCore = new DatabaseCore(this);
-            this.commandManager = new CommandManager();
-            this.objectManager = new ObjectManager();
-            await this.commandManager.loadCommands();
-            await this.objectManager.loadItems();
+        } catch (err) {
+            this.logger.error(err.message);
+        }
+    }
+
+    public async loadModules(): Promise<void> {
+        try {
+            Promise.all([
+                this.getManager(CommandManager).loadCommands(),
+                this.getManager(ObjectManager).loadItems(),
+            ]);
         } catch (err) {
             this.logger.error(err.message);
         }
@@ -108,10 +115,6 @@ export default class NikkuCore {
         return this.client;
     }
 
-    public getCommandManager(): CommandManager {
-        return this.commandManager;
-    }
-
     public getConfig(): typeof Config {
         return this.config;
     }
@@ -120,6 +123,12 @@ export default class NikkuCore {
         this.client.user.setActivity(str);
     }
 
+    public getManager<T extends AbstractManager>(Cls: (new () => T)): T {
+        if (!this.managers.has(Cls.name)) {
+            this.managers.set(Cls.name, new Cls());
+        }
+        return this.managers.get(Cls.name) as T;
+    }
 }
 
 /* Core Singleton */
