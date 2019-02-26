@@ -1,9 +1,11 @@
 # Mr Fortnite (Nikku 2)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/q77lx59u0k6sf34q?svg=true)](https://ci.appveyor.com/project/aXises/nikkubot)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e12d96ca6dfd4a80a4063eb97cd24837)](https://app.codacy.com/app/aXises/fortniteBot?utm_source=github.com&utm_medium=referral&utm_content=aXises/fortniteBot&utm_campaign=badger)
-![CodeFactor](https://www.codefactor.io/repository/github/axises/fortnitebot/badge)
+[![CodeFactor](https://www.codefactor.io/repository/github/axises/nikkubot/badge)](https://www.codefactor.io/repository/github/axises/nikkubot)
 [![Maintainability](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/maintainability)](https://codeclimate.com/github/aXises/fortniteBot/maintainability) [![codecov](https://codecov.io/gh/aXises/fortniteBot/branch/master/graph/badge.svg)](https://codecov.io/gh/aXises/fortniteBot)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/test_coverage)](https://codeclimate.com/github/aXises/fortniteBot/test_coverage)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Mr Fortnite is an bot built upon the new Nikku 2 Core. Originally the main focus of the bot was to ping a group of (opt-in) users whenever "Fortnite" is mentioned.
 
@@ -33,9 +35,16 @@ All contributions are welcome. Adhering to tslint style is recommended.
 
 Want to try out Mr Fortnite? Invite it from **[right here](https://discordapp.com/api/oauth2/authorize?client_id=455679698610159616&permissions=0&scope=bot)**. This bot is still in development so commands may fail. Please submit a issue with the problem and the command which caused it.
 
+## Roadmap
+
+The development roadmap of this bot. There are lots to be done, feel free to contribute to any or suggest new ideas.
+
+![Roadmap](https://i.imgur.com/h6DBxOD.png )
+
+
 ## Development
 
-Want to contribute or create your own build? Follow the following steps!
+Want to contribute or create your own build? The following sections will provide a general overview to setting up your bot and creating a command for the bot.
 
 ### Requirements
 - Node 10 or higher.
