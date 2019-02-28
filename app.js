@@ -141,7 +141,6 @@ bot.on('message', (message) => {
         }
         else if (command == "auto") {
             message.channel.send("Deprecated command, did you mean `!f auto?`");
-            return;
             let time = args[3];
             if (!args[3] || args[3] < 1000) {
                 message.reply("pls no").then((message) => {
@@ -163,12 +162,10 @@ bot.on('message', (message) => {
         }
         else if (command == "stop") {
             message.channel.send("Deprecated command, did you mean `!f stop`?");
-            return;
             loop.stopLoop();
         }
         else if (command == "target") {
             message.channel.send("Deprecated command, did you mean `!f target`?");
-            return;
             if (targets)
                 targets = args.splice(2);
                 message.channel.send("New targets set, don't be mad " +
