@@ -35,7 +35,7 @@ export default class FeedBrad extends ExecutableCommand {
     private async awardUsers(state: OnMessageState, users: IdContributionPair[], DbBrad: DBBradPropertySchema): Promise<void> {
         const channel = state.getHandle().channel;
         const client = state.getCore().getClient();
-        const embed = new Discord.MessageEmbed();
+        const embed = new Discord.RichEmbed();
         embed.setTitle("Brad is pleased.");
         embed.setColor(0x00FFF0);
         let awardIndex = 0;

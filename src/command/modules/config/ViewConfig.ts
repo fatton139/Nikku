@@ -20,7 +20,7 @@ export default class ViewConfig extends ExecutableCommand {
             try {
                 const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
                 const configs = await guild.getAllBooleanConfig();
-                const embed = new Discord.MessageEmbed();
+                const embed = new Discord.RichEmbed();
                 embed.setTitle("Bot Configurations.");
                 embed.setDescription("Current Bot Configurations. Edit with the **setConfig** command.");
                 embed.setColor(0xE600AC);
