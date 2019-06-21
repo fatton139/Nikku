@@ -14,7 +14,8 @@
     "start:hot": "nodemon -e ts --exec npm run start:dev",
     "test": "npm run tsc && cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
     "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "tscw": "tsc -w"
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",
