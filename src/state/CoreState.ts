@@ -1,14 +1,11 @@
 import NikkuCore from "core/NikkuCore";
 import { ICoreState } from "./ICoreState";
-import * as Discord from "discord.js";
-import DatabaseCore from "core/DatabaseCore";
-import CommandManager from "managers/CommandManager";
 
 export default class CoreState<T> implements ICoreState<T> {
     /**
      * Hander for the state.
      */
-    protected handle?: T;
+    protected handle: T;
 
     protected core: NikkuCore;
 
@@ -16,8 +13,9 @@ export default class CoreState<T> implements ICoreState<T> {
      * @classdesc Base state for the bot.
      * @param handle - Handler for the state.
      */
-    constructor(core: NikkuCore) {
+    constructor(core: NikkuCore, handle: T) {
         this.core = core;
+        this.handle = handle;
     }
 
     /**

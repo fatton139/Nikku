@@ -1,17 +1,16 @@
 import { config as dotenvConfig } from "dotenv";
 import * as fs from "fs";
-import * as path from "path";
 
 export namespace Config {
     dotenvConfig();
     const pjson = JSON.parse(fs.readFileSync("package.json", "utf8"));
     export namespace Discord {
-        export const TOKEN: string = process.env.DISCORD_TOKEN;
-        export const DEBUG_CHANNELS: string[] = process.env.DEBUG_CHANNELS ?
+        export const TOKEN: string | undefined = process.env.DISCORD_TOKEN;
+        export const DEBUG_CHANNELS: string[] | undefined = process.env.DEBUG_CHANNELS ?
             process.env.DEBUG_CHANNELS.replace(/\s/g, "").split(",") : undefined;
     }
     export namespace Database {
-        export const URL: string = process.env.DATABASE_URL;
+        export const URI: string | undefined = process.env.DATABASE_URI;
     }
     export namespace Command {
         export const BOT_RESPONSE_TRIGGER = "Mr Fortnite";
@@ -37,9 +36,9 @@ export namespace Config {
         ];
     }
     export namespace Service {
-        export const CHATBOT_USER_ID: string = process.env.CHATBOT_USER_ID;
-        export const CHATBOT_API_KEY: string = process.env.CHATBOT_API_KEY;
-        export const CHATBOT_SESSION: string = process.env.CHATBOT_SESSION;
+        export const CHATBOT_USER_ID: string | undefined = process.env.CHATBOT_USER_ID;
+        export const CHATBOT_API_KEY: string | undefined = process.env.CHATBOT_API_KEY;
+        export const CHATBOT_SESSION: string | undefined = process.env.CHATBOT_SESSION;
     }
     export namespace Info {
         export const GITHUB = pjson.repository;
@@ -47,7 +46,7 @@ export namespace Config {
         export const VERSION = pjson.version;
     }
     export namespace DefaultUser {
-        export const IDS: string[] = process.env.DEV_IDS ?
+        export const IDS: string[] | undefined = process.env.DEV_IDS ?
             process.env.DEV_IDS.replace(/\s/g, "").split(",") : undefined;
     }
     export namespace Brad {

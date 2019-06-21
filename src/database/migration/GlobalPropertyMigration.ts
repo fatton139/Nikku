@@ -1,5 +1,4 @@
 import * as winston from "winston";
-import * as Mongoose from "mongoose";
 import Logger from "log/Logger";
 import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
 

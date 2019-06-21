@@ -27,6 +27,6 @@ export default class TriggerableCommand extends AbstractCommand implements IHasA
     }
 
     public setCustomTrigger(): Trigger {
-        return;
+        return this.trigger;
     }
 }

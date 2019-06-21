@@ -1,4 +1,4 @@
-import { core } from "core/NikkuCore";
+import { core } from "core";
 
 /** Entry point */
 core.start();

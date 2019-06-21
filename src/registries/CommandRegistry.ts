@@ -8,7 +8,7 @@ export default class CommandRegistry extends BaseRegistry<AbstractCommand> {
     }
 
     public addCommand(command: AbstractCommand): boolean {
-        const name: string = command.getCommandString();
+        const name: string | undefined = command.getCommandString();
         if (command instanceof TriggerableCommand) {
             if (this.registry.has(command.constructor.name)) {
                 this.logger.warn(`Duplicate command "${command.constructor.name}".`);
@@ -42,15 +42,15 @@ export default class CommandRegistry extends BaseRegistry<AbstractCommand> {
         return true;
     }
 
-    private getAutoCommandAmount(): number {
-        let amount = 0;
-        for (const command of this.registry.values()) {
-            if (command instanceof TriggerableCommand) {
-                amount++;
-            }
-        }
-        return amount;
-    }
+    // private getAutoCommandAmount(): number {
+    //     let amount = 0;
+    //     for (const command of this.registry.values()) {
+    //         if (command instanceof TriggerableCommand) {
+    //             amount++;
+    //         }
+    //     }
+    //     return amount;
+    // }
 
     public removeCommand(name: string): boolean {
         if (!this.registry.has(name)) {
@@ -60,19 +60,22 @@ export default class CommandRegistry extends BaseRegistry<AbstractCommand> {
         return false;
     }
 
-    public disableCommand(name: string): boolean {
-        if (!this.registry.has(name)) {
-            this.registry.get(name).setEnabled(false);
+    public setCommandEnabled(commandName: string, status: boolean): boolean {
+        if (!this.registry.has(commandName)) {
+            const command = this.registry.get(commandName);
+            if (command) {
+                command.setEnabled(status);
+            }
             return true;
         }
         return false;
     }
 
-    public enableCommand(name: string): boolean {
-        if (!this.registry.has(name)) {
-            this.registry.get(name).setEnabled(true);
-            return true;
-        }
-        return false;
+    public disableCommand(commandName: string): boolean {
+        return this.setCommandEnabled(commandName, false);
+    }
+
+    public enableCommand(commandName: string): boolean {
+        return this.setCommandEnabled(commandName, true);
     }
 }

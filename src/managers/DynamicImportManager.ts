@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 export default class DynamicImportManager extends AbstractManager {
 
-    protected readonly FULL_PATH: string;
+    protected readonly FULL_PATH?: string;
 
     protected readonly DIR_PATH: string;
 
@@ -12,7 +12,7 @@ export default class DynamicImportManager extends AbstractManager {
 
     public constructor(dirPath: string, modulePaths: string[]) {
         super();
-        this.FULL_PATH = `${path.dirname(require.main.filename)}/src/${dirPath}`;
+        this.FULL_PATH = require.main ? `${path.dirname(require.main.filename)}/src/${dirPath}` : undefined;
         this.DIR_PATH = dirPath;
         this.MODULE_PATHS = modulePaths;
     }

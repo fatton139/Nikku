@@ -1,6 +1,6 @@
 import * as winston from "winston";
 import Logger from "log/Logger";
-import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
+import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import * as Mongoose from "mongoose";
 import { GuildConfig } from "config/GuildBooleanConfig";
 import { isUndefined } from "util";
@@ -10,10 +10,10 @@ export default class DBGuildPropertySchema extends Typegoose {
     private static readonly logger: winston.Logger = new Logger(DBGuildPropertySchema.constructor.name).getLogger();
 
     @prop({required: true, unique: true})
-    public id: string;
+    public id?: string;
 
     @arrayProp({default: [], items: String})
-    public targets: string[];
+    public targets?: string[];
 
     @prop({default: {}})
     public booleanConfig: any;
@@ -107,8 +107,9 @@ export default class DBGuildPropertySchema extends Typegoose {
         }
     }
 
-    public static async getGuildById(id: string): Promise<DBGuildPropertySchema> {
-        return await (this.getModel().findOne({id}));
+    public static async getGuildById(id: string): Promise<DBGuildPropertySchema | undefined> {
+        const guild = await (this.getModel().findOne({id}));
+        return guild ? guild : undefined;
     }
 
     public static async getAllGuild(): Promise<DBGuildPropertySchema[]> {

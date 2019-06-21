@@ -14,7 +14,7 @@ export default abstract class AbstractCommand implements IHasAction {
     /**
      * The string required to execute this command.
      */
-    protected commandString: string;
+    protected commandString?: string;
 
     /**
      * The required access level to execute this command.
@@ -35,7 +35,7 @@ export default abstract class AbstractCommand implements IHasAction {
 
     private isEnabled: boolean;
 
-    private description: string;
+    private description?: string;
 
     /**
      * @classdesc Base command class for the bot.
@@ -47,6 +47,8 @@ export default abstract class AbstractCommand implements IHasAction {
         this.action = this.setCustomAction();
         this.accessLevel = data.accessLevel;
         this.argLength = data.argLength;
+        this.isEnabled = true;
+        this.args = [];
         this.description = data.description;
     }
 
@@ -58,7 +60,7 @@ export default abstract class AbstractCommand implements IHasAction {
         this.args = args ? args : [];
     }
 
-    public getCommandString(): string {
+    public getCommandString(): string | undefined {
         return this.commandString;
     }
 
@@ -67,8 +69,10 @@ export default abstract class AbstractCommand implements IHasAction {
      * @param user - The user attempting to execute this command.
      */
     public async executeAction(msg: OnMessageState, user?: DBUserSchema): Promise<void> {
-        if (user.accessLevel < this.accessLevel) {
-            throw new UnauthorizedCommandException(msg, this, user);
+        if (user && user.accessLevel) {
+            if (user.accessLevel < this.accessLevel) {
+                throw new UnauthorizedCommandException(msg, this, user);
+            }
         }
         try {
             const status = await this.action.execute(msg, this.args);
@@ -89,8 +93,10 @@ export default abstract class AbstractCommand implements IHasAction {
     }
 
     public async executeActionNoWarning(msg: OnMessageState, user?: DBUserSchema): Promise<void> {
-        if (user.accessLevel >= this.accessLevel) {
-            await this.action.execute(msg, this.args);
+        if (user && user.accessLevel) {
+            if (user.accessLevel >= this.accessLevel) {
+                await this.action.execute(msg, this.args);
+            }
         }
     }
 
@@ -114,11 +120,11 @@ export default abstract class AbstractCommand implements IHasAction {
         return this.accessLevel;
     }
 
-    public getDescription(): string {
+    public getDescription(): string | undefined {
         return this.description;
     }
 
     public setCustomAction(): Action {
-        return;
+        return this.action;
     }
 }

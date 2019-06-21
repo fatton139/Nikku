@@ -4,7 +4,7 @@ import OnMessageState from "state/OnMessageState";
 import { CommandConstructorData } from "./CommandConstructorData";
 import Action from "action/Action";
 export default abstract class ExecutableCommand extends AbstractCommand implements IHasAction {
-    private usage: string;
+    private usage?: string;
 
     /**
      * @classdesc Commands which must be executed by a user to run.
@@ -20,7 +20,7 @@ export default abstract class ExecutableCommand extends AbstractCommand implemen
 
     public abstract setCustomAction(): Action;
 
-    public getUsage(): string {
+    public getUsage(): string | undefined {
         return this.usage;
     }
 

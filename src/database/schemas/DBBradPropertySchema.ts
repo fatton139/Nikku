@@ -1,5 +1,5 @@
 import * as Mongoose from "mongoose";
-import { prop, Typegoose, ModelType, InstanceType, instanceMethod, staticMethod, arrayProp } from "typegoose";
+import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import Brad from "entities/Brad";
 import { Config } from "config/Config";
 import { core } from "core/NikkuCore";
@@ -15,16 +15,16 @@ export class IdContributionPair {
 
 export default class DBBradPropertySchema extends Typegoose {
     @prop({required: true, default: Config.Brad.DEFAULT_WEIGHT})
-    public weight: number;
+    public weight?: number;
 
     @prop({required: true, default: Config.Brad.DEFAULT_WEIGHT + 1})
-    public weightGoal: number;
+    public weightGoal?: number;
 
     @arrayProp({default: [], items: IdContributionPair})
-    public contributors: IdContributionPair[];
+    public contributors?: IdContributionPair[];
 
     @arrayProp({default: [], items: IdContributionPair})
-    public contributorsAllTime: IdContributionPair[];
+    public contributorsAllTime?: IdContributionPair[];
 
     @instanceMethod
     public async incrementWeight(this: InstanceType<any> & Mongoose.Document, id: string, amount: number): Promise<void> {
@@ -72,8 +72,9 @@ export default class DBBradPropertySchema extends Typegoose {
          }
      }
 
-     public static async getBrad(): Promise<DBBradPropertySchema> {
-         return await (this.getModel().findOne({}));
+     public static async getBrad(): Promise<DBBradPropertySchema | undefined> {
+         const brad = await this.getModel().findOne({});
+         return brad ? brad : undefined;
      }
 
      public static getModel(): Mongoose.Model<InstanceType<DBBradPropertySchema>> & DBBradPropertySchema & typeof DBBradPropertySchema {

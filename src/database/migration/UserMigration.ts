@@ -25,9 +25,12 @@ export namespace UserMigration {
                     throw err;
                 }
             } else {
-                if (user.accessLevel < AccessLevel.DEVELOPER) {
-                    user.setAccessLevel(AccessLevel.DEVELOPER);
+                if (user.accessLevel) {
+                    if (user.accessLevel < AccessLevel.DEVELOPER) {
+                        user.setAccessLevel(AccessLevel.DEVELOPER);
+                    }
                 }
+
             }
         }
     };

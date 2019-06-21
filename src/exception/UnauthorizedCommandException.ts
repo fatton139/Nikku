@@ -14,10 +14,12 @@ export default class UnauthorizedCommandException extends NikkuException {
     constructor(state: CoreState<Discord.Message>, command: Command, user: DBUserSchema) {
         const message = `Unauthorized execution of "${command.getCommandString()}"`;
         super(message);
-        state.getHandle().reply(
-            "You do not have the required access level to this command.\n" +
-            `Your access level: **${user.accessLevel}** (${AccessLevel[user.accessLevel]})\n` +
-            `Command access level: **${command.getAccessLevel()}** (${AccessLevel[command.getAccessLevel()]})\n`,
-        );
+        if (user && user.accessLevel) {
+            state.getHandle().reply(
+                "You do not have the required access level to this command.\n" +
+                `Your access level: **${user.accessLevel}** (${AccessLevel[user.accessLevel]})\n` +
+                `Command access level: **${command.getAccessLevel()}** (${AccessLevel[command.getAccessLevel()]})\n`,
+            );
+        }
     }
 }

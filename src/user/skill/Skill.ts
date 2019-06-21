@@ -1,17 +1,15 @@
-import SkillType from "./SkillType";
-
 export default class Skill {
 
-    private skillType: SkillType;
+    // private skillType: SkillType;
 
-    private currentExperience: number;
+    // private currentExperience: number;
 
-    private currentLevel: number;
+    // private currentLevel: number;
 
-    public constructor(type: SkillType, startingExperience = 0, startingLevel = 1) {
-        this.skillType = type;
-        this.currentExperience = startingExperience;
-        this.currentLevel = startingLevel;
+    public constructor() {
+        // this.skillType = type;
+        // this.currentExperience = startingExperience;
+        // this.currentLevel = startingLevel;
     }
 
     public static getExperienceAtLevel(level: number): number {

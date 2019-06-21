@@ -1,5 +1,4 @@
 import "mocha";
-import * as Discord from "discord.js";
 import { expect } from "chai";
 import NikkuCore from "core/NikkuCore";
 import { Config } from "config/Config";
@@ -20,7 +19,7 @@ describe("Nikku Core", () => {
     });
 
     it("Initializes components correctly", () => {
-        core.initializeComponents();
+        // core.initializeComponents();
         expect(core.getEventCore()).to.be.not.equal(undefined);
         expect(core.getDbCore()).to.be.not.equal(undefined);
         expect(core.getManager(ObjectManager)).to.be.not.equal(undefined);

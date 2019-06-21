@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
@@ -32,10 +33,12 @@ export default class ChatBotService {
         }
         try {
             const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
-            const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
-            await m.channel.send(`${await this.getResponse(str)}`, {
-                tts: isUndefined(ttsEnabled) ? false : ttsEnabled,
-            });
+            if (guild) {
+                const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
+                await m.channel.send(`${await this.getResponse(str)}`, {
+                    tts: isUndefined(ttsEnabled) ? false : ttsEnabled,
+                });
+            }
             return true;
         } catch (err) {
             throw err;
@@ -44,11 +47,11 @@ export default class ChatBotService {
 
     public getResponse(message: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            this.bot.create((errA) => {
+            this.bot.create((errA: unknown) => {
                 if (errA) {
                     return reject(errA);
                 }
-                this.bot.ask(message, (errB, res) => {
+                this.bot.ask(message, (errB: unknown, res: string) => {
                     if (errB) {
                         return reject(errB);
                     }

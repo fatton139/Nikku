@@ -38,6 +38,8 @@ export default class NikkuCore {
         this.config = config;
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
+        this.eventCore = new EventCore(this);
+        this.databaseCore = new DatabaseCore(this);
     }
 
     /**
@@ -54,7 +56,6 @@ export default class NikkuCore {
                 process.exit(1);
             }
             try {
-                await this.initializeComponents();
                 await this.loadModules();
                 await this.databaseCore.connectDb();
                 this.logger.info(`Nikku v${this.config.Info.VERSION} started.`);
@@ -65,15 +66,6 @@ export default class NikkuCore {
             }
             this.eventCore.listenMessages();
         });
-    }
-
-    public async initializeComponents(): Promise<void> {
-        try {
-            this.eventCore = new EventCore(this);
-            this.databaseCore = new DatabaseCore(this);
-        } catch (err) {
-            this.logger.error(err.message);
-        }
     }
 
     public async loadModules(): Promise<void> {

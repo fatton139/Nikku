@@ -1,7 +1,6 @@
 import * as MongoDb from "mongodb";
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
-import * as Discord from "discord.js";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
 import Logger from "log/Logger";
@@ -16,14 +15,14 @@ import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 export default class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
-    private readonly URL: string;
+    private readonly URI?: string;
 
     /**
      * Database connection.
      */
     private static connection: Mongoose.Connection;
 
-    private defaultUsers: string[];
+    private defaultUsers: string[] | undefined;
 
     private core: NikkuCore;
 
@@ -32,7 +31,7 @@ export default class DatabaseCore {
      * @classdesc Class for handling important database methods.
      */
     public constructor(core: NikkuCore) {
-        this.URL = core.getConfig().Database.URL;
+        this.URI = core.getConfig().Database.URI;
         this.defaultUsers = core.getConfig().DefaultUser.IDS;
         this.core = core;
         this.ready = false;
@@ -52,7 +51,9 @@ export default class DatabaseCore {
      */
     public async connectDb(): Promise<{}> {
         return new Promise((resolve, reject) => {
-            Mongoose.connect(this.URL, { useNewUrlParser: true });
+            if (this.URI) {
+                Mongoose.connect(this.URI, { useNewUrlParser: true });
+            }
             DatabaseCore.setConnection(Mongoose.connection);
             const connection = DatabaseCore.getConnection();
             connection.on("error", (err) => {
@@ -64,7 +65,11 @@ export default class DatabaseCore {
                 this.ready = true;
                 this.logger.info("Database connected successfully.");
                 const doc = await DBBradPropertySchema.getBrad();
-                this.core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
+                if (doc && doc.weight) {
+                    this.core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
+                } else {
+                    this.core.setActivity(`Brad's Weight: unknown`);
+                }
                 resolve();
             });
         });
@@ -76,9 +81,11 @@ export default class DatabaseCore {
         }
         const userModel = DBUserSchema.getModel();
         const doc: Mongoose.Document[] = await userModel.find({accessLevel: AccessLevel.DEVELOPER});
-        if (doc.length !== this.defaultUsers.length) {
-            this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
-            await UserMigration.createModels(this.defaultUsers);
+        if (this.defaultUsers) {
+            if (doc.length !== this.defaultUsers.length) {
+                this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
+                await UserMigration.createModels(this.defaultUsers);
+            }
         }
     }
 

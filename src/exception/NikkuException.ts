@@ -1,5 +1,3 @@
-import CoreState from "state/CoreState";
-
 export default class NikkuException extends Error {
     public message: string;
 

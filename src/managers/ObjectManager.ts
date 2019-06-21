@@ -29,7 +29,7 @@ export default class ObjectManager extends DynamicImportManager {
                 `out of ${importPaths.length} ${importPaths.length === 1 ? "item" : "items"}.`);
     }
 
-    public async useItem(itemName: string, target: string): Promise<void> {
-        //
-    }
+    // public async useItem(itemName: string, target: string): Promise<void> {
+    //     //
+    // }
 }
