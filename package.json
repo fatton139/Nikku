@@ -15,7 +15,8 @@
     "test": "npm run tsc && cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
     "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js",
     "tsc": "tsc",
-    "tscw": "tsc -w"
+    "tsc:build": "tsc --build",
+    "tsc:watch": "tsc --build --watch"
   },
   "repository": "git+https://github.com/aXises/fortniteBot",
   "author": "aXises",
@@ -41,7 +42,7 @@
     "ts-mocha": "^2.0.0",
     "ts-node": "^8.0.2",
     "typegoose": "^5.6.0",
-    "typescript": "^3.3.3",
+    "typescript": "^3.5.2",
     "winston": "^3.1.0"
   },
   "devDependencies": {
