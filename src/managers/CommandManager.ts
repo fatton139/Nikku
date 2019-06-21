@@ -55,7 +55,7 @@ export default class CommandManager extends DynamicImportManager {
                 if (!commandString) {
                     return;
                 }
-                const command: Command = this.commandRegistry.getElementByKey(commandString);
+                const command: Command | undefined = this.commandRegistry.getElementByKey(commandString);
                 if (command) {
                     this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id, msg).catch((err) => {
                         this.logger.verbose(
@@ -82,10 +82,12 @@ export default class CommandManager extends DynamicImportManager {
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
-        if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
-                && user.accessLevel !== AccessLevel.DEVELOPER) {
-            await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-            msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
+        if (user && user.accessLevel) {
+            if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
+                    && user.accessLevel !== AccessLevel.DEVELOPER) {
+                await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+                msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
+            }
         }
         if (user) {
             this.logger.info(`Executing command "${command.getCommandString()}".`);
@@ -131,7 +133,7 @@ export default class CommandManager extends DynamicImportManager {
      * @param id - The discord id of the user invoking the command.
      */
     public async triggerAction(userId: string, msg: OnMessageState): Promise<void> {
-        for (const pair of this.commandRegistry.getRegistryMap().entries()) {
+        for (const pair of this.commandRegistry.getRegistry().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1] as TriggerableCommand;
                 if (await command.tryTrigger(msg)) {

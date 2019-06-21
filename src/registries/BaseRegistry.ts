@@ -12,15 +12,19 @@ export default class BaseRegistry<T> {
         this.registry = new Map<string, T>();
     }
 
+    protected getLogger(): winston.Logger {
+        return this.logger;
+    }
+
+    public getRegistry(): Map<string, T> {
+        return this.registry;
+    }
+
     public keyExists(name: string): boolean {
         return this.registry.has(name);
     }
 
-    public getRegistryMap(): Map<string, T> {
-        return this.registry;
-    }
-
-    public getElementByKey(name: string): T {
+    public getElementByKey(name: string): T | undefined {
         return this.registry.get(name);
     }
 
