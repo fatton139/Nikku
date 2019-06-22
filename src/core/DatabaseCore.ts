@@ -8,11 +8,11 @@ import { UserMigration } from "database/migration/UserMigration";
 import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
 import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
-import NikkuCore from "./NikkuCore";
+import { NikkuCore } from "core";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 
-export default class DatabaseCore {
+export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     private readonly URI?: string;
@@ -80,7 +80,7 @@ export default class DatabaseCore {
             return;
         }
         const userModel = DBUserSchema.getModel();
-        const doc: Mongoose.Document[] = await userModel.find({accessLevel: AccessLevel.DEVELOPER});
+        const doc: Mongoose.Document[] = await userModel.find({ accessLevel: AccessLevel.DEVELOPER });
         if (this.defaultUsers) {
             if (doc.length !== this.defaultUsers.length) {
                 this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
