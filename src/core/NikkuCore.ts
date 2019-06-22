@@ -1,15 +1,15 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import EventCore from "core/EventCore";
-import DatabaseCore from "core/DatabaseCore";
+import { EventCore, DatabaseCore } from "core";
 import { Config } from "config/Config";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "managers/CommandManager";
 import ObjectManager from "managers/ObjectManager";
 import AbstractManager from "managers/AbstractManager";
+import { EventType } from "event"
 
-export default class NikkuCore {
+export class NikkuCore {
     /**
      * Discord.js API
      */
@@ -34,7 +34,7 @@ export default class NikkuCore {
      * @classdesc The main class of the bot. Initializes most of the main methods.
      */
     public constructor(config: typeof Config) {
-        this.logger.debug("Core Started.");
+        this.logger.debug("Core initialized");
         this.config = config;
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
@@ -47,7 +47,7 @@ export default class NikkuCore {
      */
     public async start(): Promise<void> {
         this.client.login(this.config.Discord.TOKEN);
-        this.client.on("ready", async () => {
+        this.client.on(EventType.READY, async () => {
             if (this.config.Discord.DEBUG_CHANNELS) {
                 this.setDebugLogChannels();
             }
