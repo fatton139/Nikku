@@ -7,7 +7,7 @@
   },
   "main": "main.js",
   "scripts": {
-    "start": "npm run tsc && npm run start:raw",
+    "start": "npm run tsc:build && npm run start:raw",
     "start:clean": "npm run clean && npm run start",
     "start:raw": "cross-env NODE_ENV=PRODUCTION NODE_PATH=./src node main.js",
     "start:dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src ts-node main",
