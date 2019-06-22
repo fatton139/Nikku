@@ -1,4 +1,4 @@
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 
 export default class Brad {
     public static dotmaCoinsToKg(amount: number): number {

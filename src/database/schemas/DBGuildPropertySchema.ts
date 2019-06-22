@@ -2,20 +2,20 @@ import * as winston from "winston";
 import Logger from "log/Logger";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import * as Mongoose from "mongoose";
-import { GuildConfig } from "config/GuildBooleanConfig";
+import { GuildConfig } from "config/GuildConfig";
 import { isUndefined } from "util";
 import NikkuException from "exception/NikkuException";
 
 export default class DBGuildPropertySchema extends Typegoose {
     private static readonly logger: winston.Logger = new Logger(DBGuildPropertySchema.constructor.name).getLogger();
 
-    @prop({required: true, unique: true})
+    @prop({ required: true, unique: true })
     public id?: string;
 
-    @arrayProp({default: [], items: String})
+    @arrayProp({ default: [], items: String })
     public targets?: string[];
 
-    @prop({default: {}})
+    @prop({ default: {} })
     public booleanConfig: any;
 
     @instanceMethod
@@ -79,7 +79,7 @@ export default class DBGuildPropertySchema extends Typegoose {
 
     @instanceMethod
     public async getBooleanConfig(this: InstanceType<any> & Mongoose.Document,
-            configName: GuildConfig.BooleanConfig.Options): Promise<boolean> {
+        configName: GuildConfig.BooleanConfig.Options): Promise<boolean> {
         const enumOptions = GuildConfig.BooleanConfig.Options;
         try {
             if (isUndefined(this.booleanConfig[enumOptions[configName]])) {
@@ -108,7 +108,7 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     public static async getGuildById(id: string): Promise<DBGuildPropertySchema | undefined> {
-        const guild = await (this.getModel().findOne({id}));
+        const guild = await (this.getModel().findOne({ id }));
         return guild ? guild : undefined;
     }
 

@@ -1,6 +1,6 @@
 import ObjectRegistry from "registries/ObjectRegistry";
 import DynamicImportManager from "./DynamicImportManager";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 import BaseObject from "objects/AbstractBaseObject";
 
 export default class ObjectManager extends DynamicImportManager {
@@ -14,7 +14,7 @@ export default class ObjectManager extends DynamicImportManager {
     public async loadItems(): Promise<void> {
         const importPaths: string[] = this.getImportPaths();
         this.logger.info(`Detected ${importPaths.length}` +
-                ` ${importPaths.length === 1 ? "item" : "items"} for import.`);
+            ` ${importPaths.length === 1 ? "item" : "items"} for import.`);
         for (const path of importPaths) {
             const baseObjectClass = await import(`${this.DIR_PATH}/${path}`);
             if (!baseObjectClass.default) {
@@ -26,7 +26,7 @@ export default class ObjectManager extends DynamicImportManager {
             }
         }
         this.logger.info(`Successfully imported ${this.objectRegistry.getRegistrySize()} ` +
-                `out of ${importPaths.length} ${importPaths.length === 1 ? "item" : "items"}.`);
+            `out of ${importPaths.length} ${importPaths.length === 1 ? "item" : "items"}.`);
     }
 
     // public async useItem(itemName: string, target: string): Promise<void> {

@@ -1,7 +1,7 @@
 import "mocha";
 import { expect } from "chai";
 import NikkuCore from "core/NikkuCore";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 import ChannelTransport from "log/ChannelTransport";
 import ObjectManager from "managers/ObjectManager";
 import CommandManager from "managers/CommandManager";

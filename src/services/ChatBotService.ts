@@ -2,12 +2,12 @@
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 import Logger from "log/Logger";
 import OnMessageState from "state/OnMessageState";
 import StringFunc from "utils/StringFunc";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
-import { GuildConfig } from "config/GuildBooleanConfig";
+import { GuildConfig } from "config/GuildConfig";
 import { isUndefined } from "util";
 
 export default class ChatBotService {
@@ -17,7 +17,7 @@ export default class ChatBotService {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor(config: typeof Config) {
-        if (!config.Service.CHATBOT_API_KEY || !config.Service.CHATBOT_USER_ID || ! config.Service.CHATBOT_SESSION) {
+        if (!config.Service.CHATBOT_API_KEY || !config.Service.CHATBOT_USER_ID || !config.Service.CHATBOT_SESSION) {
             this.logger.warn("Failed to initialize chat service. Missing keys.");
             return;
         }

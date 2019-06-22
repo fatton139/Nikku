@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
 import { EventCore, DatabaseCore } from "core";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 import Logger from "log/Logger";
 import ChannelTransport from "log/ChannelTransport";
 import CommandManager from "managers/CommandManager";

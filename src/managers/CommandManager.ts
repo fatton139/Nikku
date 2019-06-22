@@ -8,7 +8,7 @@ import ExecutableCommand from "../command/ExecutableCommand";
 import NikkuException from "exception/NikkuException";
 import { AccessLevel } from "user/AccessLevel";
 import DynamicImportManager from "./DynamicImportManager";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 
 export default class CommandManager extends DynamicImportManager {
 
@@ -28,7 +28,7 @@ export default class CommandManager extends DynamicImportManager {
     public async loadCommands(): Promise<void> {
         const importPaths: string[] = this.getImportPaths();
         this.logger.info(`Detected ${importPaths.length}` +
-                ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
+            ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
         for (const path of importPaths) {
             const commandClass = await import(`${this.DIR_PATH}/${path}`);
             if (!commandClass.default) {
@@ -40,7 +40,7 @@ export default class CommandManager extends DynamicImportManager {
             }
         }
         this.logger.info(`Successfully imported ${this.commandRegistry.getRegistrySize()} ` +
-                `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
+            `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
     }
 
     /**
@@ -84,7 +84,7 @@ export default class CommandManager extends DynamicImportManager {
         const user = await DBUserSchema.getUserById(userId);
         if (user && user.accessLevel) {
             if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
-                    && user.accessLevel !== AccessLevel.DEVELOPER) {
+                && user.accessLevel !== AccessLevel.DEVELOPER) {
                 await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
                 msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
             }

@@ -1,5 +1,5 @@
 import AbstractManager from "./AbstractManager";
-import { Config } from "config/Config";
+import { Config } from "config/NikkuConfig";
 
 export default class PrefixManager extends AbstractManager {
     /**
