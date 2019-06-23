@@ -3,7 +3,7 @@ import * as Mongoose from "mongoose";
 import * as winston from "winston";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
-import Logger from "log/Logger";
+import { Logger } from "log";
 import { UserMigration } from "database/migration/UserMigration";
 import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
