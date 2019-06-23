@@ -3,6 +3,9 @@ import * as winston from "winston";
 import { config as dotenvConfig } from "dotenv";
 import { Logger } from "log";
 
+/**
+ * Configuration parser for Nikku settings.
+ */
 export class ConfigParser {
     private botConfig: BotConfigOptions;
     private pjsonData: pjsonData;
@@ -11,6 +14,10 @@ export class ConfigParser {
         this.botConfig = {};
         this.pjsonData = {};
     }
+    /**
+     * Parses bot configuration/settings.
+     * @param configPath Path to the configuration JSON file.
+     */
     public parseConfig(configPath: string): this {
         try {
             const botConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
@@ -23,6 +30,9 @@ export class ConfigParser {
         }
         return this;
     }
+    /**
+     * Retrieves relevant package.json data.
+     */
     public parsePackageJSON(): this {
         try {
             const data = JSON.parse(fs.readFileSync("package.json", "utf8"));
@@ -34,6 +44,9 @@ export class ConfigParser {
         }
         return this;
     }
+    /**
+     * Loads environment variables with dotenv.
+     */
     public parseEnvConfig(): this {
         const result = dotenvConfig();
         if (result.error) {
@@ -41,9 +54,15 @@ export class ConfigParser {
         }
         return this;
     }
+    /**
+     * Gets bot configurations.
+     */
     public getBotConfig(): BotConfigOptions {
         return this.botConfig;
     }
+    /**
+     * Gets package.json data.
+     */
     public getPackageJSONData(): pjsonData {
         return this.pjsonData;
     }

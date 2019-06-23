@@ -1,3 +1,6 @@
+/**
+ * Type declaration for bot configuration options/fields.
+ */
 declare type BotConfigOptions = {
     BOT_RESPONSE_TRIGGER?: string;
     MODULE_PATHS?: string[];
@@ -5,6 +8,9 @@ declare type BotConfigOptions = {
     REQUIRE_SPACE_AFTER_PREFIX?: boolean;
 }
 
+/**
+ * Type declaration for package.json data.
+ */
 declare type pjsonData = {
     REPOSITORY?: string;
     AUTHOR?: string;
