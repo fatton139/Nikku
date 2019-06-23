@@ -29,7 +29,6 @@ export class EventCore {
      */
     public listenMessages(): void {
         this.client.on("message", (message: Discord.Message) => {
-            console.log((message.channel as Discord.TextChannel).name, message.author.username, message.content);
             if (!message.author.bot && message.content.length !== 0) {
                 this.core.getManager(CommandManager).parseLine(message.content,
                     message.author.id, new OnMessageState(this.core, message));
