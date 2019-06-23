@@ -1,10 +1,7 @@
 {
     "extends": "tslint:latest",
-    "rulesDirectory": "built/local/tslint/rules",
     "linterOptions": {
-        "exclude": [
-            "test/**/*"
-        ]
+        "exclude": []
     },
     "rules": {
         "no-unnecessary-type-assertion": true,
@@ -29,7 +26,7 @@
         "comment-format": [true,
             "check-space"
         ],
-        "curly":[true, "ignore-same-line"],
+        "curly": [true, "ignore-same-line"],
         "debug-assert": true,
         "indent": [true,
             "spaces"
@@ -109,5 +106,5 @@
         "no-reference": false,
         "object-literal-sort-keys": false,
         "one-variable-per-declaration": false
-	}
+    }
 }
