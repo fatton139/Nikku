@@ -8,7 +8,7 @@ import ExecutableCommand from "../command/ExecutableCommand";
 import NikkuException from "exception/NikkuException";
 import { AccessLevel } from "user/AccessLevel";
 import DynamicImportManager from "./DynamicImportManager";
-import { Config } from "config/NikkuConfig";
+import { NikkuConfig } from "config/NikkuConfig";
 
 export default class CommandManager extends DynamicImportManager {
 
@@ -20,7 +20,7 @@ export default class CommandManager extends DynamicImportManager {
      * @classdesc Class to handle import and execution of commands.
      */
     public constructor() {
-        super(Config.Command.DIR_PATH, Config.Command.MODULE_PATHS);
+        super(NikkuConfig.botConfigOptions.MODULE_PATHS ? NikkuConfig.botConfigOptions.MODULE_PATHS : [], undefined);
         this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
     }

@@ -11,7 +11,7 @@ export class ConfigParser {
         this.botConfig = {};
         this.pjsonData = {};
     }
-    public parseConfig(configPath: string): void {
+    public parseConfig(configPath: string): this {
         try {
             const botConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
             this.botConfig.BOT_RESPONSE_TRIGGER = botConfig["bot_response_trigger"];
@@ -21,8 +21,9 @@ export class ConfigParser {
         } catch (e) {
             this.logger.error(e)
         }
+        return this;
     }
-    public parsePackageJSON(): void {
+    public parsePackageJSON(): this {
         try {
             const data = JSON.parse(fs.readFileSync("package.json", "utf8"));
             this.pjsonData.REPOSITORY = data["repository"];
@@ -31,12 +32,14 @@ export class ConfigParser {
         } catch (e) {
             this.logger.error(e)
         }
+        return this;
     }
-    public parseEnvConfig(): void {
+    public parseEnvConfig(): this {
         const result = dotenvConfig();
         if (result.error) {
             this.logger.error(result.error);
         }
+        return this;
     }
     public getBotConfig(): BotConfigOptions {
         return this.botConfig;

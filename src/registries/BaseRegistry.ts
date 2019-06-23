@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import Logger from "log/Logger";
+import { Logger } from "log";
 
 export default class BaseRegistry<T> {
 

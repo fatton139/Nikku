@@ -1,6 +1,6 @@
 import * as winston from "winston";
 import * as Mongoose from "mongoose";
-import Logger from "log/Logger";
+import { Logger } from "log";
 import { prop, Typegoose, InstanceType, instanceMethod } from "typegoose";
 import { AccessLevel } from "user/AccessLevel";
 import { CoinType } from "user/CoinType";
@@ -10,36 +10,36 @@ import { DatabaseException } from "exception/DatabaseException";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
-    @prop({required: true, unique: true})
+    @prop({ required: true, unique: true })
     public id?: string;
 
-    @prop({default: AccessLevel.UNREGISTERED})
+    @prop({ default: AccessLevel.UNREGISTERED })
     public accessLevel?: AccessLevel;
 
-    @prop({default: {dotmaCoin: 100, bradCoin: 0}})
+    @prop({ default: { dotmaCoin: 100, bradCoin: 0 } })
     public wallet?: {
         dotmaCoin: number,
         bradCoin: number,
     };
 
     // @ts-ignore
-    @prop({enum: SkillType, default: {THIEVING: 0}})
+    @prop({ enum: SkillType, default: { THIEVING: 0 } })
     public skillsExperienceMap?: {
         THIEVING: number,
     };
 
-    @prop({default: {lastUpdate: new Date((new Date()).setDate(new Date().getDate() - 1))}})
+    @prop({ default: { lastUpdate: new Date((new Date()).setDate(new Date().getDate() - 1)) } })
     public daily?: {
         lastUpdate: Date,
     };
 
-    @prop({default: {active: 0, all: ["The Untitled"]}})
+    @prop({ default: { active: 0, all: ["The Untitled"] } })
     public title?: {
         active: number,
         all: string[];
     };
 
-    @prop({default: new Date()})
+    @prop({ default: new Date() })
     public dateRegistered?: Date;
 
     @instanceMethod
@@ -138,13 +138,13 @@ export default class DBUserSchema extends Typegoose {
     }
 
     public static async getUserById(id: string): Promise<DBUserSchema | undefined> {
-        const user = await (this.getModel().findOne({id}));
+        const user = await (this.getModel().findOne({ id }));
         return user ? user : undefined;
     }
 
     public static async removeUser(id: string): Promise<boolean> {
         try {
-            await this.getModel().findOne({id}).remove();
+            await this.getModel().findOne({ id }).remove();
             DBUserSchema.logger.info("User unregistered.");
             return true;
         } catch (err) {

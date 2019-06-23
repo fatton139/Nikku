@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import Logger from "log/Logger";
+import { Logger } from "log";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 import { GuildConfig } from "config/GuildConfig";
 

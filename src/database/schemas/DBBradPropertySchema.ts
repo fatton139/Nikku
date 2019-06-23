@@ -1,7 +1,6 @@
 import * as Mongoose from "mongoose";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import Brad from "entities/Brad";
-import { Config } from "config/NikkuConfig";
 import { core } from "core/NikkuCore";
 
 export class IdContributionPair {
@@ -14,10 +13,10 @@ export class IdContributionPair {
 }
 
 export default class DBBradPropertySchema extends Typegoose {
-    @prop({ required: true, default: Config.Brad.DEFAULT_WEIGHT })
+    @prop({ required: true, default: 200 })
     public weight?: number;
 
-    @prop({ required: true, default: Config.Brad.DEFAULT_WEIGHT + 1 })
+    @prop({ required: true, default: 200 + 1 })
     public weightGoal?: number;
 
     @arrayProp({ default: [], items: IdContributionPair })

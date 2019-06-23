@@ -11,6 +11,7 @@ import { BradPropertyMigration } from "database/migration/BradPropertyMigration"
 import { NikkuCore } from "core";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+import { NikkuConfig } from 'config';
 
 export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -22,7 +23,7 @@ export class DatabaseCore {
      */
     private static connection: Mongoose.Connection;
 
-    private defaultUsers: string[] | undefined;
+    private defaultUsers?: string[];
 
     private core: NikkuCore;
 
@@ -31,8 +32,8 @@ export class DatabaseCore {
      * @classdesc Class for handling important database methods.
      */
     public constructor(core: NikkuCore) {
-        this.URI = core.getConfig().Database.URI;
-        this.defaultUsers = core.getConfig().DefaultUser.IDS;
+        this.URI = NikkuConfig.EnvironmentVars.DatabaseOptions.URI;
+        this.defaultUsers = NikkuConfig.EnvironmentVars.DevUsers.IDS;
         this.core = core;
         this.ready = false;
         this.logger.debug("Database Core created.");
@@ -76,7 +77,7 @@ export class DatabaseCore {
     }
 
     public async generateDevUserModel(): Promise<void> {
-        if (!this.core.getConfig().DefaultUser.IDS) {
+        if (!this.defaultUsers) {
             return;
         }
         const userModel = DBUserSchema.getModel();

@@ -2,8 +2,8 @@
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { Config } from "config/NikkuConfig";
-import Logger from "log/Logger";
+import { NikkuConfig } from "config";
+import { Logger } from "log";
 import OnMessageState from "state/OnMessageState";
 import StringFunc from "utils/StringFunc";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
@@ -16,13 +16,16 @@ export default class ChatBotService {
 
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
-    public constructor(config: typeof Config) {
-        if (!config.Service.CHATBOT_API_KEY || !config.Service.CHATBOT_USER_ID || !config.Service.CHATBOT_SESSION) {
+    public constructor() {
+        if (!NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_API_KEY
+            || !NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_USER_ID
+            || !NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_SESSION) {
             this.logger.warn("Failed to initialize chat service. Missing keys.");
             return;
         }
-        this.bot = new ChatBot(config.Service.CHATBOT_USER_ID, config.Service.CHATBOT_API_KEY);
-        this.bot.setNick(config.Service.CHATBOT_SESSION);
+        this.bot = new ChatBot(NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_USER_ID,
+            NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_API_KEY);
+        this.bot.setNick(NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_SESSION);
     }
 
     public async sendMessage(state: OnMessageState): Promise<boolean> {

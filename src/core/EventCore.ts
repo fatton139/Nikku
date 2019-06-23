@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import Logger from "log/Logger";
+import { Logger } from "log";
 import { NikkuCore } from "core";
 import OnMessageState from "state/OnMessageState";
 import CommandManager from "managers/CommandManager";

@@ -1,4 +1,4 @@
-import NikkuCore from "core/NikkuCore";
+import { NikkuCore } from "core";
 import { ICoreState } from "./ICoreState";
 
 export default class CoreState<T> implements ICoreState<T> {

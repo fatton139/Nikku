@@ -1,5 +1,5 @@
 import * as winston from "winston";
-import Logger from "log/Logger";
+import { Logger } from "log";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import * as Mongoose from "mongoose";
 import { GuildConfig } from "config/GuildConfig";

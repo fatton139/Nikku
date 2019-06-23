@@ -1,4 +1,4 @@
-import { Config } from "config/NikkuConfig";
+import { NikkuConfig } from "config";
 import { LevenshteinDistance } from "math/LevenshteinDistance";
 
 export namespace CommandUtil {
@@ -13,10 +13,12 @@ export namespace CommandUtil {
 
     export const isResponseTrigger = (message: string, tol: number): boolean => {
         const messageArr = message.split(" ");
-        const triggerWord = Config.Command.BOT_RESPONSE_TRIGGER.replace(/\s/g, "").toLowerCase();
-        for (let i = 1; i < messageArr.length; i++) {
-            if (LevenshteinDistance((messageArr[i - 1] + messageArr[i]).toLowerCase(), triggerWord) <= tol) {
-                return true;
+        if (NikkuConfig.botConfigOptions.BOT_RESPONSE_TRIGGER) {
+            const triggerWord = NikkuConfig.botConfigOptions.BOT_RESPONSE_TRIGGER.replace(/\s/g, "").toLowerCase();
+            for (let i = 1; i < messageArr.length; i++) {
+                if (LevenshteinDistance((messageArr[i - 1] + messageArr[i]).toLowerCase(), triggerWord) <= tol) {
+                    return true;
+                }
             }
         }
         return false;

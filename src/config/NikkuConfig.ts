@@ -1,10 +1,10 @@
-import { ConfigParser } from "config";
+import { ConfigParser } from "config/ConfigParser";
 
 /**
  * Namespace to for all bot configurations.
  */
 export namespace NikkuConfig {
-    const configParser = new ConfigParser();
+    export const configParser = new ConfigParser();
     export const botConfigOptions = configParser.getBotConfig();
     export const pjsonData = configParser.getPackageJSONData();
     export namespace EnvironmentVars {
