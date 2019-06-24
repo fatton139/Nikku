@@ -1,0 +1,6 @@
+{
+    "bot_response_trigger": "test",
+    "module_paths": 1,
+    "command_prefixes": 1,
+    "require_space_after_prefix": 1
+}
