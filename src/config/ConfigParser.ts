@@ -2,6 +2,8 @@ import * as fs from "fs";
 import * as winston from "winston";
 import { config as dotenvConfig } from "dotenv";
 import { Logger } from "log";
+import { isString, isBoolean } from "util";
+import { NikkuException } from "exception";
 
 /**
  * Configuration parser for Nikku settings.
@@ -21,12 +23,20 @@ export class ConfigParser {
     public parseConfig(configPath: string): this {
         try {
             const botConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
-            this.botConfig.BOT_RESPONSE_TRIGGER = botConfig["bot_response_trigger"];
-            this.botConfig.MODULE_PATHS = botConfig["module_paths"];
-            this.botConfig.COMMAND_PREFIXES = botConfig["command_prefixes"];
-            this.botConfig.REQUIRE_SPACE_AFTER_PREFIX = botConfig["require_space_After_prefix"];
+            if (botConfig.bot_response_trigger && isString(botConfig.bot_response_trigger)) {
+                this.botConfig.BOT_RESPONSE_TRIGGER = botConfig.bot_response_trigger;
+            } else {
+                throw new NikkuException("Invalid bot response trigger word.");
+            }
+            this.botConfig.MODULE_PATHS = botConfig.module_paths &&
+                Array.isArray(botConfig.module_paths) ? botConfig.module_paths : [];
+            this.botConfig.COMMAND_PREFIXES = botConfig.command_prefixes &&
+                Array.isArray(botConfig.command_prefixes) ? botConfig.command_prefixes : [];
+            this.botConfig.REQUIRE_SPACE_AFTER_PREFIX = botConfig.require_space_after_prefix &&
+                isBoolean(botConfig.require_space_after_prefix) ? botConfig.require_space_after_prefix : true;
         } catch (e) {
-            this.logger.error(e)
+            this.logger.error(e);
+            throw new NikkuException(e.message, e.stack);
         }
         return this;
     }
@@ -36,11 +46,11 @@ export class ConfigParser {
     public parsePackageJSON(): this {
         try {
             const data = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            this.pjsonData.REPOSITORY = data["repository"];
-            this.pjsonData.AUTHOR = data["author"];
-            this.pjsonData.VERSION = data["version"];
+            this.pjsonData.REPOSITORY = data.repository;
+            this.pjsonData.AUTHOR = data.author;
+            this.pjsonData.VERSION = data.version;
         } catch (e) {
-            this.logger.error(e)
+            this.logger.error(e);
         }
         return this;
     }
