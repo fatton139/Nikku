@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
 import { Logger } from "log";
-import { NikkuCore } from "core";
+import { NikkuCore, core as coreInstance } from "core";
 import OnMessageState from "state/OnMessageState";
 import CommandManager from "managers/CommandManager";
 
@@ -18,9 +18,9 @@ export class EventCore {
      * @classdesc Class for handling events.
      * @param core - The main bot core.
      */
-    public constructor(core: NikkuCore) {
-        this.client = core.getClient();
-        this.core = core;
+    public constructor() {
+        this.core = coreInstance;
+        this.client = coreInstance.getClient();
         this.logger.debug("Event Core created.");
     }
 

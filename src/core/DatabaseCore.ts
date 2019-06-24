@@ -8,10 +8,10 @@ import { UserMigration } from "database/migration/UserMigration";
 import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
 import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
-import { NikkuCore } from "core";
+import { NikkuCore, core as coreInstance } from "core";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
-import { NikkuConfig } from 'config';
+import { NikkuConfig } from "config";
 
 export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -31,10 +31,10 @@ export class DatabaseCore {
     /**
      * @classdesc Class for handling important database methods.
      */
-    public constructor(core: NikkuCore) {
+    public constructor() {
         this.URI = NikkuConfig.EnvironmentVars.DatabaseOptions.URI;
         this.defaultUsers = NikkuConfig.EnvironmentVars.DevUsers.IDS;
-        this.core = core;
+        this.core = coreInstance;
         this.ready = false;
         this.logger.debug("Database Core created.");
     }
