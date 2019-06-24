@@ -1,5 +1,5 @@
 import * as Discord from "discord.js";
-import NikkuException from "./NikkuException";
+import { NikkuException } from "exception";
 import CoreState from "state/CoreState";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import Command from "command/AbstractCommand";

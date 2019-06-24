@@ -5,7 +5,7 @@ import CommandRegistry from "../registries/CommandRegistry";
 import TriggerableCommand from "../command/TriggerableCommand";
 import OnMessageState from "state/OnMessageState";
 import ExecutableCommand from "../command/ExecutableCommand";
-import NikkuException from "exception/NikkuException";
+import { NikkuException } from "exception";
 import { AccessLevel } from "user/AccessLevel";
 import DynamicImportManager from "./DynamicImportManager";
 import { NikkuConfig } from "config/NikkuConfig";

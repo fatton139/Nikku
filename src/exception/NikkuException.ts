@@ -1,4 +1,4 @@
-export default class NikkuException extends Error {
+export class NikkuException extends Error {
     public message: string;
 
     /**

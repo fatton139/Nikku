@@ -3,7 +3,7 @@ import { Logger } from "log";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
 import Action from "action/Action";
-import NikkuException from "exception/NikkuException";
+import { NikkuException } from "exception";
 import { AccessLevel } from "user/AccessLevel";
 import IHasAction from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";

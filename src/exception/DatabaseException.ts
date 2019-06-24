@@ -1,4 +1,4 @@
-import NikkuException from "./NikkuException";
+import { NikkuException } from "Exception";
 
 export class DatabaseException extends NikkuException {
     /**
