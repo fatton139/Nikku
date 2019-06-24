@@ -5,8 +5,11 @@ import { NikkuConfig } from "config";
 import { Logger, ChannelTransport } from "log";
 import CommandManager from "managers/CommandManager";
 import AbstractManager from "managers/AbstractManager";
-import { EventType } from "event"
+import { EventType } from "event";
 
+/**
+ * The main class of the bot, initializes most of the main processes.
+ */
 export class NikkuCore {
     /**
      * Discord.js API
@@ -19,7 +22,7 @@ export class NikkuCore {
     private eventCore: EventCore;
 
     /**
-     * Main database methods for the bot.
+     * Main database events/handlers for the bot.
      */
     private databaseCore: DatabaseCore;
 
@@ -28,54 +31,73 @@ export class NikkuCore {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     private managers: Map<string, AbstractManager>;
+
     /**
-     * @classdesc The main class of the bot. Initializes most of the main methods.
+     * @param config Initial configurations for the bot.
+     * @param initializeImmediately Start main processes immediately.
      */
-    public constructor(config: typeof NikkuConfig) {
-        this.logger.debug("Core initialized");
-        this.config = config;
+    public constructor(config?: typeof NikkuConfig, initializeImmediately?: boolean) {
+        this.config = config ? config : NikkuConfig;
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
-        this.eventCore = new EventCore(this);
-        this.databaseCore = new DatabaseCore(this);
+        this.eventCore = new EventCore();
+        this.databaseCore = new DatabaseCore();
+        this.logger.debug("Core initialized.");
+        if (initializeImmediately) {
+            this.startMainProcesses();
+        }
     }
 
     /**
      * Start the main processes of the bot.
      */
-    public start(): void {
+    public startMainProcesses(): void {
         this.client.login(this.config.EnvironmentVars.DiscordOptions.TOKEN);
         this.client.on(EventType.READY, async () => {
-            if (this.config.EnvironmentVars.DiscordOptions.DEBUG_CHANNELS) {
-                this.setDebugLogChannels();
+            this.setDebugLogChannels();
+            await this.loadModules();
+            if (await this.startDbProcesses()) {
+                this.eventCore.listenMessages();
             }
-            try {
-                await this.loadModules();
-                await this.databaseCore.connectDb();
-                this.logger.info(`Nikku v${this.config.pjsonData.VERSION} started.`);
-            } catch (err) {
-                this.logger.warn(`Nikku v${this.config.pjsonData.VERSION} started without an database.`);
-                this.logger.error(err.message);
-                // no db mode.
-            }
-            this.eventCore.listenMessages();
         });
     }
 
+    /**
+     * Starts database related processes.
+     */
+    public async startDbProcesses(): Promise<boolean> {
+        try {
+            await this.databaseCore.connectDb();
+            this.logger.info(`Nikku v${this.config.pjsonData.VERSION} started.`);
+            return true;
+        } catch (err) {
+            // no db mode.
+            this.logger.warn(`Nikku v${this.config.pjsonData.VERSION} started without an database.`);
+            this.logger.error(err.message);
+            return false;
+        }
+    }
+
+    /**
+     * Loads primary bot modules.
+     */
     public async loadModules(): Promise<void> {
         try {
             Promise.all([
                 this.getManager(CommandManager).loadCommands(),
-                // this.getManager(ObjectManager).loadItems(),
             ]);
         } catch (err) {
             this.logger.error(err.message);
         }
     }
 
+    /**
+     * Set Discord channels for debug/logging outputs. Configure it from a botconfig.json file.
+     */
     public setDebugLogChannels(): void {
-        if (this.config.EnvironmentVars.DiscordOptions.DEBUG_CHANNELS) {
-            for (const id of this.config.EnvironmentVars.DiscordOptions.DEBUG_CHANNELS) {
+        const debugChannels = this.config.EnvironmentVars.DiscordOptions.DEBUG_CHANNELS;
+        if (debugChannels && debugChannels.length !== 0) {
+            for (const id of debugChannels) {
                 const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
                 if (channel) {
                     ChannelTransport.addChannel(channel);
@@ -83,6 +105,7 @@ export class NikkuCore {
             }
         }
     }
+
     /**
      * @returns The event core of the bot.
      */
@@ -91,25 +114,41 @@ export class NikkuCore {
     }
 
     /**
-     * @returns The db core of the bot.
+     * @returns The database core of the bot.
      */
     public getDbCore(): DatabaseCore {
         return this.databaseCore;
     }
 
+    /**
+     * @returns The discord client instance.
+     */
     public getClient(): Discord.Client {
         return this.client;
     }
 
+    /**
+     * @returns The current configuration loaded.
+     */
     public getConfig(): typeof NikkuConfig {
         return this.config;
     }
 
+    /**
+     * Sets the activity of the bot.
+     * @param str The activity of the bot.
+     */
     public setActivity(str: string): void {
         this.client.user.setActivity(str);
     }
 
+    /* tslint:disable */
+    /**
+     * Gets a instance of a manager.
+     * @param Cls Class Type of the manager to retrieve.
+     */
     public getManager<T extends AbstractManager>(Cls: (new () => T)): T {
+        /* tslint:enable */
         if (!this.managers.has(Cls.name)) {
             this.managers.set(Cls.name, new Cls());
         }
