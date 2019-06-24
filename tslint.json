@@ -1,7 +1,7 @@
 {
     "extends": "tslint:latest",
     "linterOptions": {
-        "exclude": []
+        "exclude": ["test/**/*.ts"]
     },
     "rules": {
         "no-unnecessary-type-assertion": true,
