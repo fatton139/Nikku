@@ -8,7 +8,7 @@ import { UserMigration } from "database/migration/UserMigration";
 import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
 import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
-import { NikkuCore, core as coreInstance } from "core";
+import { Nikku } from "core";
 import { AccessLevel } from "user/AccessLevel";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
 import { NikkuConfig } from "config";
@@ -25,7 +25,7 @@ export class DatabaseCore {
 
     private defaultUsers?: string[];
 
-    private core: NikkuCore;
+    private core: Nikku.Core;
 
     private ready: boolean;
     /**
@@ -34,7 +34,7 @@ export class DatabaseCore {
     public constructor() {
         this.URI = NikkuConfig.EnvironmentVars.DatabaseOptions.URI;
         this.defaultUsers = NikkuConfig.EnvironmentVars.DevUsers.IDS;
-        this.core = coreInstance;
+        this.core = Nikku.coreInstance;
         this.ready = false;
         this.logger.debug("Database Core created.");
     }

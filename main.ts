@@ -1,4 +1,6 @@
-import { core } from "core";
+import { Nikku } from "core";
+
+console.log(Nikku.coreInstance);
 
 /** Entry point */
-core.start();
+// core.start();

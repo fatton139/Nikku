@@ -1,4 +1,3 @@
-import { NikkuCore } from "core";
 import { ICoreState } from "./ICoreState";
 
 export default class CoreState<T> implements ICoreState<T> {
@@ -7,14 +6,11 @@ export default class CoreState<T> implements ICoreState<T> {
      */
     protected handle: T;
 
-    protected core: NikkuCore;
-
     /**
      * @classdesc Base state for the bot.
      * @param handle - Handler for the state.
      */
-    constructor(core: NikkuCore, handle: T) {
-        this.core = core;
+    constructor(handle: T) {
         this.handle = handle;
     }
 
@@ -31,9 +27,5 @@ export default class CoreState<T> implements ICoreState<T> {
      */
     public getHandle(): T {
         return this.handle;
-    }
-
-    public getCore(): NikkuCore {
-        return this.core;
     }
 }

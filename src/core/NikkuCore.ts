@@ -1,6 +1,7 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { EventCore, DatabaseCore } from "core";
+import { EventCore } from "core/EventCore";
+import { DatabaseCore } from "core/DatabaseCore";
 import { NikkuConfig } from "config";
 import { Logger, ChannelTransport } from "log";
 import CommandManager from "managers/CommandManager";
@@ -36,8 +37,9 @@ export class NikkuCore {
      * @param config Initial configurations for the bot.
      * @param initializeImmediately Start main processes immediately.
      */
-    public constructor(config?: typeof NikkuConfig, initializeImmediately?: boolean) {
-        this.config = config ? config : NikkuConfig;
+    public constructor(initializeImmediately?: boolean) {
+        console.log("core init")
+        this.config = NikkuConfig;
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
         this.eventCore = new EventCore();
@@ -156,5 +158,4 @@ export class NikkuCore {
     }
 }
 
-/* Core Singleton */
-export const core: NikkuCore = new NikkuCore(NikkuConfig);
+export const core: NikkuCore = new NikkuCore();

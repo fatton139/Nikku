@@ -1,15 +1,15 @@
 import * as winston from "winston";
 import { Logger } from "log";
-import { NikkuCore, core } from "core/NikkuCore";
+import { Nikku } from "core";
 
 export default abstract class AbstractManager {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
-    protected core: NikkuCore;
+    protected core: Nikku.Core;
 
     public constructor() {
         this.logger.debug(`${this.constructor.name} manager initialized.`);
-        this.core = core;
+        this.core = Nikku.coreInstance;
     }
 
 }
