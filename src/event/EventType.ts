@@ -1,3 +1,3 @@
 export enum EventType {
-    READY = "ready"
+    READY = "ready",
 }

@@ -1,1 +1,1 @@
-export { EventType } from "event/EventType"
+export { EventType } from "event/EventType";

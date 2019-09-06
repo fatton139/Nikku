@@ -1,7 +1,7 @@
 /**
  * Type declaration for bot configuration options/fields.
  */
-declare type BotConfigOptions = {
+declare interface BotConfigOptions {
     BOT_RESPONSE_TRIGGER?: string;
     MODULE_PATHS?: string[];
     COMMAND_PREFIXES?: string[];
@@ -11,7 +11,7 @@ declare type BotConfigOptions = {
 /**
  * Type declaration for package.json data.
  */
-declare type pjsonData = {
+declare interface pjsonData {
     REPOSITORY?: string;
     AUTHOR?: string;
     VERSION?: string;

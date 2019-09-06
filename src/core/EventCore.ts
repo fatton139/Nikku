@@ -20,9 +20,7 @@ export class EventCore {
      * @param core - The main bot core.
      */
     public constructor() {
-        console.log(coreInstance);
         this.core = coreInstance;
-
         this.client = this.core.getClient();
         this.logger.debug("Event Core created.");
     }

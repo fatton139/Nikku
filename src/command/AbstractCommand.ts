@@ -88,7 +88,7 @@ export default abstract class AbstractCommand implements IHasAction {
     public async executeActionNoUser(msg: OnMessageState): Promise<void> {
         const tempUser = new DBUserSchema();
         if (AccessLevel.UNREGISTERED >= this.accessLevel) {
-            return await this.executeAction(msg, tempUser);
+            return this.executeAction(msg, tempUser);
         }
     }
 

@@ -23,7 +23,7 @@ export default class TriggerableCommand extends AbstractCommand implements IHasA
     }
 
     public async tryTrigger(msg: OnMessageState): Promise<boolean> {
-        return await this.trigger.execute(msg);
+        return this.trigger.execute(msg);
     }
 
     public setCustomTrigger(): Trigger {

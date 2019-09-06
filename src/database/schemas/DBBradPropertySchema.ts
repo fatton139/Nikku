@@ -1,7 +1,6 @@
 import * as Mongoose from "mongoose";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import Brad from "entities/Brad";
-import { core } from "core/NikkuCore";
 
 export class IdContributionPair {
     public id: string;
@@ -43,7 +42,7 @@ export default class DBBradPropertySchema extends Typegoose {
             this.weight += parseFloat(Brad.dotmaCoinsToKg(amount).toFixed(4));
             await this.markModified("contributors");
             await this.markModified("contributorsAllTime");
-            core.setActivity(`Brad's Weight: ${this.weight.toFixed(4)}kg`);
+            // NikkuCore.getInstance().setActivity(`Brad's Weight: ${this.weight.toFixed(4)}kg`);
             return await this.save();
         } catch (err) {
             throw err;

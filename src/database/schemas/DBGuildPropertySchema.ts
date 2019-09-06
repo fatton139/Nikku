@@ -79,7 +79,7 @@ export default class DBGuildPropertySchema extends Typegoose {
 
     @instanceMethod
     public async getBooleanConfig(this: InstanceType<any> & Mongoose.Document,
-        configName: GuildConfig.BooleanConfig.Options): Promise<boolean> {
+                                  configName: GuildConfig.BooleanConfig.Options): Promise<boolean> {
         const enumOptions = GuildConfig.BooleanConfig.Options;
         try {
             if (isUndefined(this.booleanConfig[enumOptions[configName]])) {
@@ -113,7 +113,7 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     public static async getAllGuild(): Promise<DBGuildPropertySchema[]> {
-        return await (this.getModel().find({}));
+        return (this.getModel().find({}));
     }
 
     public static async registerGuild(id: string): Promise<void> {

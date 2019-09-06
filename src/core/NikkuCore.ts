@@ -38,7 +38,6 @@ export class NikkuCore {
      * @param initializeImmediately Start main processes immediately.
      */
     public constructor(initializeImmediately?: boolean) {
-        console.log("core init")
         this.config = NikkuConfig;
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();

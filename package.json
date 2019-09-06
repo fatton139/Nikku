@@ -16,9 +16,10 @@
     "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js",
     "tsc": "tsc",
     "tsc:build": "tsc --build",
-    "tsc:watch": "tsc --build --watch"
+    "tsc:watch": "tsc --build --watch",
+    "tslint:fix": "tslint --fix -c tslint.json 'src/**/*{.ts,.tsx}'"
   },
-  "repository": "git+https://github.com/aXises/fortniteBot",
+  "repository": "git+https://github.com/aXises/Nikku",
   "author": "aXises",
   "license": "MIT",
   "dependencies": {

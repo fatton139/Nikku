@@ -154,7 +154,7 @@ export default class DBUserSchema extends Typegoose {
     }
 
     public static async getAllUser(): Promise<DBUserSchema[]> {
-        return await (this.getModel().find({}));
+        return (this.getModel().find({}));
     }
 
     public static getModel(): Mongoose.Model<InstanceType<DBUserSchema>> & DBUserSchema & typeof DBUserSchema {
