@@ -66,7 +66,9 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async addSkillExperience(this: InstanceType<any> & Mongoose.Document, type: SkillType, amount: number): Promise<void> {
+    public async addSkillExperience(
+        this: InstanceType<any> & Mongoose.Document, type: SkillType, amount: number,
+    ): Promise<void> {
         try {
             this.skillsExperienceMap[SkillType[(type as any).toString()]] += amount;
             await this.markModified("skillsExperienceMap");
@@ -98,7 +100,9 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async addCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
+    public async addCurrency(
+        this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number,
+    ): Promise<void> {
         if (this.wallet[type] + amount > Number.MAX_SAFE_INTEGER) {
             throw new DatabaseException("Addition of currency will cause value to be greater than MAX_SAFE_INTEGER");
         }
@@ -113,7 +117,9 @@ export default class DBUserSchema extends Typegoose {
     }
 
     @instanceMethod
-    public async removeCurrency(this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number): Promise<void> {
+    public async removeCurrency(
+        this: InstanceType<any> & Mongoose.Document, type: CoinType, amount: number,
+    ): Promise<void> {
         if (amount <= 0) {
             throw new DatabaseException("Amount should be positive.");
         }

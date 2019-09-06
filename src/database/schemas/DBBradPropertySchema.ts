@@ -25,7 +25,9 @@ export default class DBBradPropertySchema extends Typegoose {
     public contributorsAllTime?: IdContributionPair[];
 
     @instanceMethod
-    public async incrementWeight(this: InstanceType<any> & Mongoose.Document, id: string, amount: number): Promise<void> {
+    public async incrementWeight(
+        this: InstanceType<any> & Mongoose.Document, id: string, amount: number,
+    ): Promise<void> {
         try {
             const index = this.contributors.findIndex((u: IdContributionPair) => u.id === id);
             if (index === -1) {
@@ -75,7 +77,8 @@ export default class DBBradPropertySchema extends Typegoose {
         return brad ? brad : undefined;
     }
 
-    public static getModel(): Mongoose.Model<InstanceType<DBBradPropertySchema>> & DBBradPropertySchema & typeof DBBradPropertySchema {
+    public static getModel(): Mongoose.Model<InstanceType<DBBradPropertySchema>> & DBBradPropertySchema
+            & typeof DBBradPropertySchema {
         return new DBBradPropertySchema().getModelForClass(DBBradPropertySchema);
     }
 }

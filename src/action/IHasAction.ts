@@ -1,5 +1,5 @@
 import Action from "./Action";
 
-export default interface IHasAction {
+export interface HasAction {
     setCustomAction(): Action;
 }

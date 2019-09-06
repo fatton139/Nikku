@@ -11,7 +11,7 @@ declare interface BotConfigOptions {
 /**
  * Type declaration for package.json data.
  */
-declare interface pjsonData {
+declare interface PackagejsonData {
     REPOSITORY?: string;
     AUTHOR?: string;
     VERSION?: string;

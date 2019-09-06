@@ -9,8 +9,7 @@
         "array-type": [true, "array"],
         "ban": [
             true,
-            "setInterval",
-            "setTimeout"
+            "setInterval"
         ],
         "ban-types": {
             "options": [
@@ -95,8 +94,13 @@
 
         "no-implicit-dependencies": false,
         "object-literal-key-quotes": [true, "consistent-as-needed"],
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-
+        "variable-name": {
+            "options": [
+              "ban-keywords",
+              "check-format",
+              "allow-pascal-case"
+            ]
+        },
         "ban-comma-operator": false,
         "max-classes-per-file": false,
         "member-ordering": false,

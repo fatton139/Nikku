@@ -34,7 +34,10 @@ export default class CommandManager extends DynamicImportManager {
             if (!commandClass.default) {
                 this.logger.warn(`Fail to register command. "${this.DIR_PATH}/${path}" has no default export.`);
             } else if (!(new commandClass.default() instanceof Command)) {
-                this.logger.warn(`Fail to register command. "${this.DIR_PATH}/${path}" exported class is not of type "Command".`);
+                this.logger.warn(
+                    `Fail to register command."${this.DIR_PATH}/${path}" 
+                    exported class is not of type ${Command.constructor.name}.`,
+                );
             } else {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
@@ -57,7 +60,9 @@ export default class CommandManager extends DynamicImportManager {
                 }
                 const command: Command | undefined = this.commandRegistry.getElementByKey(commandString);
                 if (command) {
-                    this.attemptExecution(command, this.extractArguments(line, command.getArgLength()), id, msg).catch((err) => {
+                    this.attemptExecution(
+                        command, this.extractArguments(line, command.getArgLength()), id, msg,
+                    ).catch((err) => {
                         this.logger.verbose(
                             `${err.constructor.name}:Execution of "${command.getCommandString()}" failed`,
                         );
@@ -69,37 +74,43 @@ export default class CommandManager extends DynamicImportManager {
         this.triggerAction(id, msg);
     }
 
-    private async attemptExecution(command: Command, args: string[], userId: string, msg: OnMessageState): Promise<void> {
+    private async attemptExecution(
+        command: Command, args: string[], userId: string, message: OnMessageState,
+    ): Promise<void> {
         if (!this.core.getDbCore().isReady()) {
             this.logger.warn("Please wait until database connection has resolved.");
             return;
         }
         if (command.getArgLength() !== 0 && args.length !== command.getArgLength()) {
             if (command instanceof ExecutableCommand) {
-                command.displayUsageText(msg);
+                command.displayUsageText(message);
                 throw new NikkuException("Invalid arguments.");
             }
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
         if (user && user.accessLevel) {
-            if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
-                && user.accessLevel !== AccessLevel.DEVELOPER) {
+            if (
+                user && message.getHandle().member.hasPermission("ADMINISTRATOR")
+                && user.accessLevel < AccessLevel.ADMINISTRATOR && user.accessLevel !== AccessLevel.DEVELOPER
+            ) {
                 await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-                msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
+                message.getHandle().reply(
+                    "You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.",
+                );
             }
         }
         if (user) {
             this.logger.info(`Executing command "${command.getCommandString()}".`);
             try {
-                await command.executeAction(msg, user);
+                await command.executeAction(message, user);
             } catch (err) {
                 throw err;
             }
         } else {
-            this.logger.info(`Executing command "${command.getCommandString()}". NO_REG_USER.`);
+            this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
             try {
-                command.executeActionNoUser(msg);
+                command.executeActionNoUser(message);
             } catch (err) {
                 throw err;
             }
@@ -135,7 +146,7 @@ export default class CommandManager extends DynamicImportManager {
     public async triggerAction(userId: string, msg: OnMessageState): Promise<void> {
         for (const pair of this.commandRegistry.getRegistry().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
-                const command: TriggerableCommand = pair[1] as TriggerableCommand;
+                const command: TriggerableCommand = pair[1];
                 if (await command.tryTrigger(msg)) {
                     const user = await DBUserSchema.getUserById(userId);
                     try {

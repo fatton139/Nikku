@@ -9,8 +9,8 @@ export default class DBGlobalPropertySchema extends Typegoose {
     @prop({default: new Date()})
     // private shopLastUpdate?: Date;
 
-    public static getModel():
-            Mongoose.Model<InstanceType<DBGlobalPropertySchema>> & DBGlobalPropertySchema & typeof DBGlobalPropertySchema {
+    public static getModel(): Mongoose.Model<InstanceType<DBGlobalPropertySchema>> & DBGlobalPropertySchema
+            & typeof DBGlobalPropertySchema {
         return new DBGlobalPropertySchema().getModelForClass(DBGlobalPropertySchema);
     }
 }

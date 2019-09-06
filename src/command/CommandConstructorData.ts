@@ -1,12 +1,12 @@
 import { AccessLevel } from "user/AccessLevel";
 
 export namespace CommandConstructorData {
-    export interface IBase {
+    export interface Base {
         accessLevel: AccessLevel;
         argLength: number;
         description?: string;
     }
-    export interface IExecutable extends IBase {
+    export interface Executable extends Base {
         commandString: string;
         usage?: string;
     }

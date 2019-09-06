@@ -84,7 +84,9 @@ export class DatabaseCore {
         const doc: Mongoose.Document[] = await userModel.find({ accessLevel: AccessLevel.DEVELOPER });
         if (this.defaultUsers) {
             if (doc.length !== this.defaultUsers.length) {
-                this.logger.warn(`Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`);
+                this.logger.warn(
+                    `Dev user models do not match. Creating ${this.defaultUsers.length - doc.length} dev profile(s).`,
+                    );
                 await UserMigration.createModels(this.defaultUsers);
             }
         }

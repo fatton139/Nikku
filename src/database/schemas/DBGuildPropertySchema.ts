@@ -46,7 +46,9 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     @instanceMethod
-    public async addBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string, initValue?: boolean): Promise<void> {
+    public async addBooleanConfig(
+        this: InstanceType<any> & Mongoose.Document, configName: string, initValue?: boolean,
+    ): Promise<void> {
         try {
             await this.markModified("booleanConfig");
             if (!this.booleanConfig) {
@@ -63,7 +65,9 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     @instanceMethod
-    public async booleanConfigExists(this: InstanceType<any> & Mongoose.Document, configName: string): Promise<boolean> {
+    public async booleanConfigExists(
+        this: InstanceType<any> & Mongoose.Document, configName: string,
+    ): Promise<boolean> {
         try {
             return !isUndefined(this.booleanConfig[configName]);
         } catch (err) {
@@ -93,7 +97,9 @@ export default class DBGuildPropertySchema extends Typegoose {
     }
 
     @instanceMethod
-    public async setBooleanConfig(this: InstanceType<any> & Mongoose.Document, configName: string, value: boolean): Promise<boolean> {
+    public async setBooleanConfig(
+        this: InstanceType<any> & Mongoose.Document, configName: string, value: boolean,
+    ): Promise<boolean> {
         try {
             if (isUndefined(this.booleanConfig[configName])) {
                 throw new NikkuException(undefined, "Undefined config name.");
@@ -143,7 +149,8 @@ export default class DBGuildPropertySchema extends Typegoose {
         }
     }
 
-    public static getModel(): Mongoose.Model<InstanceType<DBGuildPropertySchema>> & DBGuildPropertySchema & typeof DBGuildPropertySchema {
+    public static getModel(): Mongoose.Model<InstanceType<DBGuildPropertySchema>> & DBGuildPropertySchema
+            & typeof DBGuildPropertySchema {
         return new DBGuildPropertySchema().getModelForClass(DBGuildPropertySchema);
     }
 }

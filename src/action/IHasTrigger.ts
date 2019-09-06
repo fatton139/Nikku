@@ -1,5 +1,5 @@
 import Trigger from "./Trigger";
 
-export default interface IHasTrigger {
+export interface HasTrigger {
     setCustomTrigger(): Trigger;
 }

@@ -1,9 +1,9 @@
 import AbstractCommand from "./AbstractCommand";
-import IHasAction from "action/IHasAction";
+import { HasAction } from "action/IHasAction";
 import OnMessageState from "state/OnMessageState";
 import { CommandConstructorData } from "./CommandConstructorData";
 import Action from "action/Action";
-export default abstract class ExecutableCommand extends AbstractCommand implements IHasAction {
+export default abstract class ExecutableCommand extends AbstractCommand implements HasAction {
     private usage?: string;
 
     /**
@@ -12,7 +12,7 @@ export default abstract class ExecutableCommand extends AbstractCommand implemen
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(data: CommandConstructorData.IExecutable) {
+    public constructor(data: CommandConstructorData.Executable) {
         super(data);
         this.commandString = data.commandString;
         this.usage = data.usage;
@@ -24,9 +24,7 @@ export default abstract class ExecutableCommand extends AbstractCommand implemen
         return this.usage;
     }
 
-    public displayUsageText(msg: OnMessageState): void {
-        msg.getHandle().reply(this.usage ? this.usage : "Looks like this command went wrong and did not have a usage string."
-            + "Sad reacts only.",
-        );
+    public displayUsageText(message: OnMessageState): void {
+        message.getHandle().reply(this.usage ? this.usage : "Invalid command usage.");
     }
 }

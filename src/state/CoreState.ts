@@ -1,8 +1,6 @@
-import { ICoreState } from "./ICoreState";
-
-export default class CoreState<T> implements ICoreState<T> {
+export class CoreState<T> {
     /**
-     * Hander for the state.
+     * Handler for the state.
      */
     protected handle: T;
 

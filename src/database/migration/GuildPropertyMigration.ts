@@ -5,10 +5,10 @@ import { GuildConfig } from "config/GuildConfig";
 
 export namespace GuildPropertyMigration {
     const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
-    const LocalPropertyModel = DBGuildPropertySchema.getModel();
+    const localPropertyModel = DBGuildPropertySchema.getModel();
 
     export const createModels = async (): Promise<void> => {
-        const model = new LocalPropertyModel({
+        const model = new localPropertyModel({
             targets: [],
             booleanConfig: {},
         });
@@ -22,7 +22,7 @@ export namespace GuildPropertyMigration {
     };
 
     export const verifyGuildConfig = async (): Promise<void> => {
-        for (const guild of await LocalPropertyModel.find({})) {
+        for (const guild of await localPropertyModel.find({})) {
             for (const key of GuildConfig.BooleanConfig.keys) {
                 if (!(await guild.booleanConfigExists(key))) {
                     await guild.addBooleanConfig(key);

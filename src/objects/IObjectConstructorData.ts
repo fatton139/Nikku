@@ -1,3 +1,3 @@
-export interface IObjectConstructorData {
+export interface ObjectConstructorData {
     readonly name: string;
 }

@@ -1,3 +1,3 @@
-export interface IUsableObject {
+export interface UsableObject {
     onUse(): void;
 }
