@@ -1,4 +1,4 @@
-import Trigger from "./Trigger";
+import { Trigger } from "./";
 
 export interface HasTrigger {
     setCustomTrigger(): Trigger;

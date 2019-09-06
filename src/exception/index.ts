@@ -1,1 +1,2 @@
-export { NikkuException } from "exception/NikkuException";
+export { NikkuException } from "./NikkuException";
+export { UnauthorizedCommandException } from "./UnauthorizedCommandException";

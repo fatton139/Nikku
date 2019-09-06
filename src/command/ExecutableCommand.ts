@@ -1,8 +1,7 @@
 import AbstractCommand from "./AbstractCommand";
-import { HasAction } from "action/IHasAction";
-import OnMessageState from "state/OnMessageState";
+import { Action, HasAction } from "action";
+import { OnMessageState } from "state";
 import { CommandConstructorData } from "./CommandConstructorData";
-import Action from "action/Action";
 export default abstract class ExecutableCommand extends AbstractCommand implements HasAction {
     private usage?: string;
 

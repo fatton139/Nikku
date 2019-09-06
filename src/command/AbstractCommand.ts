@@ -1,15 +1,13 @@
 import * as winston from "winston";
 import { Logger } from "log";
 import DBUserSchema from "database/schemas/DBUserSchema";
-import UnauthorizedCommandException from "exception/UnauthorizedCommandException";
-import Action from "action/Action";
-import { NikkuException } from "exception";
+import { NikkuException, UnauthorizedCommandException } from "exception";
+import { Action, HasAction } from "action";
 import { AccessLevel } from "user/AccessLevel";
-import IHasAction from "action/IHasAction";
-import OnMessageState from "state/OnMessageState";
+import { OnMessageState } from "state";
 import { CommandConstructorData } from "./CommandConstructorData";
 
-export default abstract class AbstractCommand implements IHasAction {
+export default abstract class AbstractCommand implements HasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.
@@ -43,7 +41,7 @@ export default abstract class AbstractCommand implements IHasAction {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(data: CommandConstructorData.IBase) {
+    public constructor(data: CommandConstructorData.Base) {
         this.action = this.setCustomAction();
         this.accessLevel = data.accessLevel;
         this.argLength = data.argLength;

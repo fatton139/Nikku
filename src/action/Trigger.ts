@@ -1,8 +1,8 @@
 import * as Discord from "discord.js";
-import Action from "action/Action";
-import CoreState from "state/CoreState";
+import { CoreState } from "state/CoreState";
+import { Action } from "./";
 
-export default class Trigger extends Action {
+export class Trigger extends Action {
     /**
      * @classdesc Base trigger class, invokes an FortniteBotAction if conditions are met.
      * @param trigger - A trigger to invoke, returns true if conditions are met.

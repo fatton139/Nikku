@@ -3,7 +3,7 @@ import DBUserSchema from "database/schemas/DBUserSchema";
 import PrefixManager from "managers/PrefixManager";
 import CommandRegistry from "../registries/CommandRegistry";
 import TriggerableCommand from "../command/TriggerableCommand";
-import OnMessageState from "state/OnMessageState";
+import { OnMessageState } from "state";
 import ExecutableCommand from "../command/ExecutableCommand";
 import { NikkuException } from "exception";
 import { AccessLevel } from "user/AccessLevel";

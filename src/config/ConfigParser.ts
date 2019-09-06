@@ -10,11 +10,11 @@ import { NikkuException } from "exception";
  */
 export class ConfigParser {
     private botConfig: BotConfigOptions;
-    private pjsonData: pjsonData;
+    private packagejsonData: PackagejsonData;
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     public constructor() {
         this.botConfig = {};
-        this.pjsonData = {};
+        this.packagejsonData = {};
     }
     /**
      * Parses bot configuration/settings.
@@ -46,9 +46,9 @@ export class ConfigParser {
     public parsePackageJSON(): this {
         try {
             const data = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            this.pjsonData.REPOSITORY = data.repository;
-            this.pjsonData.AUTHOR = data.author;
-            this.pjsonData.VERSION = data.version;
+            this.packagejsonData.REPOSITORY = data.repository;
+            this.packagejsonData.AUTHOR = data.author;
+            this.packagejsonData.VERSION = data.version;
         } catch (e) {
             this.logger.error(e);
         }
@@ -73,7 +73,7 @@ export class ConfigParser {
     /**
      * Gets package.json data.
      */
-    public getPackageJSONData(): pjsonData {
-        return this.pjsonData;
+    public getPackageJSONData(): PackagejsonData {
+        return this.packagejsonData;
     }
 }

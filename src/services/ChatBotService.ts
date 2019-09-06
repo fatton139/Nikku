@@ -4,7 +4,7 @@ import * as Discord from "discord.js";
 import * as winston from "winston";
 import { NikkuConfig } from "config";
 import { Logger } from "log";
-import OnMessageState from "state/OnMessageState";
+import { OnMessageState } from "state";
 import StringFunc from "utils/StringFunc";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 import { GuildConfig } from "config/GuildConfig";
@@ -17,15 +17,15 @@ export default class ChatBotService {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor() {
-        if (!NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_API_KEY
-            || !NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_USER_ID
-            || !NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_SESSION) {
+        if (!NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_API_KEY
+            || !NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_USER_ID
+            || !NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_SESSION) {
             this.logger.warn("Failed to initialize chat service. Missing keys.");
             return;
         }
-        this.bot = new ChatBot(NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_USER_ID,
-            NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_API_KEY);
-        this.bot.setNick(NikkuConfig.EnvironmentVars.ServiceOptions.CHATBOT_SESSION);
+        this.bot = new ChatBot(NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_USER_ID,
+            NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_API_KEY);
+        this.bot.setNick(NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_SESSION);
     }
 
     public async sendMessage(state: OnMessageState): Promise<boolean> {

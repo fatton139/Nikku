@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
-import CoreState from "state/CoreState";
+import { CoreState } from "state/CoreState";
 
-export default class Action {
+export class Action {
     /**
      * An action to invoke.
      */

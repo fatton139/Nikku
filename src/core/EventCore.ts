@@ -2,10 +2,10 @@ import * as Discord from "discord.js";
 import * as winston from "winston";
 import { Logger } from "log";
 import { Nikku } from "core";
-import { core as coreInstance } from "core/NikkuCore";
-import OnMessageState from "state/OnMessageState";
-import CommandManager from "managers/CommandManager";
+import { OnMessageState } from "state";
 import { EventType } from "event";
+import CommandManager from "managers/CommandManager";
+import { core as coreInstance } from "./";
 
 export class EventCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();

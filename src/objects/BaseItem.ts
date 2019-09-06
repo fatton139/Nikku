@@ -1,11 +1,11 @@
 import BaseObject from "./AbstractBaseObject";
-import { IUsableObject } from "./IUsableObject";
+import { UsableObject } from "./UsableObject";
 
-export default class BaseItem extends BaseObject implements IUsableObject {
+export default class BaseItem extends BaseObject implements UsableObject {
 
     public constructor() {
         super({
-            name: "test",
+            name: "NOT IMPLEMENTED",
         });
     }
 

@@ -1,4 +1,4 @@
-import Action from "./Action";
+import { Action } from "./";
 
 export interface HasAction {
     setCustomAction(): Action;

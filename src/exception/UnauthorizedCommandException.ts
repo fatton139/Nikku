@@ -1,5 +1,5 @@
 import * as Discord from "discord.js";
-import CoreState from "state/CoreState";
+import { CoreState } from "state/CoreState";
 import DBUserSchema from "database/schemas/DBUserSchema";
 import Command from "command/AbstractCommand";
 import { AccessLevel } from "user/AccessLevel";

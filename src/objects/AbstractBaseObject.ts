@@ -1,10 +1,10 @@
-import { IObjectConstructorData } from "./IObjectConstructorData";
+import { ObjectConstructorData } from "./ObjectConstructorData";
 
 export default abstract class AbstractBaseObject {
 
     private readonly name: string;
 
-    public constructor(data: IObjectConstructorData) {
+    public constructor(data: ObjectConstructorData) {
         this.name = data.name;
     }
 
