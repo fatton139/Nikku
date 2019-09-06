@@ -32,8 +32,8 @@ export class DatabaseCore {
      * @classdesc Class for handling important database methods.
      */
     public constructor() {
-        this.URI = NikkuConfig.EnvironmentVars.DatabaseOptions.URI;
-        this.defaultUsers = NikkuConfig.EnvironmentVars.DevUsers.IDS;
+        this.URI = NikkuConfig.EnvironmentVariables.DatabaseOptions.URI;
+        this.defaultUsers = NikkuConfig.EnvironmentVariables.DevUsers.IDS;
         this.core = Nikku.coreInstance;
         this.ready = false;
         this.logger.debug("Database Core created.");
