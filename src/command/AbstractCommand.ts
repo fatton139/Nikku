@@ -1,13 +1,14 @@
 import * as winston from "winston";
 import { Logger } from "log";
-import DBUserSchema from "database/schemas/DBUserSchema";
 import { NikkuException, UnauthorizedCommandException } from "exception";
 import { Action, HasAction } from "action";
-import { AccessLevel } from "user/AccessLevel";
+import { AccessLevel } from "user";
 import { OnMessageState } from "state";
-import { CommandConstructorData } from "./CommandConstructorData";
+import { CommandConstructorData } from "./";
 
-export default abstract class AbstractCommand implements HasAction {
+import DBUserSchema from "database/schemas/DBUserSchema";
+
+export abstract class AbstractCommand implements HasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
     /**
      * The string required to execute this command.

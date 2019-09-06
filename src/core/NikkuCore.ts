@@ -1,12 +1,10 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { EventCore } from "core/EventCore";
-import { DatabaseCore } from "core/DatabaseCore";
 import { NikkuConfig } from "config";
 import { Logger, ChannelTransport } from "log";
-import CommandManager from "managers/CommandManager";
-import AbstractManager from "managers/AbstractManager";
+import { CommandManager, AbstractManager } from "managers";
 import { EventType } from "event";
+import { EventCore, DatabaseCore } from "./";
 
 /**
  * The main class of the bot, initializes most of the main processes.

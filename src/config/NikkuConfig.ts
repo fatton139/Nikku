@@ -1,4 +1,4 @@
-import { ConfigParser } from "config/ConfigParser";
+import { ConfigParser } from "./";
 
 /**
  * Namespace to for all bot configurations.

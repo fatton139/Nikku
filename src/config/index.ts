@@ -1,2 +1,3 @@
-export { NikkuConfig } from "config/NikkuConfig";
-export { GuildConfig } from "config/GuildConfig";
+export { NikkuConfig } from "./NikkuConfig";
+export { GuildConfig } from "./GuildConfig";
+export { ConfigParser } from "./ConfigParser";

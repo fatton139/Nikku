@@ -1,10 +1,10 @@
-import { NikkuCore } from "core/NikkuCore";
-import { EventCore as eventCore } from "core/EventCore";
-import { DatabaseCore as databaseCore } from "core/DatabaseCore";
+import { NikkuCore } from "./NikkuCore";
+import { EventCore as eventCore } from "./EventCore";
+import { DatabaseCore as databaseCore } from "./DatabaseCore";
 
-export { core, NikkuCore } from "core/NikkuCore";
-export { EventCore } from "core/EventCore";
-export { DatabaseCore } from "core/DatabaseCore";
+export { core, NikkuCore } from "./NikkuCore";
+export { EventCore } from "./EventCore";
+export { DatabaseCore } from "./DatabaseCore";
 
 export namespace Nikku {
     export type Core = NikkuCore;

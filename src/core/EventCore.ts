@@ -4,7 +4,7 @@ import { Logger } from "log";
 import { Nikku } from "core";
 import { OnMessageState } from "state";
 import { EventType } from "event";
-import CommandManager from "managers/CommandManager";
+import { CommandManager } from "managers";
 import { core as coreInstance } from "./";
 
 export class EventCore {

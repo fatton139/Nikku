@@ -1,8 +1,9 @@
-import AbstractCommand from "./AbstractCommand";
 import { Trigger, HasAction, HasTrigger } from "action";
 import { OnMessageState } from "state";
 
-export default class TriggerableCommand extends AbstractCommand implements HasAction, HasTrigger {
+import { AbstractCommand } from "./";
+
+export class TriggerableCommand extends AbstractCommand implements HasAction, HasTrigger {
 
     protected trigger: Trigger;
 

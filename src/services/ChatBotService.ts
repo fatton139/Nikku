@@ -2,15 +2,14 @@
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { NikkuConfig } from "config";
+import { isUndefined } from "util";
+import { NikkuConfig, GuildConfig } from "config";
 import { Logger } from "log";
 import { OnMessageState } from "state";
-import StringFunc from "utils/StringFunc";
+import { StringHelpers } from "utils";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
-import { GuildConfig } from "config/GuildConfig";
-import { isUndefined } from "util";
 
-export default class ChatBotService {
+export class ChatBotService {
 
     private bot: ChatBot;
 
@@ -30,7 +29,7 @@ export default class ChatBotService {
 
     public async sendMessage(state: OnMessageState): Promise<boolean> {
         const m: Discord.Message = state.getHandle();
-        const str = StringFunc.removeStrBothEndsNoSpace(m.content, "mrfortnite");
+        const str = StringHelpers.removeStrBothEndsNoSpace(m.content, "mrfortnite");
         if (str.length === 0) {
             return false;
         }

@@ -1,7 +1,7 @@
-import AbstractManager from "./AbstractManager";
-import { NikkuConfig } from "config/NikkuConfig";
+import { NikkuConfig } from "config";
+import { AbstractManager } from "./";
 
-export default class PrefixManager extends AbstractManager {
+export class PrefixManager extends AbstractManager {
     /**
      * An array of prefixes accepted by the bot.
      */

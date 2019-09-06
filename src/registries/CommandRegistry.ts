@@ -1,8 +1,7 @@
-import AbstractCommand from "command/AbstractCommand";
-import TriggerableCommand from "command/TriggerableCommand";
-import BaseRegistry from "./BaseRegistry";
+import { AbstractCommand, TriggerableCommand } from "command";
+import { BaseRegistry } from "./";
 
-export default class CommandRegistry extends BaseRegistry<AbstractCommand> {
+export class CommandRegistry extends BaseRegistry<AbstractCommand> {
     public constructor() {
         super();
     }

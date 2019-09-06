@@ -1,6 +1,6 @@
 import * as moment from "moment";
 import * as winston from "winston";
-import { ChannelTransport } from "log";
+import { ChannelTransport } from "./";
 
 export class Logger {
     private readonly logger: winston.Logger;

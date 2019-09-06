@@ -1,17 +1,19 @@
 import * as MongoDb from "mongodb";
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
-import DBUserSchema from "database/schemas/DBUserSchema";
-import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
 import { Logger } from "log";
+import { AccessLevel } from "user/AccessLevel";
+import { NikkuConfig } from "config";
+import { Nikku } from "./";
+
+// Will be removed soon.
 import { UserMigration } from "database/migration/UserMigration";
 import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
 import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
 import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
-import { Nikku } from "core";
-import { AccessLevel } from "user/AccessLevel";
+import DBUserSchema from "database/schemas/DBUserSchema";
+import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
 import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
-import { NikkuConfig } from "config";
 
 export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();

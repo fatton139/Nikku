@@ -1,7 +1,7 @@
 import { NikkuConfig } from "config";
 import { LevenshteinDistance } from "math/LevenshteinDistance";
 
-export namespace CommandUtil {
+export namespace CommandHelpers {
     /**
      * Extracts the user id from a string.
      * @param text - The text to extract id from.

@@ -1,5 +1,5 @@
-export default class StringFunc {
-    public static removeFirstCharsNoSpace(str: string, length: number): string {
+export namespace StringHelpers {
+    export const removeFirstCharsNoSpace = (str: string, length: number): string => {
         let spaces = 0;
         for (let i = 0; i < length; i++) {
             if (str[i] === " ") {
@@ -7,9 +7,9 @@ export default class StringFunc {
             }
         }
         return str.substring(length + spaces).trim();
-    }
+    };
 
-    public static removeLastCharsNoSpace(str: string, length: number): string {
+    export const removeLastCharsNoSpace = (str: string, length: number): string => {
         let spaces = 0;
         for (let i = 0; i < length; i++) {
             if (str[str.length - i - 1] === " ") {
@@ -17,16 +17,16 @@ export default class StringFunc {
             }
         }
         return str.substring(0, str.length - (length + spaces)).trim();
-    }
+    };
 
-    public static removeStrBothEndsNoSpace(str: string, removeString: string): string {
+    export const removeStrBothEndsNoSpace = (str: string, removeString: string): string => {
         let newStr = str;
         if (newStr.replace(/\s/g, "").toLowerCase().startsWith(removeString)) {
-            newStr = StringFunc.removeFirstCharsNoSpace(newStr, removeString.length);
+            newStr = removeFirstCharsNoSpace(newStr, removeString.length);
         }
         if (newStr.replace(/\s/g, "").toLowerCase().endsWith(removeString)) {
-            newStr = StringFunc.removeLastCharsNoSpace(newStr, removeString.length);
+            newStr = removeLastCharsNoSpace(newStr, removeString.length);
         }
         return newStr;
-    }
+    };
 }

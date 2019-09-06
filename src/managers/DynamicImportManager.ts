@@ -1,8 +1,8 @@
-import AbstractManager from "./AbstractManager";
 import * as path from "path";
 import * as fs from "fs";
+import { AbstractManager } from "./";
 
-export default class DynamicImportManager extends AbstractManager {
+export class DynamicImportManager extends AbstractManager {
 
     protected readonly FULL_PATH?: string;
 

@@ -1,7 +1,7 @@
 import * as winston from "winston";
 import { Logger } from "log";
 
-export default class BaseRegistry<T> {
+export abstract class BaseRegistry<T> {
 
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 

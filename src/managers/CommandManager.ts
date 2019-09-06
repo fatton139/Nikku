@@ -1,16 +1,16 @@
-import Command from "command/AbstractCommand";
-import DBUserSchema from "database/schemas/DBUserSchema";
-import PrefixManager from "managers/PrefixManager";
-import CommandRegistry from "../registries/CommandRegistry";
-import TriggerableCommand from "../command/TriggerableCommand";
-import { OnMessageState } from "state";
-import ExecutableCommand from "../command/ExecutableCommand";
-import { NikkuException } from "exception";
-import { AccessLevel } from "user/AccessLevel";
-import DynamicImportManager from "./DynamicImportManager";
-import { NikkuConfig } from "config/NikkuConfig";
+import { TriggerableCommand, ExecutableCommand, AbstractCommand as Command } from "command";
 
-export default class CommandManager extends DynamicImportManager {
+import { CommandRegistry } from "registries";
+import { OnMessageState } from "state";
+import { NikkuException } from "exception";
+import { AccessLevel } from "user";
+import { NikkuConfig } from "config";
+
+import { DynamicImportManager, PrefixManager } from "./";
+
+import DBUserSchema from "database/schemas/DBUserSchema";
+
+export class CommandManager extends DynamicImportManager {
 
     private prefixManager: PrefixManager;
 
