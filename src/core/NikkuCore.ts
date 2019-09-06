@@ -53,7 +53,7 @@ export class NikkuCore {
      * Start the main processes of the bot.
      */
     public startMainProcesses(): void {
-        this.client.login(this.config.EnvironmentVars.DiscordOptions.TOKEN);
+        this.client.login(this.config.EnvironmentVariables.DiscordOptions.TOKEN);
         this.client.on(EventType.READY, async () => {
             this.setDebugLogChannels();
             await this.loadModules();
@@ -96,7 +96,7 @@ export class NikkuCore {
      * Set Discord channels for debug/logging outputs. Configure it from a botconfig.json file.
      */
     public setDebugLogChannels(): void {
-        const debugChannels = this.config.EnvironmentVars.DiscordOptions.DEBUG_CHANNELS;
+        const debugChannels = this.config.EnvironmentVariables.DiscordOptions.DEBUG_CHANNELS;
         if (debugChannels && debugChannels.length !== 0) {
             for (const id of debugChannels) {
                 const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;

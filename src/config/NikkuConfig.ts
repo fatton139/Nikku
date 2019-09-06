@@ -11,7 +11,7 @@ export namespace NikkuConfig {
     /**
      * Internal namespace for environment variables.
      */
-    export namespace EnvironmentVars {
+    export namespace EnvironmentVariables {
         /**
          * Options regarding discord.js
          */
