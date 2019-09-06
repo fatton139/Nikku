@@ -5,6 +5,7 @@ import { Nikku } from "core";
 import { core as coreInstance } from "core/NikkuCore";
 import OnMessageState from "state/OnMessageState";
 import CommandManager from "managers/CommandManager";
+import { EventType } from "event";
 
 export class EventCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -28,8 +29,8 @@ export class EventCore {
     /**
      * Begin listening for channel messages.
      */
-    public listenMessages(): void {
-        this.client.on("message", (message: Discord.Message) => {
+    public handleMessageEvent(): void {
+        this.client.on(EventType.MESSAGE, (message: Discord.Message) => {
             if (!message.author.bot && message.content.length !== 0) {
                 this.core.getManager(CommandManager).parseLine(message.content,
                     message.author.id, new OnMessageState(message));
@@ -39,11 +40,11 @@ export class EventCore {
 
     public handleGuildRegistration(): void {
         this.client.on("guildCreate", (guild) => {
-            this.logger.verbose(`Joined new server "${guild.name}".`);
+            this.logger.debug(`Joined new server "${guild.name}".`);
         });
 
         this.client.on("guildDelete", (guild) => {
-            this.logger.verbose(`Left server "${guild.name}".`);
+            this.logger.debug(`Left server "${guild.name}".`);
         });
     }
 }

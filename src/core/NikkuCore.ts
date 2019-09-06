@@ -58,7 +58,7 @@ export class NikkuCore {
             this.setDebugLogChannels();
             await this.loadModules();
             if (await this.startDbProcesses()) {
-                this.eventCore.listenMessages();
+                this.eventCore.handleMessageEvent();
             }
         });
     }
