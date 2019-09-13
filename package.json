@@ -14,7 +14,7 @@
     "tsc:build": "tsc --build",
     "tsc:watch": "tsc --build --watch",
     "tslint:fix": "tslint --fix -c tslint.json 'src/**/*{.ts,.tsx}'",
-    "prepare": "npm run tsc"
+    "prepare": "npm run clean && npm run tsc"
   },
   "repository": "git+https://github.com/aXises/Nikku",
   "author": "aXises",
