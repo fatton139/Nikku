@@ -1,23 +1,20 @@
 {
-  "name": "Nikku",
-  "version": "2.6.1",
+  "name": "nikku",
+  "version": "2.6.3",
   "description": "",
   "engines": {
     "node": "10.4"
   },
-  "main": "main.js",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
-    "start": "npm run tsc:build && npm run start:raw",
-    "start:clean": "npm run clean && npm run start",
-    "start:raw": "cross-env NODE_ENV=PRODUCTION NODE_PATH=./src node main.js",
-    "start:dev": "cross-env NODE_ENV=DEVELOPMENT NODE_PATH=./src ts-node main",
-    "start:hot": "nodemon -e ts --exec npm run start:dev",
     "test": "npm run tsc && cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
     "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js",
     "tsc": "tsc",
     "tsc:build": "tsc --build",
     "tsc:watch": "tsc --build --watch",
-    "tslint:fix": "tslint --fix -c tslint.json 'src/**/*{.ts,.tsx}'"
+    "tslint:fix": "tslint --fix -c tslint.json 'src/**/*{.ts,.tsx}'",
+    "prepare": "npm run tsc"
   },
   "repository": "git+https://github.com/aXises/Nikku",
   "author": "aXises",

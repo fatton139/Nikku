@@ -60,10 +60,15 @@ typings/
 # next.js build output
 .next
 
-**.js
-
 **.js.map
 
-**.d.ts
+test/
 
-lib/
+botconfig.json
+
+appveyor.yml
+
+.jshintrc
+
+CODE_OF_CONDUCT.md
+
