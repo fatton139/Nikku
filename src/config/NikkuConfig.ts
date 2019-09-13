@@ -1,13 +1,7 @@
-import { ConfigParser } from "./";
-
 /**
  * Namespace to for all bot configurations.
  */
 export namespace NikkuConfig {
-    export const configParser = new ConfigParser();
-    configParser.parseEnvConfig();
-    export const botConfigOptions = configParser.getBotConfig();
-    export const pjsonData = configParser.getPackageJSONData();
     /**
      * Internal namespace for environment variables.
      */

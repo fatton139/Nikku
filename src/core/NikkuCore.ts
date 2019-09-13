@@ -1,9 +1,9 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { NikkuConfig } from "config";
-import { Logger, ChannelTransport } from "log";
-import { CommandManager, AbstractManager } from "managers";
-import { EventType } from "event";
+import { NikkuConfig, ConfigParser } from "../config";
+import { Logger, ChannelTransport } from "../log";
+import { CommandManager, AbstractManager } from "../managers";
+import { EventType } from "../event";
 import { EventCore, DatabaseCore } from "./";
 
 /**
@@ -25,18 +25,23 @@ export class NikkuCore {
      */
     private databaseCore: DatabaseCore;
 
-    private config: typeof NikkuConfig;
-
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     private managers: Map<string, AbstractManager>;
+
+    private botConfigOptions: BotConfigOptions;
+
+    private pjsonData: PackagejsonData;
 
     /**
      * @param config Initial configurations for the bot.
      * @param initializeImmediately Start main processes immediately.
      */
     public constructor(initializeImmediately?: boolean) {
-        this.config = NikkuConfig;
+        const configParser = new ConfigParser();
+        configParser.parseEnvConfig();
+        this.botConfigOptions = configParser.getBotConfig();
+        this.pjsonData = configParser.getPackageJSONData();
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
         this.eventCore = new EventCore();
@@ -51,7 +56,7 @@ export class NikkuCore {
      * Start the main processes of the bot.
      */
     public startMainProcesses(): void {
-        this.client.login(this.config.EnvironmentVariables.DiscordOptions.TOKEN);
+        this.client.login(NikkuConfig.EnvironmentVariables.DiscordOptions.TOKEN);
         this.client.on(EventType.READY, async () => {
             this.setDebugLogChannels();
             await this.loadModules();
@@ -67,11 +72,11 @@ export class NikkuCore {
     public async startDbProcesses(): Promise<boolean> {
         try {
             await this.databaseCore.connectDb();
-            this.logger.info(`Nikku v${this.config.pjsonData.VERSION} started.`);
+            this.logger.info(`Nikku v${this.pjsonData.VERSION} started.`);
             return true;
         } catch (err) {
             // no db mode.
-            this.logger.warn(`Nikku v${this.config.pjsonData.VERSION} started without an database.`);
+            this.logger.warn(`Nikku v${this.pjsonData.VERSION} started without an database.`);
             this.logger.error(err.message);
             return false;
         }
@@ -94,7 +99,7 @@ export class NikkuCore {
      * Set Discord channels for debug/logging outputs. Configure it from a botconfig.json file.
      */
     public setDebugLogChannels(): void {
-        const debugChannels = this.config.EnvironmentVariables.DiscordOptions.DEBUG_CHANNELS;
+        const debugChannels = NikkuConfig.EnvironmentVariables.DiscordOptions.DEBUG_CHANNELS;
         if (debugChannels && debugChannels.length !== 0) {
             for (const id of debugChannels) {
                 const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
@@ -127,10 +132,14 @@ export class NikkuCore {
     }
 
     /**
-     * @returns The current configuration loaded.
+     * @returns The loaded package.json data.
      */
-    public getConfig(): typeof NikkuConfig {
-        return this.config;
+    public getPackageJsonData(): PackagejsonData {
+        return this.pjsonData;
+    }
+
+    public getBotConfigOptions(): BotConfigOptions {
+        return this.botConfigOptions;
     }
 
     /**
