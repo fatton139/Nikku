@@ -1,2 +1,2 @@
-export { Logger } from "log/Logger";
-export { ChannelTransport } from "log/ChannelTransport";
+export { Logger } from "./Logger";
+export { ChannelTransport } from "./ChannelTransport";

@@ -1,12 +1,13 @@
 import * as winston from "winston";
-import { Logger } from "log";
-import { NikkuException, UnauthorizedCommandException } from "exception";
-import { Action, HasAction } from "action";
-import { AccessLevel } from "user";
-import { OnMessageState } from "state";
+
+import { Logger } from "../log";
+import { NikkuException, UnauthorizedExecutionException } from "../exception";
+import { Action, HasAction } from "../action";
+import { AccessLevel } from "../user";
+import { OnMessageState } from "../state";
 import { CommandConstructorData } from "./";
 
-import DBUserSchema from "database/schemas/DBUserSchema";
+import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export abstract class AbstractCommand implements HasAction {
     protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -70,7 +71,7 @@ export abstract class AbstractCommand implements HasAction {
     public async executeAction(msg: OnMessageState, user?: DBUserSchema): Promise<void> {
         if (user && user.accessLevel) {
             if (user.accessLevel < this.accessLevel) {
-                throw new UnauthorizedCommandException(msg, this, user);
+                throw new UnauthorizedExecutionException(msg, this, user);
             }
         }
         try {

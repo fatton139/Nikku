@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as winston from "winston";
-import { config as dotenvConfig } from "dotenv";
-import { Logger } from "log";
 import { isString, isBoolean } from "util";
-import { NikkuException } from "exception";
+import { config as dotenvConfig } from "dotenv";
+import { Logger } from "../log";
+import { NikkuException } from "../exception";
 
 /**
  * Configuration parser for Nikku settings.

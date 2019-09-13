@@ -1,4 +1,4 @@
-import { AccessLevel } from "user";
+import { AccessLevel } from "../user";
 
 export namespace CommandConstructorData {
     export interface Base {

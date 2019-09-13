@@ -1,6 +1,7 @@
 import * as winston from "winston";
-import { Logger } from "log";
-import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
+
+import { Logger } from "../../log";
+import DBGlobalPropertySchema from "../schemas/DBGlobalPropertySchema";
 
 export namespace GlobalPropertyMigration {
     const logger: winston.Logger = new Logger("GlobalPropertyMigration").getLogger();

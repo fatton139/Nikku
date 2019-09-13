@@ -1,4 +1,5 @@
 import * as Discord from "discord.js";
+
 import { CoreState } from "./";
 
 export class OnMessageState extends CoreState<Discord.Message> {

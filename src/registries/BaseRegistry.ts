@@ -1,5 +1,6 @@
 import * as winston from "winston";
-import { Logger } from "log";
+
+import { Logger } from "../log";
 
 export abstract class BaseRegistry<T> {
 

@@ -4,7 +4,9 @@ import { NikkuConfig, ConfigParser } from "../config";
 import { Logger, ChannelTransport } from "../log";
 import { CommandManager, AbstractManager } from "../managers";
 import { EventType } from "../event";
-import { EventCore, DatabaseCore } from "./";
+
+import { EventCore } from "./EventCore";
+import { DatabaseCore } from "./DatabaseCore";
 
 /**
  * The main class of the bot, initializes most of the main processes.
@@ -44,7 +46,7 @@ export class NikkuCore {
         this.pjsonData = configParser.getPackageJSONData();
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
-        this.eventCore = new EventCore();
+        this.eventCore = new EventCore(this);
         this.databaseCore = new DatabaseCore();
         this.logger.debug("Core initialized.");
         if (initializeImmediately) {

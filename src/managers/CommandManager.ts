@@ -1,14 +1,14 @@
-import { TriggerableCommand, ExecutableCommand, AbstractCommand as Command } from "command";
+import { TriggerableCommand, ExecutableCommand, AbstractCommand as Command } from "../command";
+import { CommandRegistry } from "../registries";
+import { OnMessageState } from "../state";
+import { NikkuException } from "../exception";
+import { AccessLevel } from "../user";
+import { core } from "../core";
 
-import { CommandRegistry } from "registries";
-import { OnMessageState } from "state";
-import { NikkuException } from "exception";
-import { AccessLevel } from "user";
-import { NikkuConfig } from "config";
+import { DynamicImportManager } from "./DynamicImportManager";
+import { PrefixManager } from "./PrefixManager";
 
-import { DynamicImportManager, PrefixManager } from "./";
-
-import DBUserSchema from "database/schemas/DBUserSchema";
+import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export class CommandManager extends DynamicImportManager {
 
@@ -20,7 +20,12 @@ export class CommandManager extends DynamicImportManager {
      * @classdesc Class to handle import and execution of commands.
      */
     public constructor() {
-        super(NikkuConfig.botConfigOptions.MODULE_PATHS ? NikkuConfig.botConfigOptions.MODULE_PATHS : [], undefined);
+        const modulePaths = core.getBotConfigOptions().MODULE_PATHS;
+        if (modulePaths) {
+            super(modulePaths);
+        } else {
+            super([]);
+        }
         this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
     }
@@ -77,7 +82,7 @@ export class CommandManager extends DynamicImportManager {
     private async attemptExecution(
         command: Command, args: string[], userId: string, message: OnMessageState,
     ): Promise<void> {
-        if (!this.core.getDbCore().isReady()) {
+        if (!core.getDbCore().isReady()) {
             this.logger.warn("Please wait until database connection has resolved.");
             return;
         }

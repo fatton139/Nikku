@@ -1,5 +1,5 @@
-import { Action, HasAction } from "action";
-import { OnMessageState } from "state";
+import { Action, HasAction } from "../action";
+import { OnMessageState } from "../state";
 import { AbstractCommand, CommandConstructorData } from "./";
 
 export abstract class ExecutableCommand extends AbstractCommand implements HasAction {

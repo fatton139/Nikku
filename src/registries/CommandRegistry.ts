@@ -1,4 +1,5 @@
-import { AbstractCommand, TriggerableCommand } from "command";
+import { AbstractCommand, TriggerableCommand } from "../command";
+
 import { BaseRegistry } from "./";
 
 export class CommandRegistry extends BaseRegistry<AbstractCommand> {

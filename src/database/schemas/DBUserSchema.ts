@@ -1,12 +1,13 @@
 import * as winston from "winston";
 import * as Mongoose from "mongoose";
-import { Logger } from "log";
 import { prop, Typegoose, InstanceType, instanceMethod } from "typegoose";
-import { AccessLevel } from "user/AccessLevel";
-import { CoinType } from "user/CoinType";
-import Skill from "user/skill/Skill";
-import SkillType from "user/skill/SkillType";
-import { DatabaseException } from "exception/DatabaseException";
+
+import { Logger } from "../../log";
+import { AccessLevel } from "../../user/AccessLevel";
+import { CoinType } from "../../user/CoinType";
+import Skill from "../../user/skill/Skill";
+import SkillType from "../../user/skill/SkillType";
+import { DatabaseException } from "../../exception/DatabaseException";
 
 export default class DBUserSchema extends Typegoose {
     public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();

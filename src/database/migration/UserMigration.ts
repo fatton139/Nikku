@@ -1,7 +1,8 @@
 import * as winston from "winston";
-import { Logger } from "log";
-import DBUserSchema from "database/schemas/DBUserSchema";
-import { AccessLevel } from "user/AccessLevel";
+
+import { Logger } from "../../log";
+import DBUserSchema from "../schemas/DBUserSchema";
+import { AccessLevel } from "../../user/AccessLevel";
 
 export namespace UserMigration {
     const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();

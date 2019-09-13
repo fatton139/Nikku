@@ -1,6 +1,7 @@
 import * as winston from "winston";
-import { Logger } from "log";
-import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+
+import { Logger } from "../../log";
+import DBBradPropertySchema from "../schemas/DBBradPropertySchema";
 
 export namespace BradPropertyMigration {
     const logger: winston.Logger = new Logger("BradPropertyMigration").getLogger();

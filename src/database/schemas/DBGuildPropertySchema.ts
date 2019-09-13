@@ -1,10 +1,11 @@
 import * as winston from "winston";
-import { Logger } from "log";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
 import * as Mongoose from "mongoose";
-import { GuildConfig } from "config/GuildConfig";
 import { isUndefined } from "util";
-import { NikkuException } from "exception";
+
+import { Logger } from "../../log";
+import { GuildConfig } from "../../config";
+import { NikkuException } from "../../exception";
 
 export default class DBGuildPropertySchema extends Typegoose {
     private static readonly logger: winston.Logger = new Logger(DBGuildPropertySchema.constructor.name).getLogger();

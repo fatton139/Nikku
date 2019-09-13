@@ -3,11 +3,13 @@ import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
 import { isUndefined } from "util";
-import { NikkuConfig, GuildConfig } from "config";
-import { Logger } from "log";
-import { OnMessageState } from "state";
-import { StringHelpers } from "utils";
-import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
+
+import { NikkuConfig, GuildConfig } from "../config";
+import { Logger } from "../log";
+import { OnMessageState } from "../state";
+import { StringHelpers } from "../utils";
+
+import DBGuildPropertySchema from "../database/schemas/DBGuildPropertySchema";
 
 export class ChatBotService {
 

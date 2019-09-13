@@ -1,7 +1,9 @@
 import * as Discord from "discord.js";
-import { CoreState } from "state";
-import { AbstractCommand } from "command";
-import { NikkuException } from "./";
+
+import { CoreState } from "../state";
+import { AbstractCommand } from "../command";
+
+import { NikkuException } from "./NikkuException";
 
 export class CommandException extends NikkuException {
 

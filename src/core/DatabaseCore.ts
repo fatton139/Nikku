@@ -1,19 +1,21 @@
 import * as MongoDb from "mongodb";
 import * as Mongoose from "mongoose";
 import * as winston from "winston";
-import { Logger } from "log";
-import { AccessLevel } from "user/AccessLevel";
-import { NikkuConfig } from "config";
-import { Nikku } from "./";
+
+import { Logger } from "../log";
+import { AccessLevel } from "../user";
+import { NikkuConfig } from "../config";
+
+import { core } from "./NikkuCore";
 
 // Will be removed soon.
-import { UserMigration } from "database/migration/UserMigration";
-import { GlobalPropertyMigration } from "database/migration/GlobalPropertyMigration";
-import { GuildPropertyMigration } from "database/migration/GuildPropertyMigration";
-import { BradPropertyMigration } from "database/migration/BradPropertyMigration";
-import DBUserSchema from "database/schemas/DBUserSchema";
-import DBGlobalPropertySchema from "database/schemas/DBGlobalPropertySchema";
-import DBBradPropertySchema from "database/schemas/DBBradPropertySchema";
+import { UserMigration } from "../database/migration/UserMigration";
+import { GlobalPropertyMigration } from "../database/migration/GlobalPropertyMigration";
+import { GuildPropertyMigration } from "../database/migration/GuildPropertyMigration";
+import { BradPropertyMigration } from "../database/migration/BradPropertyMigration";
+import DBUserSchema from "../database/schemas/DBUserSchema";
+import DBGlobalPropertySchema from "../database/schemas/DBGlobalPropertySchema";
+import DBBradPropertySchema from "../database/schemas/DBBradPropertySchema";
 
 export class DatabaseCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -27,8 +29,6 @@ export class DatabaseCore {
 
     private defaultUsers?: string[];
 
-    private core: Nikku.Core;
-
     private ready: boolean;
     /**
      * @classdesc Class for handling important database methods.
@@ -36,7 +36,6 @@ export class DatabaseCore {
     public constructor() {
         this.URI = NikkuConfig.EnvironmentVariables.DatabaseOptions.URI;
         this.defaultUsers = NikkuConfig.EnvironmentVariables.DevUsers.IDS;
-        this.core = Nikku.coreInstance;
         this.ready = false;
         this.logger.debug("Database Core created.");
     }
@@ -69,9 +68,9 @@ export class DatabaseCore {
                 this.logger.info("Database connected successfully.");
                 const doc = await DBBradPropertySchema.getBrad();
                 if (doc && doc.weight) {
-                    this.core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
+                    core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
                 } else {
-                    this.core.setActivity(`Brad's Weight: unknown`);
+                    core.setActivity(`Brad's Weight: unknown`);
                 }
                 resolve();
             });

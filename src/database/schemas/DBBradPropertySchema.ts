@@ -1,6 +1,6 @@
 import * as Mongoose from "mongoose";
 import { prop, Typegoose, InstanceType, instanceMethod, arrayProp } from "typegoose";
-import Brad from "entities/Brad";
+import Brad from "../../entities/Brad";
 
 export class IdContributionPair {
     public id: string;

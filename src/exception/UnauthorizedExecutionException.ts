@@ -1,12 +1,14 @@
 import * as Discord from "discord.js";
-import { CoreState } from "state";
-import { AbstractCommand } from "command";
-import { AccessLevel } from "user";
-import { CommandException } from "./";
 
-import DBUserSchema from "database/schemas/DBUserSchema";
+import { CoreState } from "../state";
+import { AbstractCommand } from "../command";
+import { AccessLevel } from "../user";
 
-export class UnauthorizedCommandException extends CommandException {
+import { CommandException } from "./CommandException";
+
+import DBUserSchema from "../database/schemas/DBUserSchema";
+
+export class UnauthorizedExecutionException extends CommandException {
 
     /**
      * @classdesc Exception thrown when a command is executed without the appropriate access level.

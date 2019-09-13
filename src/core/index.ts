@@ -10,5 +10,4 @@ export namespace Nikku {
     export type Core = NikkuCore;
     export type EventCore = eventCore;
     export type DatabaseCore = databaseCore;
-    export let coreInstance: Core = new NikkuCore();
 }

@@ -1,4 +1,5 @@
-import { NikkuConfig } from "config";
+import { core } from "../core";
+
 import { AbstractManager } from "./";
 
 export class PrefixManager extends AbstractManager {
@@ -12,9 +13,10 @@ export class PrefixManager extends AbstractManager {
      */
     public constructor() {
         super();
+        let commandPrefixes = core.getBotConfigOptions().COMMAND_PREFIXES;
+        commandPrefixes = commandPrefixes ? commandPrefixes : [];
         this.prefixes = [];
-        for (const prefix of NikkuConfig.botConfigOptions.COMMAND_PREFIXES ?
-            NikkuConfig.botConfigOptions.COMMAND_PREFIXES : []) {
+        for (const prefix of commandPrefixes) {
             this.addPrefix(prefix);
         }
     }

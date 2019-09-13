@@ -1,7 +1,8 @@
 import * as winston from "winston";
-import { Logger } from "log";
-import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
-import { GuildConfig } from "config/GuildConfig";
+
+import { Logger } from "../../log";
+import DBGuildPropertySchema from "../schemas/DBGuildPropertySchema";
+import { GuildConfig } from "../../config";
 
 export namespace GuildPropertyMigration {
     const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();

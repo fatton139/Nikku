@@ -1,5 +1,6 @@
 import * as Discord from "discord.js";
-import { CoreState } from "state/CoreState";
+
+import { CoreState } from "../state";
 
 export class Action {
     /**
