@@ -4,9 +4,12 @@ import { NikkuConfig, ConfigParser } from "../config";
 import { Logger, ChannelTransport } from "../log";
 import { CommandManager, AbstractManager } from "../managers";
 import { EventType } from "../event";
+import { NikkuException } from "../exception";
+import { BotConfigOptions, PackagejsonData } from "../config";
 
 import { EventCore } from "./EventCore";
 import { DatabaseCore } from "./DatabaseCore";
+import { CoreInitializer } from "./CoreInitializer";
 
 /**
  * The main class of the bot, initializes most of the main processes.
@@ -34,6 +37,7 @@ export class NikkuCore {
     private botConfigOptions: BotConfigOptions;
 
     private pjsonData: PackagejsonData;
+    private static instance: NikkuCore;
 
     /**
      * @param config Initial configurations for the bot.
@@ -52,6 +56,7 @@ export class NikkuCore {
         if (initializeImmediately) {
             this.startMainProcesses();
         }
+        NikkuCore.instance = this;
     }
 
     /**
@@ -164,6 +169,12 @@ export class NikkuCore {
         }
         return this.managers.get(Cls.name) as T;
     }
-}
 
-export const core: NikkuCore = new NikkuCore();
+    public static getCoreInstance(): NikkuCore {
+        if (!NikkuCore.instance) {
+            throw new NikkuException("Nikku core should be initialized via the constructor first.");
+        } else {
+            return this.instance;
+        }
+    }
+}

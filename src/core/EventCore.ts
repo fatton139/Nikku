@@ -22,9 +22,9 @@ export class EventCore {
      * @param core - The main bot core.
      */
     public constructor(core: NikkuCore) {
+        this.logger.debug("Event Core initialized.");
         this.core = core;
         this.client = core.getClient();
-        this.logger.debug("Event Core created.");
     }
 
     /**

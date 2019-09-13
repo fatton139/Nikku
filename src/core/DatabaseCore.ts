@@ -6,7 +6,7 @@ import { Logger } from "../log";
 import { AccessLevel } from "../user";
 import { NikkuConfig } from "../config";
 
-import { core } from "./NikkuCore";
+import { NikkuCore } from "./NikkuCore";
 
 // Will be removed soon.
 import { UserMigration } from "../database/migration/UserMigration";
@@ -30,14 +30,18 @@ export class DatabaseCore {
     private defaultUsers?: string[];
 
     private ready: boolean;
+
+    private core: NikkuCore;
+
     /**
      * @classdesc Class for handling important database methods.
      */
-    public constructor() {
+    public constructor(core: NikkuCore) {
+        this.logger.debug("Database Core initialized.");
+        this.core = core;
         this.URI = NikkuConfig.EnvironmentVariables.DatabaseOptions.URI;
         this.defaultUsers = NikkuConfig.EnvironmentVariables.DevUsers.IDS;
         this.ready = false;
-        this.logger.debug("Database Core created.");
     }
 
     public static setConnection(connection: Mongoose.Connection): void {
@@ -68,9 +72,9 @@ export class DatabaseCore {
                 this.logger.info("Database connected successfully.");
                 const doc = await DBBradPropertySchema.getBrad();
                 if (doc && doc.weight) {
-                    core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
+                    this.core.setActivity(`Brad's Weight: ${doc.weight.toFixed(4)}kg`);
                 } else {
-                    core.setActivity(`Brad's Weight: unknown`);
+                    this.core.setActivity(`Brad's Weight: unknown`);
                 }
                 resolve();
             });
