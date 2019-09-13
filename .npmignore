@@ -64,6 +64,8 @@ typings/
 
 test/
 
+src/
+
 botconfig.json
 
 appveyor.yml

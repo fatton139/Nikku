@@ -9,7 +9,7 @@
   "types": "lib/src/index.d.ts",
   "scripts": {
     "test": "npm run tsc && cross-env NODE_ENV=TEST NODE_PATH=./src ts-mocha test/**/*.ts --exit",
-    "clean": "del /s .\\src\\*.js && del /s .\\test\\*.js",
+    "clean": "rd /s /q .\\lib",
     "tsc": "tsc",
     "tsc:build": "tsc --build",
     "tsc:watch": "tsc --build --watch",
@@ -30,7 +30,7 @@
     "audit": "0.0.6",
     "cleverbot.io": "^1.0.4",
     "cross-env": "^5.2.0",
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.1",
     "dotenv": "^6.1.0",
     "ffmpeg-binaries": "^3.2.2",
     "moment": "^2.22.2",
