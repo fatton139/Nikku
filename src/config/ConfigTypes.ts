@@ -1,7 +1,7 @@
 /**
  * Type declaration for bot configuration options/fields.
  */
-declare interface BotConfigOptions {
+export interface BotConfigOptions {
     BOT_RESPONSE_TRIGGER?: string;
     MODULE_PATHS?: string[];
     COMMAND_PREFIXES?: string[];
@@ -11,7 +11,7 @@ declare interface BotConfigOptions {
 /**
  * Type declaration for package.json data.
  */
-declare interface PackagejsonData {
+export interface PackagejsonData {
     REPOSITORY?: string;
     AUTHOR?: string;
     VERSION?: string;
