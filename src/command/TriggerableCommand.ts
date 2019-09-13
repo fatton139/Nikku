@@ -1,5 +1,5 @@
-import { Trigger, HasAction, HasTrigger } from "action";
-import { OnMessageState } from "state";
+import { Trigger, HasAction, HasTrigger } from "../action";
+import { OnMessageState } from "../state";
 
 import { AbstractCommand } from "./";
 
