@@ -3,11 +3,11 @@ import { CommandRegistry } from "../registries";
 import { OnMessageState } from "../state";
 import { NikkuException } from "../exception";
 import { AccessLevel } from "../user";
-import { core } from "../core";
+import { NikkuCore } from "../core";
+import { BotConfigOptions } from "../config";
 
 import { DynamicImportManager } from "./DynamicImportManager";
 import { PrefixManager } from "./PrefixManager";
-
 import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export class CommandManager extends DynamicImportManager {
@@ -20,12 +20,8 @@ export class CommandManager extends DynamicImportManager {
      * @classdesc Class to handle import and execution of commands.
      */
     public constructor() {
-        const modulePaths = core.getBotConfigOptions().MODULE_PATHS;
-        if (modulePaths) {
-            super(modulePaths);
-        } else {
-            super([]);
-        }
+        const options: BotConfigOptions | undefined = NikkuCore.getCoreInstance().getBotConfigOptions();
+        super(options && options.MODULE_PATHS ? options.MODULE_PATHS : []);
         this.prefixManager = new PrefixManager();
         this.commandRegistry = new CommandRegistry();
     }
@@ -82,7 +78,7 @@ export class CommandManager extends DynamicImportManager {
     private async attemptExecution(
         command: Command, args: string[], userId: string, message: OnMessageState,
     ): Promise<void> {
-        if (!core.getDbCore().isReady()) {
+        if (!NikkuCore.getCoreInstance().getDbCore().isReady()) {
             this.logger.warn("Please wait until database connection has resolved.");
             return;
         }
