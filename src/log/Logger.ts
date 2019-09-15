@@ -1,9 +1,11 @@
 import * as moment from "moment";
 import * as winston from "winston";
-import { ChannelTransport } from "./";
+
+import { ChannelTransport, HasLog } from "./";
 
 export class Logger {
     private readonly logger: winston.Logger;
+
     public constructor(className: string) {
         this.logger = winston.createLogger({
             format: winston.format.combine(
@@ -39,7 +41,12 @@ export class Logger {
             }
         }
     }
-    public getLogger(): winston.Logger {
-        return this.logger;
+
+    public static getNamedLogger(constructor: Function): winston.Logger {
+        return new Logger(constructor.name).logger;
+    }
+
+    public static getLogger<T extends HasLog | Function>(cls: (Function & {prototype: T})): winston.Logger {
+        return new Logger(cls.name).logger;
     }
 }
