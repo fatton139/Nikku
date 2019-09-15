@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as winston from "winston";
 import { isString, isBoolean } from "util";
-import { config as dotenvConfig } from "dotenv";
+import { config as dotenvConfig, DotenvConfigOutput } from "dotenv";
 import { Logger } from "../log";
 import { NikkuException } from "../exception";
 import { BotConfigOptions, PackagejsonData } from "../config";
@@ -15,11 +15,14 @@ export class ConfigParser {
     private botConfig: BotConfigOptions;
     private packagejsonData: PackagejsonData;
     private configPath: string;
+    private dotenvPath?: string;
 
-    public constructor(configPath = "botconfig.json") {
+    public constructor(configPath = "botconfig.json", dotenvPath?: string) {
         this.botConfig = {};
         this.packagejsonData = {};
         this.configPath = configPath;
+        this.dotenvPath = dotenvPath;
+
     }
     /**
      * Parses bot configuration/settings.
@@ -30,14 +33,14 @@ export class ConfigParser {
         try {
             botConfig = JSON.parse(fs.readFileSync(this.configPath, "utf8"));
         } catch (e) {
-            this.logger.error(e.message);
+            this.logger.error(`${e.message} while parsing '${this.configPath}'.`);
             throw new NikkuException(e.message, e.stack);
         }
         if (botConfig.BOT_RESPONSE_TRIGGER && isString(botConfig.BOT_RESPONSE_TRIGGER)) {
             this.botConfig.BOT_RESPONSE_TRIGGER = botConfig.BOT_RESPONSE_TRIGGER;
             this.logger.info(`Response trigger word set to ${this.botConfig.BOT_RESPONSE_TRIGGER}`);
         } else {
-            this.logger.warn("Invalid response trigger word. Chat services will not be enabled.");
+            this.logger.warn("Invalid response trigger word. Chat services will be disabled.");
         }
 
         if (botConfig.MODULE_PATHS && Array.isArray(botConfig.MODULE_PATHS)) {
@@ -85,9 +88,15 @@ export class ConfigParser {
      * Loads environment variables with dotenv.
      */
     public parseEnvConfig(): this {
-        const result = dotenvConfig();
+        const result: DotenvConfigOutput = this.dotenvPath ? dotenvConfig({path: this.dotenvPath}) : dotenvConfig();
+        if (this.dotenvPath) {
+            this.logger.info(`Using ${this.dotenvPath} as environment variable file.`);
+        } else {
+            this.logger.info(`No environment variable file specified. Using default file '.env'.`);
+        }
         if (result.error) {
-            this.logger.error(result.error);
+            this.logger.error(result.error.message);
+            throw new NikkuException(result.error.message, result.error.stack);
         }
         return this;
     }

@@ -5,4 +5,5 @@
 export interface CoreInitializer {
     initializeImmediately?: boolean;
     configurationPath?: string;
+    dotenvPath?: string;
 }

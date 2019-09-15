@@ -1,11 +1,10 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { NikkuConfig, ConfigParser } from "../config";
+import { NikkuConfig, ConfigParser, BotConfigOptions, PackagejsonData } from "../config";
 import { Logger, ChannelTransport } from "../log";
 import { CommandManager, AbstractManager } from "../managers";
 import { EventType } from "../event";
 import { NikkuException } from "../exception";
-import { BotConfigOptions, PackagejsonData } from "../config";
 
 import { EventCore } from "./EventCore";
 import { DatabaseCore } from "./DatabaseCore";
@@ -50,7 +49,9 @@ export class NikkuCore {
         this.managers = new Map<string, AbstractManager>();
         this.eventCore = new EventCore(this);
         this.databaseCore = new DatabaseCore(this);
-        this.retrieveInitializationConfiguration(new ConfigParser(coreInitializer.configurationPath));
+        this.retrieveInitializationConfiguration(
+            new ConfigParser(coreInitializer.configurationPath, coreInitializer.dotenvPath),
+        );
         if (coreInitializer.initializeImmediately) {
             this.startMainProcesses();
         }
@@ -71,7 +72,9 @@ export class NikkuCore {
     private validateEnvironmentalVariables(): void {
         let exception: NikkuException | undefined;
         if (!NikkuConfig.EnvironmentVariables.DiscordOptions.TOKEN) {
-            exception = new NikkuException("Missing Discord Bot Token.");
+            exception = new NikkuException(
+                "Missing Discord bot token in environment variables. Please specify 'DISCORD_BOT_TOKEN'.",
+            );
         }
         // Additional checking for other options.
         if (exception) {
