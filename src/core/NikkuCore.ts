@@ -1,10 +1,10 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { NikkuConfig, ConfigParser, BotConfigOptions, PackagejsonData } from "../config";
+import { ConfigParser, PackagejsonData } from "../config";
 import { Logger, ChannelTransport } from "../log";
 import { CommandManager, AbstractManager } from "../managers";
 import { EventType } from "../event";
-import { NikkuException } from "../exception";
+import { NikkuException, ExceptionHandler } from "../exception";
 
 import { EventCore } from "./EventCore";
 import { DatabaseCore } from "./DatabaseCore";
@@ -33,9 +33,9 @@ export class NikkuCore {
 
     private managers: Map<string, AbstractManager>;
 
-    private botConfigOptions?: BotConfigOptions;
+    private config: ConfigParser;
 
-    private pjsonData?: PackagejsonData;
+    private exceptionHandler: ExceptionHandler;
 
     private static instance: NikkuCore;
 
@@ -45,40 +45,35 @@ export class NikkuCore {
      */
     public constructor(coreInitializer: CoreInitializer) {
         this.logger.debug("Nikku Core initialized.");
+        this.config = new ConfigParser(coreInitializer.configurationPath, coreInitializer.dotenvPath);
+        this.exceptionHandler = new ExceptionHandler(true);
         this.client = new Discord.Client();
+        this.setupNikkuParameters();
         this.managers = new Map<string, AbstractManager>();
         this.eventCore = new EventCore(this);
         this.databaseCore = new DatabaseCore(this);
-        this.retrieveInitializationConfiguration(
-            new ConfigParser(coreInitializer.configurationPath, coreInitializer.dotenvPath),
-        );
+        NikkuCore.instance = this;
         if (coreInitializer.initializeImmediately) {
             this.startMainProcesses();
         }
-        NikkuCore.instance = this;
     }
 
-    private retrieveInitializationConfiguration(configParser: ConfigParser): void {
+    private retrieveInitializationConfiguration(): void {
         try {
-            configParser.parseConfig().parsePackageJSON().parseEnvConfig();
-            this.botConfigOptions = configParser.getBotConfig();
-            this.pjsonData = configParser.getPackageJSONData();
+            this.config.parseEnvConfig().parseConfig().parsePackageJSON();
+            this.config.validateEnvironmentalVariables();
         }  catch (e) {
             this.logger.error("Error while parsing configurations.");
-            process.exit();
         }
     }
 
-    private validateEnvironmentalVariables(): void {
-        let exception: NikkuException | undefined;
-        if (!NikkuConfig.EnvironmentVariables.DiscordOptions.TOKEN) {
-            exception = new NikkuException(
-                "Missing Discord bot token in environment variables. Please specify 'DISCORD_BOT_TOKEN'.",
-            );
-        }
-        // Additional checking for other options.
-        if (exception) {
-            throw exception;
+    private setupNikkuParameters(): void {
+        try {
+            this.retrieveInitializationConfiguration();
+            this.client.login(this.config.getEnvironmentVariables().discordOptions.DISCORD_BOT_TOKEN);
+        } catch (e) {
+            this.exceptionHandler.handleTopLevel(e, this.logger);
+            process.exit();
         }
     }
 
@@ -87,29 +82,31 @@ export class NikkuCore {
      */
     public startMainProcesses(): void {
         try {
-            this.validateEnvironmentalVariables();
+            this.client.on(EventType.READY, async () => {
+                try {
+                    this.setDebugLogChannels();
+                    await this.loadModules();
+                    if (await this.startDbProcesses()) {
+                        this.eventCore.handleMessageEvent();
+                    }
+                } catch (e) {
+                    this.exceptionHandler.handleTopLevel(e, this.logger);
+                }
+            });
         } catch (e) {
-            this.logger.error(e.message);
-            return;
+            this.exceptionHandler.handleTopLevel(e, this.logger);
         }
-        this.client.login(NikkuConfig.EnvironmentVariables.DiscordOptions.TOKEN);
-        this.client.on(EventType.READY, async () => {
-            this.setDebugLogChannels();
-            await this.loadModules();
-            if (await this.startDbProcesses()) {
-                this.eventCore.handleMessageEvent();
-            }
-        });
     }
 
     /**
      * Starts database related processes.
      */
     public async startDbProcesses(): Promise<boolean> {
-        const version: string | undefined = this.pjsonData ? this.pjsonData.VERSION : "0.0.0";
+        const pjsonData: PackagejsonData = this.config.getPackageJSONData();
+        const version: string = pjsonData && pjsonData.VERSION ? pjsonData.VERSION : "0.0.0";
         try {
             await this.databaseCore.connectDb();
-            this.logger.info(`Nikku v${version ? version : "0.0.0"} started.`);
+            this.logger.info(`Nikku v${version} started.`);
             return true;
         } catch (err) {
             // no db mode.
@@ -136,7 +133,7 @@ export class NikkuCore {
      * Set Discord channels for debug/logging outputs. Configure it from a botconfig.json file.
      */
     public setDebugLogChannels(): void {
-        const debugChannels = NikkuConfig.EnvironmentVariables.DiscordOptions.DEBUG_CHANNELS;
+        const debugChannels = this.config.getEnvironmentVariables().discordOptions.DEBUG_OUTPUT_CHANNELS;
         if (debugChannels && debugChannels.length !== 0) {
             for (const id of debugChannels) {
                 const channel: Discord.TextChannel = this.client.channels.get(id) as Discord.TextChannel;
@@ -169,22 +166,15 @@ export class NikkuCore {
     }
 
     /**
-     * @returns The loaded package.json data.
-     */
-    public getPackageJsonData(): PackagejsonData | undefined {
-        return this.pjsonData;
-    }
-
-    public getBotConfigOptions(): BotConfigOptions | undefined {
-        return this.botConfigOptions;
-    }
-
-    /**
      * Sets the activity of the bot.
      * @param str The activity of the bot.
      */
     public setActivity(str: string): void {
         this.client.user.setActivity(str);
+    }
+
+    public getConfig(): ConfigParser {
+        return this.config;
     }
 
     /* tslint:disable */

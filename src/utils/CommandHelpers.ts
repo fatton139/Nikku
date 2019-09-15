@@ -14,7 +14,7 @@ export namespace CommandHelpers {
 
     export const isResponseTrigger = (message: string, tol: number): boolean => {
         const messageArr: string[] = message.split(" ");
-        const botConfigOptions: BotConfigOptions | undefined = NikkuCore.getCoreInstance().getBotConfigOptions();
+        const botConfigOptions: BotConfigOptions | undefined = NikkuCore.getCoreInstance().getConfig().getBotConfig();
         if (botConfigOptions && botConfigOptions.BOT_RESPONSE_TRIGGER) {
             const triggerWord = botConfigOptions.BOT_RESPONSE_TRIGGER.replace(/\s/g, "").toLowerCase();
             for (let i = 1; i < messageArr.length; i++) {

@@ -11,11 +11,11 @@ export class DynamicImportManager extends AbstractManager {
 
     protected readonly MODULE_PATHS: string[];
 
-    public constructor(modulePaths: string[], dirPath?: string) {
+    public constructor(modulePaths?: string[], dirPath?: string) {
         super();
         this.FULL_PATH = require.main ? `${path.dirname(require.main.filename)}/src/${dirPath}` : undefined;
         this.DIR_PATH = dirPath ? dirPath : "";
-        this.MODULE_PATHS = modulePaths;
+        this.MODULE_PATHS = modulePaths ? modulePaths : (this.botConfig.MODULE_PATHS || []);
     }
 
     protected getImportPaths(): string[] {

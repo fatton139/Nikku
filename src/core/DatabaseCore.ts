@@ -4,7 +4,6 @@ import * as winston from "winston";
 
 import { Logger } from "../log";
 import { AccessLevel } from "../user";
-import { NikkuConfig } from "../config";
 
 import { NikkuCore } from "./NikkuCore";
 
@@ -39,8 +38,8 @@ export class DatabaseCore {
     public constructor(core: NikkuCore) {
         this.logger.debug("Database Core initialized.");
         this.core = core;
-        this.URI = NikkuConfig.EnvironmentVariables.DatabaseOptions.URI;
-        this.defaultUsers = NikkuConfig.EnvironmentVariables.DevUsers.IDS;
+        this.URI = core.getConfig().getEnvironmentVariables().databaseOptions.URI;
+        this.defaultUsers = core.getConfig().getEnvironmentVariables().discordOptions.DEVELOPER_IDS;
         this.ready = false;
     }
 
