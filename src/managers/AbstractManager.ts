@@ -5,7 +5,7 @@ import { Logger } from "../log";
 import { BotConfigOptions } from "../config";
 
 export abstract class AbstractManager {
-    protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
     protected botConfig: BotConfigOptions;
 
     public constructor() {

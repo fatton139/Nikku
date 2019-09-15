@@ -1,11 +1,9 @@
-import * as winston from "winston";
 
-import { Logger } from "../../log";
 import DBGuildPropertySchema from "../schemas/DBGuildPropertySchema";
 import { GuildConfig } from "../../config";
 
 export namespace GuildPropertyMigration {
-    const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
+    //const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
     const localPropertyModel = DBGuildPropertySchema.getModel();
 
     export const createModels = async (): Promise<void> => {
@@ -15,9 +13,9 @@ export namespace GuildPropertyMigration {
         });
         try {
             await model.save();
-            logger.info("Setup guild properties document.");
+            //logger.info("Setup guild properties document.");
         } catch (err) {
-            logger.error("Failed to setup guild properties document.");
+            //logger.error("Failed to setup guild properties document.");
             throw err;
         }
     };

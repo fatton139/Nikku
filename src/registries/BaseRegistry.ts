@@ -4,7 +4,7 @@ import { Logger } from "../log";
 
 export abstract class BaseRegistry<T> {
 
-    protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(BaseRegistry);
 
     protected registry: Map<string, T>;
 

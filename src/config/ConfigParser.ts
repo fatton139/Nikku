@@ -11,7 +11,7 @@ import { DiscordOptions, EnvironmentalVariables, DatabaseOptions, ServiceConfig 
  * Configuration parser for Nikku settings.
  */
 export class ConfigParser {
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(ConfigParser);
 
     private configPath: string;
     private dotenvPath?: string;

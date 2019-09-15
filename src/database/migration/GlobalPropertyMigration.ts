@@ -1,10 +1,7 @@
-import * as winston from "winston";
-
-import { Logger } from "../../log";
 import DBGlobalPropertySchema from "../schemas/DBGlobalPropertySchema";
 
 export namespace GlobalPropertyMigration {
-    const logger: winston.Logger = new Logger("GlobalPropertyMigration").getLogger();
+    //const logger: winston.Logger = new Logger("GlobalPropertyMigration").getLogger();
     const globalPropertyModel = DBGlobalPropertySchema.getModel();
 
     export const createModels = async (): Promise<void> => {
@@ -14,9 +11,9 @@ export namespace GlobalPropertyMigration {
         });
         try {
             await model.save();
-            logger.info("Setup global properties document.");
+            //logger.info("Setup global properties document.");
         } catch (err) {
-            logger.error("Failed to setup global properties document.");
+            //logger.error("Failed to setup global properties document.");
             throw err;
         }
     };

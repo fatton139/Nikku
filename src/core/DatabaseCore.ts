@@ -17,7 +17,7 @@ import DBGlobalPropertySchema from "../database/schemas/DBGlobalPropertySchema";
 import DBBradPropertySchema from "../database/schemas/DBBradPropertySchema";
 
 export class DatabaseCore {
-    private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(DatabaseCore);
 
     private readonly URI?: string;
 

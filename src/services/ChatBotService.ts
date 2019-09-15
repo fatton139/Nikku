@@ -4,7 +4,7 @@ import * as Discord from "discord.js";
 import * as winston from "winston";
 import { isUndefined } from "util";
 
-import { NikkuConfig, GuildConfig } from "../config";
+import { GuildConfig } from "../config";
 import { Logger } from "../log";
 import { OnMessageState } from "../state";
 import { StringHelpers } from "../utils";
@@ -12,10 +12,9 @@ import { StringHelpers } from "../utils";
 import DBGuildPropertySchema from "../database/schemas/DBGuildPropertySchema";
 
 export class ChatBotService {
+    public readonly logger: winston.Logger = Logger.getLogger(ChatBotService);
 
     private bot: ChatBot;
-
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor() {
         if (!NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_API_KEY

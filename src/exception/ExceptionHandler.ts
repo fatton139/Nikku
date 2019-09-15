@@ -3,7 +3,7 @@ import { Logger } from "../log";
 import { NikkuException } from "../exception";
 
 export class ExceptionHandler {
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(ExceptionHandler);
 
     private showStack: boolean;
 

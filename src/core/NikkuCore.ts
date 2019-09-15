@@ -14,28 +14,29 @@ import { CoreInitializer } from "./CoreInitializer";
  * The main class of the bot, initializes most of the main processes.
  */
 export class NikkuCore {
+
+    public readonly logger: winston.Logger = Logger.getLogger(NikkuCore);
+
     /**
      * Discord.js API
      */
-    private client: Discord.Client;
+    private readonly client: Discord.Client;
 
     /**
      * Main event handlers for the bot.
      */
-    private eventCore: EventCore;
+    private readonly eventCore: EventCore;
 
     /**
      * Main database events/handlers for the bot.
      */
-    private databaseCore: DatabaseCore;
+    private readonly databaseCore: DatabaseCore;
 
-    private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    private readonly managers: Map<string, AbstractManager>;
 
-    private managers: Map<string, AbstractManager>;
+    private readonly config: ConfigParser;
 
-    private config: ConfigParser;
-
-    private exceptionHandler: ExceptionHandler;
+    private readonly exceptionHandler: ExceptionHandler;
 
     private static instance: NikkuCore;
 
@@ -177,13 +178,11 @@ export class NikkuCore {
         return this.config;
     }
 
-    /* tslint:disable */
     /**
      * Gets a instance of a manager.
      * @param Cls Class Type of the manager to retrieve.
      */
     public getManager<T extends AbstractManager>(Cls: (new () => T)): T {
-        /* tslint:enable */
         if (!this.managers.has(Cls.name)) {
             this.managers.set(Cls.name, new Cls());
         }

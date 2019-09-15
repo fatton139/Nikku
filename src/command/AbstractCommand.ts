@@ -10,7 +10,7 @@ import { CommandConstructorData } from "./";
 import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export abstract class AbstractCommand implements HasAction {
-    protected logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
     /**
      * The string required to execute this command.
      */

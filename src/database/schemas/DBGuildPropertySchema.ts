@@ -8,7 +8,7 @@ import { GuildConfig } from "../../config";
 import { NikkuException } from "../../exception";
 
 export default class DBGuildPropertySchema extends Typegoose {
-    private static readonly logger: winston.Logger = new Logger(DBGuildPropertySchema.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(DBGuildPropertySchema);
 
     @prop({ required: true, unique: true })
     public id?: string;
@@ -25,7 +25,7 @@ export default class DBGuildPropertySchema extends Typegoose {
         try {
             return await this.save();
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Failed to save guild targets.");
+            //DBGuildPropertySchema.logger.error("Failed to save guild targets.");
             throw err;
         }
     }
@@ -34,14 +34,14 @@ export default class DBGuildPropertySchema extends Typegoose {
     public async removeTarget(this: InstanceType<any> & Mongoose.Document, target: string): Promise<void> {
         const index = this.targets.indexOf(target);
         if (index === -1) {
-            DBGuildPropertySchema.logger.verbose("Target does not exist on current guild target list.");
+            //DBGuildPropertySchema.logger.verbose("Target does not exist on current guild target list.");
             return Promise.reject();
         }
         this.targets.splice(index, 1);
         try {
             return await this.save();
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Remove target, failed to save document.");
+            //DBGuildPropertySchema.logger.error("Remove target, failed to save document.");
             throw err;
         }
     }
@@ -60,7 +60,7 @@ export default class DBGuildPropertySchema extends Typegoose {
             }
             return await this.save();
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Failed to add new configuration.");
+            //DBGuildPropertySchema.logger.error("Failed to add new configuration.");
             throw err;
         }
     }
@@ -72,7 +72,7 @@ export default class DBGuildPropertySchema extends Typegoose {
         try {
             return !isUndefined(this.booleanConfig[configName]);
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Failed to retrieve configuration.");
+            //DBGuildPropertySchema.logger.error("Failed to retrieve configuration.");
             throw err;
         }
     }
@@ -92,7 +92,7 @@ export default class DBGuildPropertySchema extends Typegoose {
             }
             return this.booleanConfig[enumOptions[configName]];
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
+            //DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
             throw err;
         }
     }
@@ -109,7 +109,7 @@ export default class DBGuildPropertySchema extends Typegoose {
             this.booleanConfig[configName] = value;
             return await this.save();
         } catch (err) {
-            DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
+            //DBGuildPropertySchema.logger.error("Unable to retrieve configuration.");
             throw err;
         }
     }
@@ -137,9 +137,9 @@ export default class DBGuildPropertySchema extends Typegoose {
                 }
             }
             await model.save();
-            this.logger.info("Setup guild properties document.");
+            //this.logger.info("Setup guild properties document.");
         } catch (err) {
-            this.logger.error("Failed to setup guild properties document.");
+            //this.logger.error("Failed to setup guild properties document.");
             throw err;
         }
     }

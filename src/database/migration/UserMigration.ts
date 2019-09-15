@@ -5,7 +5,7 @@ import DBUserSchema from "../schemas/DBUserSchema";
 import { AccessLevel } from "../../user/AccessLevel";
 
 export namespace UserMigration {
-    const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
+    const logger: winston.Logger = Logger.getLogger(DBUserSchema)
     const userModel = DBUserSchema.getModel();
 
     export const createModels = async (ids: string[]): Promise<void> => {

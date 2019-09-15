@@ -9,7 +9,7 @@ import { CommandManager } from "../managers";
 import { NikkuCore } from "./NikkuCore";
 
 export class EventCore {
-    private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(EventCore);
     /**
      * Main interface with Discord.js
      */

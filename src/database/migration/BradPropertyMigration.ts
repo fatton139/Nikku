@@ -1,10 +1,8 @@
-import * as winston from "winston";
 
-import { Logger } from "../../log";
 import DBBradPropertySchema from "../schemas/DBBradPropertySchema";
 
 export namespace BradPropertyMigration {
-    const logger: winston.Logger = new Logger("BradPropertyMigration").getLogger();
+    //const logger: winston.Logger = new Logger("BradPropertyMigration").getLogger();
     const bradModel = DBBradPropertySchema.getModel();
 
     export const DEFAULT_STARTING_WEIGHT = 200;
@@ -16,10 +14,10 @@ export namespace BradPropertyMigration {
         });
         try {
             const doc = await model.save();
-            logger.info("Setup Brad properties document.");
+            //logger.info("Setup Brad properties document.");
             Promise.resolve(doc);
         } catch (err) {
-            logger.error("Failed to setup Brad properties document.");
+            //logger.error("Failed to setup Brad properties document.");
             Promise.reject(err);
         }
     };

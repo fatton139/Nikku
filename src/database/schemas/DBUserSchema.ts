@@ -10,7 +10,7 @@ import SkillType from "../../user/skill/SkillType";
 import { DatabaseException } from "../../exception/DatabaseException";
 
 export default class DBUserSchema extends Typegoose {
-    public static readonly logger: winston.Logger = new Logger(DBUserSchema.constructor.name).getLogger();
+    public readonly logger: winston.Logger = Logger.getLogger(DBUserSchema);
     @prop({ required: true, unique: true })
     public id?: string;
 
@@ -49,7 +49,7 @@ export default class DBUserSchema extends Typegoose {
         try {
             return await this.save();
         } catch (err) {
-            DBUserSchema.logger.error("Failed to save user access level.");
+            //DBUserSchema.logger.error("Failed to save user access level.");
             throw err;
         }
     }
@@ -61,7 +61,7 @@ export default class DBUserSchema extends Typegoose {
             await this.markModified("daily");
             return await this.save();
         } catch (err) {
-            DBUserSchema.logger.error("Failed to save user daily.");
+           // DBUserSchema.logger.error("Failed to save user daily.");
             throw err;
         }
     }
@@ -75,7 +75,7 @@ export default class DBUserSchema extends Typegoose {
             await this.markModified("skillsExperienceMap");
             return await this.save();
         } catch (err) {
-            DBUserSchema.logger.error("Failed to update user experience.");
+            //DBUserSchema.logger.error("Failed to update user experience.");
             throw err;
         }
     }
@@ -85,7 +85,7 @@ export default class DBUserSchema extends Typegoose {
         try {
             return this.skillsExperienceMap[SkillType[(type as any).toString()]];
         } catch (err) {
-            DBUserSchema.logger.error("Failed to retrieve user experience.");
+            //DBUserSchema.logger.error("Failed to retrieve user experience.");
             throw err;
         }
     }
@@ -95,7 +95,7 @@ export default class DBUserSchema extends Typegoose {
         try {
             return Skill.getLevelAtExperience(await this.getSkillExperience(type));
         } catch (err) {
-            DBUserSchema.logger.error("Failed to retrieve user level.");
+            //DBUserSchema.logger.error("Failed to retrieve user level.");
             throw err;
         }
     }
@@ -112,7 +112,7 @@ export default class DBUserSchema extends Typegoose {
             await this.markModified("wallet");
             return await this.save();
         } catch (err) {
-            DBUserSchema.logger.error("Failed to save user currency.");
+            //DBUserSchema.logger.error("Failed to save user currency.");
             throw err;
         }
     }
@@ -138,9 +138,9 @@ export default class DBUserSchema extends Typegoose {
         });
         try {
             await model.save();
-            DBUserSchema.logger.info("New user registered.");
+            //DBUserSchema.logger.info("New user registered.");
         } catch (err) {
-            DBUserSchema.logger.info(`Failed to register user:${err}`);
+            //DBUserSchema.logger.info(`Failed to register user:${err}`);
         }
     }
 
@@ -152,10 +152,10 @@ export default class DBUserSchema extends Typegoose {
     public static async removeUser(id: string): Promise<boolean> {
         try {
             await this.getModel().findOne({ id }).remove();
-            DBUserSchema.logger.info("User unregistered.");
+           // DBUserSchema.logger.info("User unregistered.");
             return true;
         } catch (err) {
-            DBUserSchema.logger.info(`Failed to unregister user:${err}`);
+            //DBUserSchema.logger.info(`Failed to unregister user:${err}`);
             return false;
         }
     }
