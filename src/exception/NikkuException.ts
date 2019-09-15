@@ -1,5 +1,4 @@
 export class NikkuException extends Error {
-    public message: string;
 
     /**
      * @classdesc Base custom exception class.
@@ -9,5 +8,13 @@ export class NikkuException extends Error {
     constructor(message?: string, stack?: string) {
         super(stack);
         this.message = message ? message : "No error message specified.";
+    }
+
+    public set message(message: string) {
+        this.message = message;
+    }
+
+    public get message(): string {
+        return this.message;
     }
 }
