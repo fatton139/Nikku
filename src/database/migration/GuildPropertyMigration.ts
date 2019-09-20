@@ -1,32 +1,32 @@
 
-import DBGuildPropertySchema from "../schemas/DBGuildPropertySchema";
-import { GuildConfig } from "../../config";
+// import DBGuildPropertySchema from "../schemas/DBGuildPropertySchema";
+// import { GuildConfig } from "../../config";
 
-export namespace GuildPropertyMigration {
-    //const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
-    const localPropertyModel = DBGuildPropertySchema.getModel();
+// export namespace GuildPropertyMigration {
+//     //const logger: winston.Logger = new Logger("GuildPropertyMigration").getLogger();
+//     const localPropertyModel = DBGuildPropertySchema.getModel();
 
-    export const createModels = async (): Promise<void> => {
-        const model = new localPropertyModel({
-            targets: [],
-            booleanConfig: {},
-        });
-        try {
-            await model.save();
-            //logger.info("Setup guild properties document.");
-        } catch (err) {
-            //logger.error("Failed to setup guild properties document.");
-            throw err;
-        }
-    };
+//     export const createModels = async (): Promise<void> => {
+//         const model = new localPropertyModel({
+//             targets: [],
+//             booleanConfig: {},
+//         });
+//         try {
+//             await model.save();
+//             //logger.info("Setup guild properties document.");
+//         } catch (err) {
+//             //logger.error("Failed to setup guild properties document.");
+//             throw err;
+//         }
+//     };
 
-    export const verifyGuildConfig = async (): Promise<void> => {
-        for (const guild of await localPropertyModel.find({})) {
-            for (const key of GuildConfig.BooleanConfig.keys) {
-                if (!(await guild.booleanConfigExists(key))) {
-                    await guild.addBooleanConfig(key);
-                }
-            }
-        }
-    };
-}
+//     export const verifyGuildConfig = async (): Promise<void> => {
+//         for (const guild of await localPropertyModel.find({})) {
+//             for (const key of GuildConfig.BooleanConfig.keys) {
+//                 if (!(await guild.booleanConfigExists(key))) {
+//                     await guild.addBooleanConfig(key);
+//                 }
+//             }
+//         }
+//     };
+// }

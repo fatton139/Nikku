@@ -6,7 +6,7 @@ import { AccessLevel } from "../user";
 
 import { CommandException } from "./CommandException";
 
-import DBUserSchema from "../database/schemas/DBUserSchema";
+// import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export class UnauthorizedExecutionException extends CommandException {
 
@@ -14,7 +14,7 @@ export class UnauthorizedExecutionException extends CommandException {
      * @classdesc Exception thrown when a command is executed without the appropriate access level.
      * @param message - Message associated with the error.
      */
-    constructor(state: CoreState<Discord.Message>, command: AbstractCommand, user: DBUserSchema) {
+    constructor(state: CoreState<Discord.Message>, command: AbstractCommand, user: any | undefined) {
         super(state, command);
         if (user && user.accessLevel) {
             this.toExecutionUser(

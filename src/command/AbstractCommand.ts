@@ -7,7 +7,7 @@ import { AccessLevel } from "../user";
 import { OnMessageState } from "../state";
 import { CommandInitializer } from "./";
 
-import DBUserSchema from "../database/schemas/DBUserSchema";
+// import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export abstract class AbstractCommand implements HasAction {
     public readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
@@ -68,7 +68,7 @@ export abstract class AbstractCommand implements HasAction {
      * Execute the action provided by this command.
      * @param user - The user attempting to execute this command.
      */
-    public async executeAction(msg: OnMessageState, user?: DBUserSchema): Promise<void> {
+    public async executeAction(msg: OnMessageState, user?: any): Promise<void> {
         if (user && user.accessLevel) {
             if (user.accessLevel < this.accessLevel) {
                 throw new UnauthorizedExecutionException(msg, this, user);
@@ -86,13 +86,13 @@ export abstract class AbstractCommand implements HasAction {
     }
 
     public async executeActionNoUser(msg: OnMessageState): Promise<void> {
-        const tempUser = new DBUserSchema();
+        // const tempUser = new DBUserSchema();
         if (AccessLevel.UNREGISTERED >= this.accessLevel) {
-            return this.executeAction(msg, tempUser);
+            return this.executeAction(msg);
         }
     }
 
-    public async executeActionNoWarning(msg: OnMessageState, user?: DBUserSchema): Promise<void> {
+    public async executeActionNoWarning(msg: OnMessageState, user?: any): Promise<void> {
         if (user && user.accessLevel) {
             if (user.accessLevel >= this.accessLevel) {
                 await this.action.execute(msg, this.args);

@@ -33,8 +33,7 @@ export class EventCore {
     public handleMessageEvent(): void {
         this.client.on(EventType.MESSAGE, (message: Discord.Message) => {
             if (!message.author.bot && message.content.length !== 0) {
-                this.core.getManager(CommandManager).parseLine(message.content,
-                    message.author.id, new OnMessageState(message));
+                this.core.getManager(CommandManager).parseLine(message.content, new OnMessageState(message));
             }
         });
     }

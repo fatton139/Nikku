@@ -9,7 +9,7 @@ import { NikkuException } from "../exception";
 
 import { ImportManager } from "./ImportManager";
 import { PrefixManager } from "./PrefixManager";
-import DBUserSchema from "../database/schemas/DBUserSchema";
+// import DBUserSchema from "../database/schemas/DBUserSchema";
 
 export class CommandManager extends ImportManager {
 
@@ -69,7 +69,7 @@ export class CommandManager extends ImportManager {
      * @param line - The channel message to evaluate.
      * @param id - The discord id of the user invoking the command.
      */
-    public parseLine(line: string, id: string, msg: OnMessageState): void {
+    public parseLine(line: string, msg: OnMessageState): void {
         for (const prefix of this.prefixManager.getPrefixes()) {
             if (line.split(" ")[0] === prefix) {
                 const commandString = this.extractCommand(line);
@@ -89,7 +89,7 @@ export class CommandManager extends ImportManager {
                 return;
             }
         }
-        this.triggerAction(id, msg);
+        this.triggerAction(msg);
     }
 
     private async attemptExecution(
@@ -167,12 +167,13 @@ export class CommandManager extends ImportManager {
      * Attempt to invoke the action by testing if the trigger conditions are met.
      * @param id - The discord id of the user invoking the command.
      */
-    public async triggerAction(userId: string, msg: OnMessageState): Promise<void> {
+    public async triggerAction(msg: OnMessageState): Promise<void> {
         for (const pair of this.commandRegistry.getRegistry().entries()) {
             if (pair[1] instanceof TriggerableCommand) {
                 const command: TriggerableCommand = pair[1];
                 if (await command.tryTrigger(msg)) {
-                    const user = await DBUserSchema.getUserById(userId);
+                    // const user = await DBUserSchema.getUserById(userId);
+                    const user = undefined;
                     try {
                         if (user) {
                             this.logger.info(`Triggering auto command "${command.constructor.name}". NO_WARN.`);
