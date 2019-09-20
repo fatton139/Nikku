@@ -25,9 +25,19 @@ export class CommandManager extends ImportManager {
     }
 
     public async loadCommands(): Promise<void> {
-        const importPaths: string[] = this.getImportPaths();
-        this.logger.info(`Detected ${importPaths.length}` +
+        let importPaths: string[] = [];
+        try {
+            importPaths = await this.getImportPaths();
+        } catch (error) {
+            this.logger.error("Error while generating import paths.");
+        }
+
+        if (importPaths.length > 0) {
+            this.logger.info(`Detected ${importPaths.length}` +
             ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
+        } else {
+            this.logger.info(`No command import paths detected.`);
+        }
         for (const path of importPaths) {
             const commandClass = await import(`${this.DIR_PATH}/${path}`);
             if (!commandClass.default) {
@@ -41,7 +51,7 @@ export class CommandManager extends ImportManager {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
         }
-        this.logger.info(`Successfully imported ${this.commandRegistry.getRegistrySize()} ` +
+        this.logger.info(`Imported ${this.commandRegistry.getRegistrySize()} ` +
             `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
     }
 
