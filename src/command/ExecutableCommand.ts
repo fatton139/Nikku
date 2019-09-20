@@ -1,6 +1,6 @@
 import { Action, HasAction } from "../action";
 import { OnMessageState } from "../state";
-import { AbstractCommand, CommandConstructorData } from "./";
+import { AbstractCommand, ExecutableCommandInitializer } from "./";
 
 export abstract class ExecutableCommand extends AbstractCommand implements HasAction {
     private usage?: string;
@@ -11,7 +11,7 @@ export abstract class ExecutableCommand extends AbstractCommand implements HasAc
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(data: CommandConstructorData.Executable) {
+    public constructor(data: ExecutableCommandInitializer) {
         super(data);
         this.commandString = data.commandString;
         this.usage = data.usage;

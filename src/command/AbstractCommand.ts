@@ -5,7 +5,7 @@ import { NikkuException, UnauthorizedExecutionException } from "../exception";
 import { Action, HasAction } from "../action";
 import { AccessLevel } from "../user";
 import { OnMessageState } from "../state";
-import { CommandConstructorData } from "./";
+import { CommandInitializer } from "./";
 
 import DBUserSchema from "../database/schemas/DBUserSchema";
 
@@ -43,7 +43,7 @@ export abstract class AbstractCommand implements HasAction {
      * @param accessLevel - The required access level to execute this command.
      * @param action - The action to execute.
      */
-    public constructor(data: CommandConstructorData.Base) {
+    public constructor(data: CommandInitializer) {
         this.action = this.setCustomAction();
         this.accessLevel = data.accessLevel;
         this.argLength = data.argLength;
