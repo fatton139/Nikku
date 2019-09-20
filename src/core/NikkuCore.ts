@@ -78,10 +78,14 @@ export class NikkuCore {
         }
     }
 
+    public start(): void {
+        this.startMainProcesses();
+    }
+
     /**
      * Start the main processes of the bot.
      */
-    public startMainProcesses(): void {
+    private startMainProcesses(): void {
         try {
             this.client.on(EventType.READY, async () => {
                 try {
@@ -102,7 +106,7 @@ export class NikkuCore {
     /**
      * Starts database related processes.
      */
-    public async startDbProcesses(): Promise<boolean> {
+    private async startDbProcesses(): Promise<boolean> {
         const pjsonData: PackagejsonData = this.config.getPackageJSONData();
         const version: string = pjsonData && pjsonData.VERSION ? pjsonData.VERSION : "0.0.0";
         try {
@@ -120,7 +124,7 @@ export class NikkuCore {
     /**
      * Loads primary bot modules.
      */
-    public async loadModules(): Promise<void> {
+    private async loadModules(): Promise<void> {
         try {
             Promise.all([
                 this.getManager(CommandManager).loadCommands(),
@@ -133,7 +137,7 @@ export class NikkuCore {
     /**
      * Set Discord channels for debug/logging outputs. Configure it from a botconfig.json file.
      */
-    public setDebugLogChannels(): void {
+    private setDebugLogChannels(): void {
         const debugChannels = this.config.getEnvironmentVariables().discordOptions.DEBUG_OUTPUT_CHANNELS;
         if (debugChannels && debugChannels.length !== 0) {
             for (const id of debugChannels) {
