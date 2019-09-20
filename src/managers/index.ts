@@ -1,4 +1,4 @@
 export { AbstractManager } from "./AbstractManager";
 export { CommandManager } from "./CommandManager";
-export { DynamicImportManager } from "./DynamicImportManager";
+export { ImportManager } from "./ImportManager";
 export { PrefixManager } from "./PrefixManager";

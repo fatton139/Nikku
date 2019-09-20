@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 import { AbstractManager } from "./";
 
-export class DynamicImportManager extends AbstractManager {
+export class ImportManager extends AbstractManager {
 
     protected readonly FULL_PATH?: string;
 
@@ -18,12 +18,19 @@ export class DynamicImportManager extends AbstractManager {
         this.MODULE_PATHS = modulePaths ? modulePaths : (this.botConfig.MODULE_PATHS || []);
     }
 
+    public addImportPath(path: string): void {
+        if (this.MODULE_PATHS.indexOf(path) === -1) {
+            this.MODULE_PATHS.push(path);
+        } else {
+            throw new Error(`Duplicate path '${path}'.`);
+        }
+    }
+
     protected getImportPaths(): string[] {
         const filePaths: string[] = [];
         for (const modulePath of this.MODULE_PATHS) {
-            let files: string[];
             try {
-                files = fs.readdirSync(`${this.FULL_PATH}/${modulePath}`);
+                const files: string[] = fs.readdirSync(`${this.FULL_PATH}/${modulePath}`);
                 if (files.length === 0) {
                     this.logger.verbose(`Empty directory "${modulePath}".`);
                 }

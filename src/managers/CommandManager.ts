@@ -5,11 +5,11 @@ import { NikkuException } from "../exception";
 import { AccessLevel } from "../user";
 import { NikkuCore } from "../core";
 
-import { DynamicImportManager } from "./DynamicImportManager";
+import { ImportManager } from "./ImportManager";
 import { PrefixManager } from "./PrefixManager";
 import DBUserSchema from "../database/schemas/DBUserSchema";
 
-export class CommandManager extends DynamicImportManager {
+export class CommandManager extends ImportManager {
 
     private prefixManager: PrefixManager;
 
