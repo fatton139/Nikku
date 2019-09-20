@@ -1,7 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
+import * as util from "util";
 
 import { AbstractManager } from "./";
+
+const readdir = util.promisify(fs.readdir);
 
 export class ImportManager extends AbstractManager {
 
@@ -26,11 +29,11 @@ export class ImportManager extends AbstractManager {
         }
     }
 
-    protected getImportPaths(): string[] {
+    protected async getImportPaths(): Promise<string[]> {
         const filePaths: string[] = [];
         for (const modulePath of this.MODULE_PATHS) {
             try {
-                const files: string[] = fs.readdirSync(`${this.FULL_PATH}/${modulePath}`);
+                const files: string[] = await readdir(`${this.FULL_PATH}/${modulePath}`);
                 if (files.length === 0) {
                     this.logger.verbose(`Empty directory "${modulePath}".`);
                 }
@@ -41,14 +44,16 @@ export class ImportManager extends AbstractManager {
                         this.logger.info(`Path detected "${modulePath}/${fileName}".`);
                     }
                 }
-            } catch (err) {
-                if (err.code === "ENOENT") {
-                    this.logger.warn(`No such directory "${modulePath}".`);
+            } catch (error) {
+                if (error.code === "ENOENT") {
+                    this.logger.warn(`No such directory "${this.FULL_PATH}/${modulePath}".`);
                 } else {
                     this.logger.warn(`FS error while reading "${modulePath}".`);
                     break;
                 }
-                throw new Error(err);
+                if (error instanceof Error) {
+                    throw error;
+                }
             }
         }
         return filePaths;
