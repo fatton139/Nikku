@@ -95,10 +95,10 @@ export class CommandManager extends ImportManager {
     private async attemptExecution(
         command: Command, args: string[], userId: string, message: OnMessageState,
     ): Promise<void> {
-        if (!NikkuCore.getCoreInstance().getDbCore().isReady()) {
-            this.logger.warn("Please wait until database connection has resolved.");
-            return;
-        }
+        // if (!NikkuCore.getCoreInstance().getDbCore().isReady()) {
+        //     this.logger.warn("Please wait until database connection has resolved.");
+        //     return;
+        // }
         if (command.getArgLength() !== 0 && args.length !== command.getArgLength()) {
             if (command instanceof ExecutableCommand) {
                 command.displayUsageText(message);
@@ -106,33 +106,39 @@ export class CommandManager extends ImportManager {
             }
         }
         command.setArgs(args);
-        const user = await DBUserSchema.getUserById(userId);
-        if (user && user.accessLevel) {
-            if (
-                user && message.getHandle().member.hasPermission("ADMINISTRATOR")
-                && user.accessLevel < AccessLevel.ADMINISTRATOR && user.accessLevel !== AccessLevel.DEVELOPER
-            ) {
-                await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-                message.getHandle().reply(
-                    "You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.",
-                );
-            }
+        this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
+        try {
+            command.executeActionNoUser(message);
+        } catch (err) {
+            throw err;
         }
-        if (user) {
-            this.logger.info(`Executing command "${command.getCommandString()}".`);
-            try {
-                await command.executeAction(message, user);
-            } catch (err) {
-                throw err;
-            }
-        } else {
-            this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
-            try {
-                command.executeActionNoUser(message);
-            } catch (err) {
-                throw err;
-            }
-        }
+        // const user = await DBUserSchema.getUserById(userId);
+        // if (user && user.accessLevel) {
+        //     if (
+        //         user && message.getHandle().member.hasPermission("ADMINISTRATOR")
+        //         && user.accessLevel < AccessLevel.ADMINISTRATOR && user.accessLevel !== AccessLevel.DEVELOPER
+        //     ) {
+        //         await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
+        //         message.getHandle().reply(
+        //             "You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.",
+        //         );
+        //     }
+        // }
+        // if (user) {
+        //     this.logger.info(`Executing command "${command.getCommandString()}".`);
+        //     try {
+        //         await command.executeAction(message, user);
+        //     } catch (err) {
+        //         throw err;
+        //     }
+        // } else {
+        //     this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
+        //     try {
+        //         command.executeActionNoUser(message);
+        //     } catch (err) {
+        //         throw err;
+        //     }
+        // }
 
     }
 

@@ -91,9 +91,10 @@ export class NikkuCore {
                 try {
                     this.setDebugLogChannels();
                     await this.loadModules();
-                    if (await this.startDbProcesses()) {
-                        this.eventCore.handleMessageEvent();
-                    }
+                    this.eventCore.handleMessageEvent();
+                    // if (await this.startDbProcesses()) {
+                    //     this.eventCore.handleMessageEvent();
+                    // }
                 } catch (e) {
                     this.exceptionHandler.handleTopLevel(e, this.logger);
                 }
