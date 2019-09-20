@@ -1,3 +1,5 @@
+import * as path from "path";
+
 import { TriggerableCommand, ExecutableCommand, AbstractCommand as Command } from "../command";
 import { CommandRegistry } from "../registries";
 import { OnMessageState } from "../state";
@@ -24,35 +26,42 @@ export class CommandManager extends ImportManager {
         this.commandRegistry = new CommandRegistry();
     }
 
-    public async loadCommands(): Promise<void> {
-        let importPaths: string[] = [];
+    private async importCommand(importPath: string): Promise<void> {
         try {
-            importPaths = await this.getImportPaths();
-        } catch (error) {
-            this.logger.error("Error while generating import paths.");
-        }
-
-        if (importPaths.length > 0) {
-            this.logger.info(`Detected ${importPaths.length}` +
-            ` ${importPaths.length === 1 ? "command" : "commands"} for import.`);
-        } else {
-            this.logger.info(`No command import paths detected.`);
-        }
-        for (const path of importPaths) {
-            const commandClass = await import(`${this.DIR_PATH}/${path}`);
+            const commandClass = await import(importPath);
             if (!commandClass.default) {
-                this.logger.warn(`Fail to register command. "${this.DIR_PATH}/${path}" has no default export.`);
+                this.logger.warn(`Fail to register command. "${importPath}" has no default export.`);
             } else if (!(new commandClass.default() instanceof Command)) {
                 this.logger.warn(
-                    `Fail to register command."${this.DIR_PATH}/${path}" 
-                    exported class is not of type ${Command.constructor.name}.`,
+                    `Fail to register command."${importPath}"` +
+                    ` exported class is not of type ${Command.name}.`,
                 );
             } else {
                 this.commandRegistry.addCommand(new commandClass.default());
             }
+        } catch (e) {
+            if (e instanceof Error) {
+                throw e;
+            }
         }
-        this.logger.info(`Imported ${this.commandRegistry.getRegistrySize()} ` +
-            `out of ${importPaths.length} ${importPaths.length === 1 ? "command" : "commands"}.`);
+    }
+
+    public async loadCommands(): Promise<void> {
+        try {
+            const importPaths: string[] = await this.getImportPaths();
+            if (importPaths.length > 0) {
+                this.logger.info(`Detected ${importPaths.length} command(s) for import.`);
+            } else {
+                this.logger.info(`No command import paths detected.`);
+            }
+            for (const importPath of importPaths) {
+                await this.importCommand(path.resolve(importPath));
+            }
+            this.logger.info(`Imported ${this.commandRegistry.getRegistrySize()}` +
+                ` out of ${importPaths.length} command(s).`);
+        } catch (error) {
+            this.logger.error("Error while generating import paths.");
+        }
     }
 
     /**

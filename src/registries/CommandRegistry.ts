@@ -16,8 +16,7 @@ export class CommandRegistry extends BaseRegistry<AbstractCommand> {
             }
             this.registry.set(command.constructor.name, command);
             this.logger.info(
-                `AutoCommand registered` +
-                ` "${command.constructor.name}".`,
+                `TriggerableCommand registered "${command.constructor.name}".`,
             );
             return true;
         } else if (name && name.length !== 0) {
@@ -32,7 +31,7 @@ export class CommandRegistry extends BaseRegistry<AbstractCommand> {
         return false;
     }
 
-    public addCommandMulti(commands: AbstractCommand[]): boolean {
+    public addCommands(commands: AbstractCommand[]): boolean {
         for (const command of commands) {
             if (!this.addCommand(command)) {
                 this.logger.warn(`Failed to register command "${command.getCommandString()}".`);
