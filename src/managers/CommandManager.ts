@@ -4,8 +4,8 @@ import { TriggerableCommand, ExecutableCommand, AbstractCommand as Command } fro
 import { CommandRegistry } from "../registries";
 import { OnMessageState } from "../state";
 import { NikkuException } from "../exception";
-import { AccessLevel } from "../user";
-import { NikkuCore } from "../core";
+// import { AccessLevel } from "../user";
+// import { NikkuCore } from "../core";
 
 import { ImportManager } from "./ImportManager";
 import { PrefixManager } from "./PrefixManager";
@@ -79,7 +79,7 @@ export class CommandManager extends ImportManager {
                 const command: Command | undefined = this.commandRegistry.getElementByKey(commandString);
                 if (command) {
                     this.attemptExecution(
-                        command, this.extractArguments(line, command.getArgLength()), id, msg,
+                        command, this.extractArguments(line, command.getArgLength()), msg,
                     ).catch((err) => {
                         this.logger.verbose(
                             `${err.constructor.name}:Execution of "${command.getCommandString()}" failed`,
@@ -93,7 +93,7 @@ export class CommandManager extends ImportManager {
     }
 
     private async attemptExecution(
-        command: Command, args: string[], userId: string, message: OnMessageState,
+        command: Command, args: string[], message: OnMessageState,
     ): Promise<void> {
         // if (!NikkuCore.getCoreInstance().getDbCore().isReady()) {
         //     this.logger.warn("Please wait until database connection has resolved.");

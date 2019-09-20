@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import * as winston from "winston";
-import { ConfigParser, PackagejsonData } from "../config";
+import { ConfigParser } from "../config";
 import { Logger, ChannelTransport } from "../log";
 import { CommandManager, AbstractManager } from "../managers";
 import { EventType } from "../event";
@@ -107,20 +107,20 @@ export class NikkuCore {
     /**
      * Starts database related processes.
      */
-    private async startDbProcesses(): Promise<boolean> {
-        const pjsonData: PackagejsonData = this.config.getPackageJSONData();
-        const version: string = pjsonData && pjsonData.VERSION ? pjsonData.VERSION : "0.0.0";
-        try {
-            await this.databaseCore.connectDb();
-            this.logger.info(`Nikku v${version} started.`);
-            return true;
-        } catch (err) {
-            // no db mode.
-            this.logger.warn(`Nikku v${version} started without an database.`);
-            this.logger.error(err.message);
-            return false;
-        }
-    }
+    // private async startDbProcesses(): Promise<boolean> {
+    //     const pjsonData: PackagejsonData = this.config.getPackageJSONData();
+    //     const version: string = pjsonData && pjsonData.VERSION ? pjsonData.VERSION : "0.0.0";
+    //     try {
+    //         await this.databaseCore.connectDb();
+    //         this.logger.info(`Nikku v${version} started.`);
+    //         return true;
+    //     } catch (err) {
+    //         // no db mode.
+    //         this.logger.warn(`Nikku v${version} started without an database.`);
+    //         this.logger.error(err.message);
+    //         return false;
+    //     }
+    // }
 
     /**
      * Loads primary bot modules.
