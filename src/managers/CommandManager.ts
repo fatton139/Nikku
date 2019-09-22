@@ -26,19 +26,37 @@ export class CommandManager extends ImportManager {
         this.commandRegistry = new CommandRegistry();
     }
 
-    private async importCommand(importPath: string): Promise<void> {
-        try {
-            const commandClass = await import(importPath);
-            if (!commandClass.default) {
-                this.logger.warn(`Fail to register command. "${importPath}" has no default export.`);
-            } else if (!(new commandClass.default() instanceof Command)) {
+    private addCommandsToRegistry(entries: [string, Command][], importPath: string): void {
+        let imported: number = 0;
+        for (const [name, commandClass] of entries) {
+            const CommandClass: any = commandClass;
+            if (!CommandClass.constructor) {
                 this.logger.warn(
-                    `Fail to register command."${importPath}"` +
-                    ` exported class is not of type ${Command.name}.`,
+                    `Fail to register command. "${importPath}"` +
+                    ` exported class "${name}" has no constructor.`,
                 );
-            } else {
-                this.commandRegistry.addCommand(new commandClass.default());
+                continue;
             }
+            const command: Command = new CommandClass();
+            if (!(command instanceof Command)) {
+                this.logger.warn(
+                    `Fail to register command. "${importPath}"` +
+                    ` exported class "${name}" is not of type ${Command.name}.`,
+                );
+                continue;
+            }
+            this.commandRegistry.addCommand(command);
+            imported++;
+        }
+        this.logger.info(`Imported ${imported} out of ${entries.length} command(s).`);
+    }
+
+    private async importCommands(importPath: string): Promise<void> {
+        try {
+            const commands: object = await import(importPath);
+            const entries: [string, Command][] = Object.entries(commands);
+            this.logger.info(`Detected ${entries.length} command(s) for import.`);
+            this.addCommandsToRegistry(entries, importPath);
         } catch (e) {
             if (e instanceof Error) {
                 throw e;
@@ -49,18 +67,15 @@ export class CommandManager extends ImportManager {
     public async loadCommands(): Promise<void> {
         try {
             const importPaths: string[] = await this.getImportPaths();
-            if (importPaths.length > 0) {
-                this.logger.info(`Detected ${importPaths.length} command(s) for import.`);
-            } else {
+            if (importPaths.length === 0) {
                 this.logger.info(`No command import paths detected.`);
+                return;
             }
             for (const importPath of importPaths) {
-                await this.importCommand(path.resolve(importPath));
+                await this.importCommands(path.resolve(importPath));
             }
-            this.logger.info(`Imported ${this.commandRegistry.getRegistrySize()}` +
-                ` out of ${importPaths.length} command(s).`);
         } catch (error) {
-            this.logger.error("Error while generating import paths.");
+            this.logger.error(`Error while generating import paths. ${error.message}`);
         }
     }
 
