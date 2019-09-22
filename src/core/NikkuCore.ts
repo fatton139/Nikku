@@ -76,7 +76,7 @@ export class NikkuCore {
      */
     private async startMainProcesses(): Promise<void> {
         try {
-            await this.client.login(this.config.getEnvironmentVariables().discordOptions.DISCORD_BOT_TOKEN);
+            this.client.login(this.config.getEnvironmentVariables().discordOptions.DISCORD_BOT_TOKEN);
             this.client.on(EventType.READY, async () => {
                 try {
                     await this.loadModules();
