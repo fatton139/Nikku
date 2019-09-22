@@ -25,12 +25,12 @@ export class NikkuCore {
     /**
      * Main event handlers for the bot.
      */
-    private readonly eventCore: EventCore;
+    private eventCore!: EventCore;
 
     /**
      * Main database events/handlers for the bot.
      */
-    private readonly databaseCore: DatabaseCore;
+    private databaseCore!: DatabaseCore;
 
     private readonly managers: Map<string, AbstractManager>;
 
@@ -38,8 +38,9 @@ export class NikkuCore {
 
     private readonly exceptionHandler: ExceptionHandler;
 
-    private static instance: NikkuCore;
+    private readonly initializeImmediately?: boolean;
 
+    private static instance: NikkuCore;
     /**
      * @param config Initial configurations for the bot.
      * @param initializeImmediately Start main processes immediately.
@@ -49,10 +50,8 @@ export class NikkuCore {
         this.config = new ConfigParser(coreInitializer.configurationPath, coreInitializer.dotenvPath);
         this.exceptionHandler = new ExceptionHandler(true);
         this.client = new Discord.Client();
-        this.setupNikkuParameters();
         this.managers = new Map<string, AbstractManager>();
-        this.eventCore = new EventCore(this);
-        this.databaseCore = new DatabaseCore(this);
+        this.setupNikkuParameters();
         NikkuCore.instance = this;
         if (coreInitializer.initializeImmediately) {
             this.startMainProcesses();
@@ -71,26 +70,28 @@ export class NikkuCore {
     private setupNikkuParameters(): void {
         try {
             this.retrieveInitializationConfiguration();
-            this.client.login(this.config.getEnvironmentVariables().discordOptions.DISCORD_BOT_TOKEN);
+            this.eventCore = new EventCore(this);
+            this.databaseCore = new DatabaseCore(this);
         } catch (e) {
             this.exceptionHandler.handleTopLevel(e, this.logger);
             process.exit();
         }
     }
 
-    public start(): void {
-        this.startMainProcesses();
+    public async start(): Promise<void> {
+        await this.startMainProcesses();
     }
 
     /**
      * Start the main processes of the bot.
      */
-    private startMainProcesses(): void {
+    private async startMainProcesses(): Promise<void> {
         try {
+            await this.client.login(this.config.getEnvironmentVariables().discordOptions.DISCORD_BOT_TOKEN);
             this.client.on(EventType.READY, async () => {
                 try {
-                    this.setDebugLogChannels();
                     await this.loadModules();
+                    this.setDebugLogChannels();
                     this.eventCore.handleMessageEvent();
                     // if (await this.startDbProcesses()) {
                     //     this.eventCore.handleMessageEvent();
