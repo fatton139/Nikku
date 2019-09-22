@@ -25,20 +25,18 @@ export class NikkuCore {
     /**
      * Main event handlers for the bot.
      */
-    private eventCore!: EventCore;
+    private readonly eventCore: EventCore;
 
     /**
      * Main database events/handlers for the bot.
      */
-    private databaseCore!: DatabaseCore;
+    private readonly databaseCore: DatabaseCore;
 
     private readonly managers: Map<string, AbstractManager>;
 
     private readonly config: ConfigParser;
 
     private readonly exceptionHandler: ExceptionHandler;
-
-    private readonly initializeImmediately?: boolean;
 
     private static instance: NikkuCore;
     /**
@@ -51,7 +49,9 @@ export class NikkuCore {
         this.exceptionHandler = new ExceptionHandler(true);
         this.client = new Discord.Client();
         this.managers = new Map<string, AbstractManager>();
-        this.setupNikkuParameters();
+        this.retrieveInitializationConfiguration();
+        this.eventCore = new EventCore(this);
+        this.databaseCore = new DatabaseCore(this);
         NikkuCore.instance = this;
         if (coreInitializer.initializeImmediately) {
             this.startMainProcesses();
@@ -64,17 +64,6 @@ export class NikkuCore {
             this.config.validateEnvironmentalVariables();
         }  catch (e) {
             this.logger.error("Error while parsing configurations.");
-        }
-    }
-
-    private setupNikkuParameters(): void {
-        try {
-            this.retrieveInitializationConfiguration();
-            this.eventCore = new EventCore(this);
-            this.databaseCore = new DatabaseCore(this);
-        } catch (e) {
-            this.exceptionHandler.handleTopLevel(e, this.logger);
-            process.exit();
         }
     }
 
