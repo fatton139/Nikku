@@ -7,7 +7,7 @@ export class ExceptionHandler {
 
     private showStack: boolean;
 
-    public constructor(showStack = false) {
+    public constructor(showStack: boolean = false) {
         this.showStack = showStack;
     }
 
@@ -25,7 +25,7 @@ export class ExceptionHandler {
     }
 
     public handleTopLevel(error: Error, classLogger?: winston.Logger): void {
-        const logger = classLogger ? classLogger : this.logger;
+        const logger: winston.Logger = classLogger ? classLogger : this.logger;
         if (error instanceof NikkuException) {
             return this.handleNikkuException(error, logger);
         }

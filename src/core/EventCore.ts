@@ -39,11 +39,11 @@ export class EventCore {
     }
 
     public handleGuildRegistration(): void {
-        this.client.on("guildCreate", (guild) => {
+        this.client.on("guildCreate", (guild: Discord.Guild) => {
             this.logger.debug(`Joined new server "${guild.name}".`);
         });
 
-        this.client.on("guildDelete", (guild) => {
+        this.client.on("guildDelete", (guild: Discord.Guild) => {
             this.logger.debug(`Left server "${guild.name}".`);
         });
     }

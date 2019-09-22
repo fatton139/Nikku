@@ -2,14 +2,12 @@
 import * as ChatBot from "cleverbot.io";
 import * as Discord from "discord.js";
 import * as winston from "winston";
-// import { isUndefined } from "util";
 
-// import { GuildConfig } from "../config";
 import { Logger } from "../log";
 import { OnMessageState } from "../state";
 import { StringHelpers } from "../utils";
-
-// import DBGuildPropertySchema from "../database/schemas/DBGuildPropertySchema";
+import { NikkuCore } from "../core";
+import { EnvironmentalVariables } from "../config";
 
 export class ChatBotService {
     public readonly logger: winston.Logger = Logger.getLogger(ChatBotService);
@@ -18,39 +16,21 @@ export class ChatBotService {
 
     public constructor() {
         this.logger.info("Chat bot service initialized.");
-        // if (!NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_API_KEY
-        //     || !NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_USER_ID
-        //     || !NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_SESSION) {
-        //     this.logger.warn("Failed to initialize chat service. Missing keys.");
-        //     return;
-        // }
-        // this.bot = new ChatBot(NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_USER_ID,
-        //     NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_API_KEY);
-        // this.bot.setNick(NikkuConfig.EnvironmentVariables.ServiceOptions.CHATBOT_SESSION);
+        const environment: EnvironmentalVariables = NikkuCore.getCoreInstance().getConfig().getEnvironmentVariables();
+        this.bot = new ChatBot(environment.serviceConfig.CHATBOT_USER_ID, environment.serviceConfig.CHATBOT_API_KEY);
+        this.bot.setNick(environment.serviceConfig.CHATBOT_SESSION);
     }
 
-    public async sendMessage(state: OnMessageState): Promise<boolean> {
+    public async sendMessage(state: OnMessageState): Promise<void> {
         const m: Discord.Message = state.getHandle();
-        const str = StringHelpers.removeStrBothEndsNoSpace(m.content, "mrfortnite");
-        if (str.length === 0) {
-            return false;
-        }
-        try {
-            // const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
-            // if (guild) {
-            //     const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
-            //     await m.channel.send(`${await this.getResponse(str)}`, {
-            //         tts: isUndefined(ttsEnabled) ? false : ttsEnabled,
-            //     });
-            // }
-            return true;
-        } catch (err) {
-            throw err;
-        }
+        const responseTrigger: string =
+            NikkuCore.getCoreInstance().getConfig().getBotConfig().BOT_RESPONSE_TRIGGER || "";
+        const str = StringHelpers.removeStrBothEndsNoSpace(m.content, responseTrigger);
+        await m.channel.send(`${await this.getResponse(str)}`);
     }
 
     public getResponse(message: string): Promise<string> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: Function, reject: Function): void => {
             this.bot.create((errA: unknown) => {
                 if (errA) {
                     return reject(errA);

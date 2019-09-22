@@ -4,7 +4,7 @@ import * as util from "util";
 
 import { AbstractManager } from "./";
 
-const readdir = util.promisify(fs.readdir);
+const readdir: Function = util.promisify(fs.readdir);
 
 export class ImportManager extends AbstractManager {
 
@@ -35,7 +35,7 @@ export class ImportManager extends AbstractManager {
                     this.logger.warn(`Empty directory "${currentPath}".`);
                 }
                 for (const file of files) {
-                    const fileName = file.split(".")[0];
+                    const fileName: string = file.split(".")[0];
                     const filePath: string = path.join(modulePath, fileName);
                     if (filePaths.indexOf(filePath) === -1) {
                         filePaths.push(filePath);

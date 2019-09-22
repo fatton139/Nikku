@@ -80,7 +80,7 @@ export class CommandManager extends ImportManager {
                 if (command) {
                     this.attemptExecution(
                         command, this.extractArguments(line, command.getArgLength()), msg,
-                    ).catch((err) => {
+                    ).catch((err: Error) => {
                         this.logger.verbose(
                             `${err.constructor.name}:Execution of "${command.getCommandString()}" failed`,
                         );

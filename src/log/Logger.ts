@@ -1,5 +1,6 @@
 import * as moment from "moment";
 import * as winston from "winston";
+import { TransformableInfo } from "logform";
 
 import { ChannelTransport, HasLog } from "./";
 
@@ -16,7 +17,7 @@ export class Logger {
                     filename: "debug.log",
                     level: "info",
                     format: winston.format.combine(
-                        winston.format.printf((info) => {
+                        winston.format.printf((info: TransformableInfo) => {
                             return `${moment().format()}:${info.label}:${info.level}:${info.message}`;
                         }),
                     ),
@@ -25,7 +26,7 @@ export class Logger {
                     level: "debug",
                     format: winston.format.combine(
                         winston.format.colorize(),
-                        winston.format.printf((info) => {
+                        winston.format.printf((info: TransformableInfo) => {
                             return `${moment().format()}:${info.label}:${info.level}:${info.message}`;
                         }),
                     ),

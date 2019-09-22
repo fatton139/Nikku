@@ -19,7 +19,7 @@ export class ConfigParser {
     private botConfig!: BotConfigOptions;
     private packagejsonData!: PackagejsonData;
 
-    public constructor(configPath = "botconfig.json", dotenvPath?: string) {
+    public constructor(configPath: string = "botconfig.json", dotenvPath?: string) {
         this.configPath = configPath;
         this.dotenvPath = dotenvPath;
     }

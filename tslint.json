@@ -42,7 +42,6 @@
         "no-eval": true,
         "no-in-operator": true,
         "no-increment-decrement": true,
-        "no-inferrable-types": true,
         "no-internal-module": true,
         "no-null-keyword": true,
         "no-switch-case-fall-through": true,
@@ -118,7 +117,7 @@
             "parameter",
             "arrow-parameter",
             "property-declaration",
-            "variable-declaration",
+            "variable-declaration-ignore-function",
             "member-variable-declaration",
             "object-destructuring",
             "array-destructuring"

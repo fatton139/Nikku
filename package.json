@@ -13,6 +13,7 @@
     "tsc": "tsc",
     "tsc:build": "tsc --build",
     "tsc:watch": "tsc --build --watch",
+    "tslint": "tslint -c tslint.json 'src/**/*{.ts,.tsx}'",
     "tslint:fix": "tslint --fix -c tslint.json 'src/**/*{.ts,.tsx}'",
     "prepare": "npm run clean && npm run tsc"
   },
