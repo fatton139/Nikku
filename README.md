@@ -248,4 +248,4 @@ Coming soon.
 
 ## Licence
 
-This project is lienced under the MIT Licence. See [LICENCE](LICENCE) for details.
+This project is lienced under the MIT Licence. See [LICENSE](LICENSE) for details.
