@@ -1,19 +1,22 @@
-import { OnMessageState } from "../state";
-import { NikkuException } from "../exception";
+import * as Discord from "discord.js";
 
-export class Action<S = OnMessageState> {
+import { CoreState, OnMessageState } from "../state";
+import { NikkuException } from "../exception";
+import { AsyncUserSpecifiedFunction } from "./";
+
+export class Action<T = void, S extends CoreState<Discord.Message> = OnMessageState> {
     /**
      * An action to invoke.
      */
-    private action: (state: S, args: string[]) => Promise<void>;
+    protected task: AsyncUserSpecifiedFunction<T>;
 
     /**
      * @classdesc Base class for a standard action executed by the bot.
      * @param argLength - Number of arguments the action requires.
      * @param action - An action to invoke.
      */
-    public constructor(action: (state: S, args: string[]) => Promise<void>) {
-        this.action = action;
+    public constructor(task: AsyncUserSpecifiedFunction<T>) {
+        this.task = task;
     }
 
     /**
@@ -22,11 +25,15 @@ export class Action<S = OnMessageState> {
      * @param args - Arguments to execute the action with.
      * @returns true if the command was successfully executed.
      */
-    public async execute(state: S, args: string[]): Promise<void> {
+    public async execute(state: S, args: string[]): Promise<T> {
         try {
-            await this.action(state, args);
+            return await this.task(state, args);
         } catch (err) {
             throw new NikkuException(`Action failed to execute.`);
         }
+    }
+
+    public getTask(): AsyncUserSpecifiedFunction<T> {
+        return this.task;
     }
 }
