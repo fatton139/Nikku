@@ -1,19 +1,19 @@
 import * as Discord from "discord.js";
 
-import { CoreState } from "../state";
+import { OnMessageState } from "../state";
 import { AbstractCommand } from "../command";
 
 import { NikkuException } from "./NikkuException";
 
 export class CommandException extends NikkuException {
 
-    private state: CoreState<Discord.Message>;
+    private state: OnMessageState;
 
     /**
      * @classdesc Exception thrown when a command is executed without the appropriate access level.
      * @param message - Message associated with the error.
      */
-    constructor(state: CoreState<Discord.Message>, command: AbstractCommand) {
+    constructor(state: OnMessageState, command: AbstractCommand) {
         super(`Exception occurred during execution of "${command.getCommandString()}"`);
         this.state = state;
     }

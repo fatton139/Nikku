@@ -97,8 +97,9 @@ export class CommandManager extends ImportManager {
                         command, this.extractArguments(line, command.getArgLength()), msg,
                     ).catch((err: Error) => {
                         this.logger.verbose(
-                            `${err.constructor.name}:Execution of "${command.getCommandString()}" failed`,
+                            `${err.constructor.name}:Execution of "${command.getCommandString()}" failed.`,
                         );
+                        this.logger.verbose(`${err.message}`);
                     });
                 }
                 return;

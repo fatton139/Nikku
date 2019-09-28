@@ -56,7 +56,7 @@ export abstract class AbstractCommand implements HasAction {
      * Changes the arguments of the command.
      * @param args - New arguments for the command.
      */
-    public setArgs(args: string[]): void {
+    public setArgs(args: string[] | undefined): void {
         this.args = args ? args : [];
     }
 
@@ -75,12 +75,9 @@ export abstract class AbstractCommand implements HasAction {
             }
         }
         try {
-            const status = await this.action.execute(msg, this.args);
-            if (!status) {
-                throw new NikkuException("Failed execution.");
-            }
+            await this.action.execute(msg, this.args);
         } catch (err) {
-            throw err;
+            throw new NikkuException(err.message, err.stack);
         }
 
     }

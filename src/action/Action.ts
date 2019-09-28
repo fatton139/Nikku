@@ -1,19 +1,18 @@
-import * as Discord from "discord.js";
+import { OnMessageState } from "../state";
+import { NikkuException } from "../exception";
 
-import { CoreState } from "../state";
-
-export class Action {
+export class Action<S = OnMessageState> {
     /**
      * An action to invoke.
      */
-    private action: (state: CoreState<Discord.Message>, args: string[]) => Promise<boolean>;
+    private action: (state: S, args: string[]) => Promise<void>;
 
     /**
      * @classdesc Base class for a standard action executed by the bot.
      * @param argLength - Number of arguments the action requires.
      * @param action - An action to invoke.
      */
-    public constructor(action: (state: CoreState<Discord.Message>, args: string[]) => Promise<boolean>) {
+    public constructor(action: (state: S, args: string[]) => Promise<void>) {
         this.action = action;
     }
 
@@ -23,11 +22,11 @@ export class Action {
      * @param args - Arguments to execute the action with.
      * @returns true if the command was successfully executed.
      */
-    public async execute(state: CoreState<Discord.Message>, args: string[]): Promise<boolean> {
+    public async execute(state: S, args: string[]): Promise<void> {
         try {
-            return await this.action(state, args);
+            await this.action(state, args);
         } catch (err) {
-            throw err;
+            throw new NikkuException(`Action failed to execute.`);
         }
     }
 }
