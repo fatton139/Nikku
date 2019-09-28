@@ -1,5 +1,5 @@
-import { Trigger } from "./";
+import { OnMessageState } from "../state";
 
 export interface HasTrigger {
-    setCustomTrigger(): Trigger;
+    setCustomTriggerFunction(state: OnMessageState, args: string[]): Promise<boolean>;
 }

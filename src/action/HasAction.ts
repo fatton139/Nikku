@@ -1,5 +1,5 @@
-import { Action } from "./";
+import { OnMessageState } from "../state";
 
 export interface HasAction {
-    setCustomAction(): Action;
+    setCustomActionFunction(state: OnMessageState, args: string[]): Promise<void>;
 }
