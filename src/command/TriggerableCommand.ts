@@ -3,7 +3,7 @@ import { OnMessageState } from "../state";
 
 import { AbstractCommand } from "./";
 
-export class TriggerableCommand extends AbstractCommand implements HasAction, HasTrigger {
+export abstract class TriggerableCommand extends AbstractCommand implements HasAction, HasTrigger {
 
     protected trigger: Trigger;
 
@@ -18,14 +18,12 @@ export class TriggerableCommand extends AbstractCommand implements HasAction, Ha
             accessLevel,
             argLength: 0,
         });
-        this.trigger = this.setCustomTrigger();
+        this.trigger = new Trigger(this.setCustomTriggerFunction);
     }
 
-    public async tryTrigger(msg: OnMessageState): Promise<boolean> {
-        return this.trigger.execute(msg);
+    public async triggerConditionMet(state: OnMessageState, args: string[]): Promise<boolean> {
+        return this.trigger.execute(state, args);
     }
 
-    public setCustomTrigger(): Trigger {
-        return this.trigger;
-    }
+    public abstract setCustomTriggerFunction(state: OnMessageState, args: string[]): Promise<boolean>;
 }

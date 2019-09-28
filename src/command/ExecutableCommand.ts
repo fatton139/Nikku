@@ -1,8 +1,14 @@
-import { Action, HasAction } from "../action";
+import { HasAction } from "../action";
 import { OnMessageState } from "../state";
 import { AbstractCommand, ExecutableCommandInitializer } from "./";
+import { NikkuException, UnauthorizedExecutionException } from "../exception";
 
 export abstract class ExecutableCommand extends AbstractCommand implements HasAction {
+    /**
+     * The string required to execute this command.
+     */
+    protected commandString: string;
+
     private usage?: string;
 
     /**
@@ -17,13 +23,15 @@ export abstract class ExecutableCommand extends AbstractCommand implements HasAc
         this.usage = data.usage;
     }
 
-    public abstract setCustomAction(): Action;
-
     public getUsage(): string | undefined {
         return this.usage;
     }
 
     public displayUsageText(message: OnMessageState): void {
         message.getHandle().reply(this.usage ? this.usage : "Invalid command usage.");
+    }
+
+    public getCommandString(): string | undefined {
+        return this.commandString;
     }
 }

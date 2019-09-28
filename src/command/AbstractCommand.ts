@@ -1,41 +1,35 @@
 import * as winston from "winston";
 
 import { Logger } from "../log";
-import { NikkuException, UnauthorizedExecutionException } from "../exception";
-import { Action, HasAction } from "../action";
-import { AccessLevel } from "../user";
 import { OnMessageState } from "../state";
+import { AccessLevel } from "../user";
+import { Action, HasAction } from "../action";
+import { NikkuException, UnauthorizedExecutionException } from "../exception";
 import { CommandInitializer } from "./";
 
-// import DBUserSchema from "../database/schemas/DBUserSchema";
-
 export abstract class AbstractCommand implements HasAction {
-    public readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
-    /**
-     * The string required to execute this command.
-     */
-    protected commandString?: string;
+    protected readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
 
     /**
      * The required access level to execute this command.
      */
-    private readonly accessLevel: AccessLevel;
-
-    /**
-     * An action to execute.
-     */
-    protected action: Action;
+    protected readonly accessLevel: AccessLevel;
 
     private readonly argLength: number;
 
     /**
      * Arguments to execute the action with.
      */
-    private args: string[];
+    protected args: string[];
 
     private isEnabled: boolean;
 
     private description?: string;
+
+    /**
+     * An action to execute.
+     */
+    protected action: Action;
 
     /**
      * @classdesc Base command class for the bot.
@@ -44,12 +38,36 @@ export abstract class AbstractCommand implements HasAction {
      * @param action - The action to execute.
      */
     public constructor(data: CommandInitializer) {
-        this.action = this.setCustomAction();
         this.accessLevel = data.accessLevel;
         this.argLength = data.argLength;
+        this.description = data.description;
         this.isEnabled = true;
         this.args = [];
-        this.description = data.description;
+        this.action = new Action(this.setCustomActionFunction);
+    }
+
+    /**
+     * User specified function.
+     * @param state - Core state.
+     * @param args - Function arguments extracted.
+     */
+    public abstract async setCustomActionFunction(state: OnMessageState, args: string[]): Promise<void>;
+
+    /**
+     * Execute the action provided by this command.
+     * @param user - The user attempting to execute this command.
+     */
+    public async executeAction(state: OnMessageState, user?: any): Promise<void> {
+        if (user && user.accessLevel) {
+            if (user.accessLevel < this.accessLevel) {
+                throw new UnauthorizedExecutionException(state, this, user);
+            }
+        }
+        try {
+            await this.action.execute(state, this.args);
+        } catch (err) {
+            throw new NikkuException(err.message, err.stack);
+        }
     }
 
     /**
@@ -58,43 +76,6 @@ export abstract class AbstractCommand implements HasAction {
      */
     public setArgs(args: string[] | undefined): void {
         this.args = args ? args : [];
-    }
-
-    public getCommandString(): string | undefined {
-        return this.commandString;
-    }
-
-    /**
-     * Execute the action provided by this command.
-     * @param user - The user attempting to execute this command.
-     */
-    public async executeAction(msg: OnMessageState, user?: any): Promise<void> {
-        if (user && user.accessLevel) {
-            if (user.accessLevel < this.accessLevel) {
-                throw new UnauthorizedExecutionException(msg, this, user);
-            }
-        }
-        try {
-            await this.action.execute(msg, this.args);
-        } catch (err) {
-            throw new NikkuException(err.message, err.stack);
-        }
-
-    }
-
-    public async executeActionNoUser(msg: OnMessageState): Promise<void> {
-        // const tempUser = new DBUserSchema();
-        if (AccessLevel.UNREGISTERED >= this.accessLevel) {
-            return this.executeAction(msg);
-        }
-    }
-
-    public async executeActionNoWarning(msg: OnMessageState, user?: any): Promise<void> {
-        if (user && user.accessLevel) {
-            if (user.accessLevel >= this.accessLevel) {
-                await this.action.execute(msg, this.args);
-            }
-        }
     }
 
     public setEnabled(enabled: boolean): void {
@@ -119,9 +100,5 @@ export abstract class AbstractCommand implements HasAction {
 
     public getDescription(): string | undefined {
         return this.description;
-    }
-
-    public setCustomAction(): Action {
-        return this.action;
     }
 }

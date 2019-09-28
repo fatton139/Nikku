@@ -1,7 +1,5 @@
-import * as Discord from "discord.js";
-
 import { OnMessageState } from "../state";
-import { AbstractCommand } from "../command";
+import { AbstractCommand, ExecutableCommand } from "../command";
 
 import { NikkuException } from "./NikkuException";
 
@@ -14,7 +12,9 @@ export class CommandException extends NikkuException {
      * @param message - Message associated with the error.
      */
     constructor(state: OnMessageState, command: AbstractCommand) {
-        super(`Exception occurred during execution of "${command.getCommandString()}"`);
+        if (command instanceof ExecutableCommand) {
+            super(`Exception occurred during execution of "${command.getCommandString()}"`);
+        }
         this.state = state;
     }
 
