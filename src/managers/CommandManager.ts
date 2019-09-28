@@ -84,7 +84,8 @@ export class CommandManager extends ImportManager {
      * @param line - The channel message to evaluate.
      * @param id - The discord id of the user invoking the command.
      */
-    public parseLine(line: string, msg: OnMessageState): void {
+    public parseLine(line: string, state: OnMessageState): void {
+        let args: string[] = [];
         for (const prefix of this.prefixManager.getPrefixes()) {
             if (line.split(" ")[0] === prefix) {
                 const commandString = this.extractCommand(line);
@@ -93,69 +94,42 @@ export class CommandManager extends ImportManager {
                 }
                 const command: Command | undefined = this.commandRegistry.getElementByKey(commandString);
                 if (command) {
+                    args = this.extractArguments(line, command.getArgLength());
                     this.attemptExecution(
-                        command, this.extractArguments(line, command.getArgLength()), msg,
+                        command, args, state,
                     ).catch((err: Error) => {
-                        this.logger.verbose(
-                            `${err.constructor.name}:Execution of "${command.getCommandString()}" failed.`,
-                        );
+                        if (command instanceof ExecutableCommand) {
+                            this.logger.verbose(
+                                `${err.constructor.name}:Execution of "${command.getCommandString()}" failed.`,
+                            );
+                        }
                         this.logger.verbose(`${err.message}`);
                     });
                 }
                 return;
             }
         }
-        this.triggerAction(msg);
+        this.triggerAction(state, args);
     }
 
     private async attemptExecution(
-        command: Command, args: string[], message: OnMessageState,
+        command: Command, args: string[], state: OnMessageState,
     ): Promise<void> {
-        // if (!NikkuCore.getCoreInstance().getDbCore().isReady()) {
-        //     this.logger.warn("Please wait until database connection has resolved.");
-        //     return;
-        // }
         if (command.getArgLength() !== 0 && args.length !== command.getArgLength()) {
             if (command instanceof ExecutableCommand) {
-                command.displayUsageText(message);
+                command.displayUsageText(state);
                 throw new NikkuException("Invalid arguments.");
             }
         }
         command.setArgs(args);
-        this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
+        if (command instanceof ExecutableCommand) {
+            this.logger.info(`Executing command "${command.getCommandString()}"`);
+        }
         try {
-            command.executeActionNoUser(message);
+            command.executeAction(state);
         } catch (err) {
             throw err;
         }
-        // const user = await DBUserSchema.getUserById(userId);
-        // if (user && user.accessLevel) {
-        //     if (
-        //         user && message.getHandle().member.hasPermission("ADMINISTRATOR")
-        //         && user.accessLevel < AccessLevel.ADMINISTRATOR && user.accessLevel !== AccessLevel.DEVELOPER
-        //     ) {
-        //         await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
-        //         message.getHandle().reply(
-        //             "You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.",
-        //         );
-        //     }
-        // }
-        // if (user) {
-        //     this.logger.info(`Executing command "${command.getCommandString()}".`);
-        //     try {
-        //         await command.executeAction(message, user);
-        //     } catch (err) {
-        //         throw err;
-        //     }
-        // } else {
-        //     this.logger.info(`Executing command "${command.getCommandString()}". No registered user.`);
-        //     try {
-        //         command.executeActionNoUser(message);
-        //     } catch (err) {
-        //         throw err;
-        //     }
-        // }
-
     }
 
     /**
@@ -183,22 +157,13 @@ export class CommandManager extends ImportManager {
      * Attempt to invoke the action by testing if the trigger conditions are met.
      * @param id - The discord id of the user invoking the command.
      */
-    public async triggerAction(msg: OnMessageState): Promise<void> {
-        for (const pair of this.commandRegistry.getRegistry().entries()) {
-            if (pair[1] instanceof TriggerableCommand) {
-                const command: TriggerableCommand = pair[1];
-                if (await command.tryTrigger(msg)) {
-                    // const user = await DBUserSchema.getUserById(userId);
-                    const user = undefined;
+    public async triggerAction(state: OnMessageState, args: string[]): Promise<void> {
+        for (const [name, command] of this.commandRegistry.getRegistry().entries()) {
+            if (command instanceof TriggerableCommand) {
+                if (await command.triggerConditionMet(state, args)) {
                     try {
-                        if (user) {
-                            this.logger.info(`Triggering auto command "${command.constructor.name}". NO_WARN.`);
-                            command.executeActionNoWarning(msg, user);
-                        }
-                        else {
-                            this.logger.info(`Triggering auto command "${command.constructor.name}". NO_REG_USER.`);
-                            command.executeActionNoUser(msg);
-                        }
+                        this.logger.info(`Triggering auto command "${command.constructor.name}"`);
+                        command.executeAction(state);
                     } catch (err) {
                         this.logger.verbose(`Auto execution of "${command.constructor.name}"` +
                             `failed, ${err.constructor.name}.`);
