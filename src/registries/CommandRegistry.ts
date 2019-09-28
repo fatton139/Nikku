@@ -1,4 +1,4 @@
-import { AbstractCommand, TriggerableCommand } from "../command";
+import { AbstractCommand, TriggerableCommand, ExecutableCommand } from "../command";
 
 import { BaseRegistry } from "./";
 
@@ -8,7 +8,6 @@ export class CommandRegistry extends BaseRegistry<AbstractCommand> {
     }
 
     public addCommand(command: AbstractCommand): boolean {
-        const name: string | undefined = command.getCommandString();
         if (command instanceof TriggerableCommand) {
             if (this.registry.has(command.constructor.name)) {
                 this.logger.warn(`Duplicate command "${command.constructor.name}".`);
@@ -19,7 +18,8 @@ export class CommandRegistry extends BaseRegistry<AbstractCommand> {
                 `TriggerableCommand registered "${command.constructor.name}".`,
             );
             return true;
-        } else if (name && name.length !== 0) {
+        } else if (command instanceof ExecutableCommand) {
+            const name: string | undefined = command.getCommandString();
             if (this.registry.has(name)) {
                 this.logger.warn(`Duplicate command "${name}".`);
                 return false;
@@ -34,7 +34,9 @@ export class CommandRegistry extends BaseRegistry<AbstractCommand> {
     public addCommands(commands: AbstractCommand[]): boolean {
         for (const command of commands) {
             if (!this.addCommand(command)) {
-                this.logger.warn(`Failed to register command "${command.getCommandString()}".`);
+                if (command instanceof ExecutableCommand) {
+                    this.logger.warn(`Failed to register command "${command.getCommandString()}".`);
+                }
                 return false;
             }
         }

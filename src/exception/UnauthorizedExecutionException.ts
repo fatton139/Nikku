@@ -1,6 +1,4 @@
-import * as Discord from "discord.js";
-
-import { CoreState, OnMessageState } from "../state";
+import { OnMessageState } from "../state";
 import { AbstractCommand } from "../command";
 import { AccessLevel } from "../user";
 

@@ -1,7 +1,6 @@
 import { HasAction } from "../action";
 import { OnMessageState } from "../state";
 import { AbstractCommand, ExecutableCommandInitializer } from "./";
-import { NikkuException, UnauthorizedExecutionException } from "../exception";
 
 export abstract class ExecutableCommand extends AbstractCommand implements HasAction {
     /**
@@ -31,7 +30,7 @@ export abstract class ExecutableCommand extends AbstractCommand implements HasAc
         message.getHandle().reply(this.usage ? this.usage : "Invalid command usage.");
     }
 
-    public getCommandString(): string | undefined {
+    public getCommandString(): string {
         return this.commandString;
     }
 }

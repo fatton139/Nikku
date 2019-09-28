@@ -158,7 +158,7 @@ export class CommandManager extends ImportManager {
      * @param id - The discord id of the user invoking the command.
      */
     public async triggerAction(state: OnMessageState, args: string[]): Promise<void> {
-        for (const [name, command] of this.commandRegistry.getRegistry().entries()) {
+        for (const [, command] of this.commandRegistry.getRegistry().entries()) {
             if (command instanceof TriggerableCommand) {
                 if (await command.triggerConditionMet(state, args)) {
                     try {
