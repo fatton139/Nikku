@@ -43,7 +43,7 @@ export abstract class AbstractCommand implements HasAction {
         this.description = data.description;
         this.isEnabled = true;
         this.args = [];
-        this.action = new Action(this.setCustomActionFunction);
+        this.action = new Action(this.onAction);
     }
 
     /**
@@ -51,7 +51,7 @@ export abstract class AbstractCommand implements HasAction {
      * @param state - Core state.
      * @param args - Function arguments extracted.
      */
-    public abstract async setCustomActionFunction(state: OnMessageState, args: string[]): Promise<void>;
+    public abstract async onAction(state: OnMessageState, args: string[]): Promise<void>;
 
     /**
      * Execute the action provided by this command.
