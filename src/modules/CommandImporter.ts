@@ -2,20 +2,29 @@ import * as winston from "winston";
 
 import { Logger } from "../log";
 import { NikkuCore } from "../core";
-import { ImportManager } from "../managers";
+import { CommandManager } from "../managers";
 
 export class CommandImporter {
     private readonly logger: winston.Logger = Logger.getNamedLogger(this.constructor);
 
-    private readonly importManager: ImportManager;
+    private readonly commandManager: CommandManager;
 
     public constructor() {
-        this.importManager = NikkuCore.getCoreInstance().getManager(ImportManager);
+        this.commandManager = NikkuCore.getCoreInstance().getManager(CommandManager);
     }
 
     public registerPath(path: string): void {
         try {
-            this.importManager.addImportPath(path);
+            this.commandManager.addImportPath(path);
+        } catch (e) {
+            this.logger.warn(e.message);
+        }
+    }
+
+    public registerPathAndLoad(path: string): void {
+        try {
+            this.registerPath(path);
+            this.commandManager.loadCommands();
         } catch (e) {
             this.logger.warn(e.message);
         }

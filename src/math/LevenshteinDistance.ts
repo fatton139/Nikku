@@ -1,4 +1,4 @@
-import { MathUtil } from "math";
+import { MathUtil } from "./";
 
 export const LevenshteinDistance = (a: string, b: string): number => {
     if (a.length === 0 || b.length === 0) {
