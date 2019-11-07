@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as winston from "winston";
-import { isString, isBoolean } from "util";
 import { config as dotenvConfig, DotenvConfigOutput } from "dotenv";
+
 import { Logger } from "../log";
 import { NikkuException } from "../exception";
 import { BotConfigOptions, PackagejsonData } from "../config";
@@ -16,12 +16,13 @@ export class ConfigParser {
     private configPath: string;
     private dotenvPath?: string;
     private environmentalVariables!: EnvironmentalVariables;
-    private botConfig!: BotConfigOptions;
+    private botConfig: Partial<BotConfigOptions>;
     private packagejsonData!: PackagejsonData;
 
     public constructor(configPath: string = "botconfig.json", dotenvPath?: string) {
         this.configPath = configPath;
         this.dotenvPath = dotenvPath;
+        this.botConfig = {};
     }
 
     /**
@@ -29,48 +30,22 @@ export class ConfigParser {
      * @param configPath Path to the configuration JSON file.
      */
     public parseConfig(): this {
-        let botConfig: any;
+        let parsedConfig: BotConfigOptions;
         try {
-            botConfig = JSON.parse(fs.readFileSync(this.configPath, "utf8"));
+            parsedConfig = JSON.parse(fs.readFileSync(this.configPath, "utf8"));
         } catch (e) {
             this.logger.error(`${e.message} while parsing '${this.configPath}'.`);
             throw new NikkuException(e.message, e.stack);
         }
-
-        let botResponseTrigger: string | undefined;
-        if (botConfig.BOT_RESPONSE_TRIGGER && isString(botConfig.BOT_RESPONSE_TRIGGER)) {
-            botResponseTrigger = botConfig.BOT_RESPONSE_TRIGGER;
-            this.logger.info(`Response trigger word set to ${this.botConfig.BOT_RESPONSE_TRIGGER}`);
-        } else {
-            this.logger.warn("Invalid response trigger word. Chat services will be disabled.");
-        }
-
-        let modulePaths: string[] | undefined;
-        if (botConfig.MODULE_PATHS && Array.isArray(botConfig.MODULE_PATHS)) {
-            modulePaths = botConfig.MODULE_PATHS;
-            for (const path of botConfig.MODULE_PATHS) {
-                this.logger.info(`Using ${path} as module path.`);
+        const partialConfigMap: BotConfigOptions = new BotConfigOptions();
+        for (const key of Object.keys(partialConfigMap)) {
+            if (parsedConfig.hasOwnProperty(key)) {
+                this.botConfig[key] = parsedConfig[key];
+                this.logger.info(`${key} set to ${this.botConfig[key]}.`);
+            } else {
+                this.logger.warn(`Missing config '${key}', defaulting to ${partialConfigMap[key]}.`);
             }
-        } else {
-            modulePaths = [];
-            this.logger.verbose("No module path specified in config. Using only explicity loaded commands.");
         }
-
-        if (botConfig.COMMAND_PREFIXES && Array.isArray(botConfig.COMMAND_PREFIXES)) {
-            for (const prefix of botConfig.COMMAND_PREFIXES) {
-                this.logger.info(`Using ${prefix} as command prefix.`);
-            }
-        } else {
-            this.logger.verbose("No command prefix specified in config. Using only explicitly loaded prefixes.");
-        }
-
-        this.botConfig = {
-            BOT_RESPONSE_TRIGGER: botResponseTrigger,
-            MODULE_PATHS: modulePaths,
-            COMMAND_PREFIXES: botConfig.COMMAND_PREFIXES,
-            REQUIRE_SPACE_AFTER_PREFIX: botConfig.REQUIRE_SPACE_AFTER_PREFIX &&
-                isBoolean(botConfig.REQUIRE_SPACE_AFTER_PREFIX) ? botConfig.REQUIRE_SPACE_AFTER_PREFIX : true,
-        };
 
         return this;
     }
@@ -155,7 +130,7 @@ export class ConfigParser {
      * Gets bot configurations.
      */
     public getBotConfig(): BotConfigOptions {
-        return this.botConfig;
+        return this.botConfig as BotConfigOptions;
     }
     /**
      * Gets package.json data.

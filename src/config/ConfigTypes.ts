@@ -1,11 +1,12 @@
 /**
  * Type declaration for bot configuration options/fields.
  */
-export interface BotConfigOptions {
-    readonly BOT_RESPONSE_TRIGGER: string | undefined;
-    readonly MODULE_PATHS: string[] | undefined;
-    readonly COMMAND_PREFIXES: string[] | undefined;
-    readonly REQUIRE_SPACE_AFTER_PREFIX: boolean | undefined;
+export class BotConfigOptions {
+    [index: string]: any | undefined;
+    public readonly BOT_RESPONSE_TRIGGER: string | undefined = void 0;
+    public readonly MODULE_PATHS: string[] = [];
+    public readonly COMMAND_PREFIXES: string[] = [];
+    public readonly REQUIRE_SPACE_AFTER_PREFIX: boolean | undefined = false;
 }
 
 /**
