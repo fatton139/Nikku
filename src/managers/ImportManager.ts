@@ -2,22 +2,23 @@ import * as path from "path";
 import * as fs from "fs";
 import * as util from "util";
 
+import { Queue } from "../utils";
 import { AbstractManager } from "./";
 
 const readdir: Function = util.promisify(fs.readdir);
 
 export class ImportManager extends AbstractManager {
 
-    protected readonly MODULE_PATHS: string[];
+    protected readonly modulePathsQueue: string[];
 
     public constructor(modulePaths?: string[]) {
         super();
-        this.MODULE_PATHS = modulePaths ? modulePaths : (this.botConfig.MODULE_PATHS || []);
+        this.modulePathsQueue = modulePaths ? modulePaths : (this.botConfig.MODULE_PATHS || []);
     }
 
     public addImportPath(importPath: string): void {
-        if (this.MODULE_PATHS.indexOf(importPath) === -1) {
-            this.MODULE_PATHS.push(importPath);
+        if (this.modulePathsQueue.indexOf(importPath) === -1) {
+            this.modulePathsQueue.push(importPath);
         } else {
             throw new Error(`Duplicate path "${importPath}".`);
         }
@@ -26,7 +27,8 @@ export class ImportManager extends AbstractManager {
     protected async getImportPaths(): Promise<string[]> {
         const filePaths: string[] = [];
         let temp: string;
-        for (const modulePath of this.MODULE_PATHS) {
+        while (Queue.isEmpty(this.modulePathsQueue)) {
+            const modulePath = this.modulePathsQueue.shift();
             const currentPath: string = path.resolve(modulePath);
             temp = currentPath; // For logging purposes.
             try {
