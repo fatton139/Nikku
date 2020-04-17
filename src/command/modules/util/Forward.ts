@@ -33,7 +33,7 @@ export default class Forward extends TriggerableCommand {
             }
             const guildSentFrom = (message.channel as Discord.TextChannel).guild.name;
             const channelSentFrom = (message.channel as Discord.TextChannel).name;
-            if (guildSentFrom === "695184181327822889") {
+            if ((message.channel as Discord.TextChannel).guild.id === "695184181327822889") {
                 return;
             }
             const guild = core.getClient().guilds.get("695184181327822889");
@@ -59,7 +59,7 @@ export default class Forward extends TriggerableCommand {
                 embed.setFooter("Mr Fortnite Forwarding Service");
                 embed.setTimestamp();
     
-                await (channelPostTo as Discord.TextChannel).send("test", embed);
+                await (channelPostTo as Discord.TextChannel).send(embed);
                 if (allAttachments.length > 0) {
                     await (channelPostTo as Discord.TextChannel).send(allAttachments.join(" "));
                 }
