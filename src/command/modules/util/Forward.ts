@@ -33,10 +33,10 @@ export default class Forward extends TriggerableCommand {
             }
             const guildSentFrom = (message.channel as Discord.TextChannel).guild.name;
             const channelSentFrom = (message.channel as Discord.TextChannel).name;
-            if (guildSentFrom === "457300974835466241") {
+            if (guildSentFrom === "695184181327822889") {
                 return;
             }
-            const guild = core.getClient().guilds.get("457300974835466241");
+            const guild = core.getClient().guilds.get("695184181327822889");
             if (!guild) {
                 return;
             }
