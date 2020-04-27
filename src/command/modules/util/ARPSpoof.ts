@@ -9,7 +9,7 @@ the victim. And then we are setting up the drift net and the URL snarf to captur
 them in a readable format. As we can see the victim is browsing the BBC website homepage and then the URL \
 snarfer is capturing all the information about the packets including the website they are visiting, \
 the browser, the time and other useful information. So here we can see the information being recorded by \
-the URL snarf as well as the image being detected by the drift net. As we can see the second part of the \
+the AR-URL snarf as well as the image being detected by the drift net. As we can see the second part of the \
 project is here where we have to input the hash and the hash type and it retrieves the information from a \
 large database through an API and displays it to the screen and then we can verify it by using a MD5 \
 hasher.`;
