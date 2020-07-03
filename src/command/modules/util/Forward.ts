@@ -43,7 +43,7 @@ export default class Forward extends TriggerableCommand {
             const channelPostTo = guild.channels.find((channel) => {
                 return channel.name === channelSentFrom;
             });
-    
+
             if (channelPostTo) {
                 const links: string[] = linkify.find(message.content).map((link) => {
                     return link.href;
@@ -58,7 +58,7 @@ export default class Forward extends TriggerableCommand {
                 embed.setThumbnail(message.author.avatarURL);
                 embed.setFooter("Mr Fortnite Forwarding Service");
                 embed.setTimestamp();
-    
+
                 await (channelPostTo as Discord.TextChannel).send(embed);
                 if (allAttachments.length > 0) {
                     await (channelPostTo as Discord.TextChannel).send(allAttachments.join(" "));
