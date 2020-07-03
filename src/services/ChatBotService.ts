@@ -14,9 +14,9 @@ const responseWrapper = (ask: string): Promise<string> => {
     return new Promise((resolve, reject) => {
         cleverbot(ask).then((response: string) => {
             return resolve(response);
-        })
-    })
-}
+        });
+    });
+};
 
 export default class ChatBotService {
 
