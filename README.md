@@ -1,50 +1,166 @@
-# Mr Fortnite (Nikku 2)
+# Nikku 3
 
 [![Build status](https://ci.appveyor.com/api/projects/status/q77lx59u0k6sf34q?svg=true)](https://ci.appveyor.com/project/aXises/nikkubot)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e12d96ca6dfd4a80a4063eb97cd24837)](https://app.codacy.com/app/aXises/fortniteBot?utm_source=github.com&utm_medium=referral&utm_content=aXises/fortniteBot&utm_campaign=badger)
-[![CodeFactor](https://www.codefactor.io/repository/github/axises/nikkubot/badge)](https://www.codefactor.io/repository/github/axises/nikkubot)
-[![Maintainability](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/maintainability)](https://codeclimate.com/github/aXises/fortniteBot/maintainability) [![codecov](https://codecov.io/gh/aXises/fortniteBot/branch/master/graph/badge.svg)](https://codecov.io/gh/aXises/fortniteBot)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/test_coverage)](https://codeclimate.com/github/aXises/fortniteBot/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/51cbd263ff1f0afff332/maintainability)](https://codeclimate.com/github/aXises/fortniteBot/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Mr Fortnite is an bot built upon the new Nikku 2 Core. Originally the main focus of the bot was to ping a group of (opt-in) users whenever "Fortnite" is mentioned.
+Nikku is a customizable bot framework allowing anyone to create a Discord bot within minutes with a simple and modular command creation system. Written in TypeScript, Nikku provides the tools and helpers necessary for anyone to create both simple and advanced bots.
 
-Despite its name, the main focus of the bot is to provide a flexible command system so that complex commands can be quickly created, implemented and deployed.
+Nikku is built upon a piece of code developed in DECO2800-2018, relying primarily on a software design pattern known as the [**Strategy Pattern**](https://en.wikipedia.org/wiki/Strategy_pattern). Users are provided with sets of controlled data used in the development of their bots allowing controlled algorithms (commands) to be written that complies with [Discord.js](https://github.com/discordjs/discord.js/).
 
 ## Features
-- Currency
-- User Profiles
-- Targeting user for "Fortnite" pings
-- Feeding Brad
+- Start a Discord bot in less than 20 lines.
+- Simple command creation and registration system.
+- Built-in logging and event handling.
+- Helpers for basic and advanced command designs.
+- Configurable runtime settings (More being added).
 
-## Upcoming
-- User Skills
-- Shop System
-- Web User Interface
-- VC Support
-- More Activities
-- Inventory
-- Items
-- Combat
-- ABT (Alex Bullying Tools)
+## Notable Upcoming Features
+- Worker threads and sharding.
+- Command builders and generators.
+- Command event handler/dispatchers.
+- Built-in database systems and models.
+- Admin management controls.
+- Integrated user systems.
+- Component/packages module system.
+- Server API.
+- Integrated Dashboard.
 
 ## Contributing
-All contributions are welcome. Adhering to tslint style is recommended.
+All contributions are welcome. Adhering to *tslint* is recommended.
+
+## Examples
+
+**[Mr Fortnite](https://github.com/aXises/MrFortnite)** is powered by Nikku and can be invited from **[here](https://discordapp.com/api/oauth2/authorize?client_id=455679698610159616&permissions=0&scope=bot)**. Mr Fortnite runs on Nikku developmental branches so things may fail. Feel free to submit an issue regarding the break.
+
 
 ## Getting Started
 
-Want to try out Mr Fortnite? Invite it from **[right here](https://discordapp.com/api/oauth2/authorize?client_id=455679698610159616&permissions=0&scope=bot)**. This bot is still in development so commands may fail. Please submit a issue with the problem and the command which caused it.
+The following sections will provide a general overview for setting up and adding basic commands to your bot.
 
-## Roadmap
+### Getting the package
+`npm install nikku` or `yarn add nikku`
 
-The development roadmap of this bot. There are lots to be done, feel free to contribute to any or suggest new ideas.
+Add typings if using TypeScript
 
-![Roadmap](https://i.imgur.com/h6DBxOD.png )
+`npm install @types/nikku` or `yarn add @types/nikku`
 
+### Starting the bot
+All bots are initialized through `NikkuCore`.
+
+```
+import * as Nikku from "nikku";
+
+const initializer = {
+    configurationPath: "config.json",
+};
+
+const core = new Nikku.NikkuCore(initializer);
+
+core.start();
+```
+### Initializer
+The initializer determines locations of the config files Nikku should read from and the following values can be configured.
+
+Available options:
+- **initializeImmediately**: Optional boolean. Defaults to `false`. Whether to start the bot as soon as the core has been instantiated.
+
+- **configurationPath**: Optional string. Defaults to `botconfig.json`. Specifies where Nikku should find the configurations for the bot.
+
+- **dotenvPath**: Optional string. Defaults to `.env`. Specifies where Nikku should find its environment configurations from.
+
+### Example configs and .env files.
+config.json.
+```
+{
+    BOT_RESPONSE_TRIGGER: "bot_name",
+    MODULE_PATHS: ["/dev", "/commands"],
+    COMMAND_PREFIXES: ["!", "!f"],
+    REQUIRE_SPACE_AFTER_PREFIX: false
+}
+```
+Available options:
+- **BOT_RESPONSE_TRIGGER**: Optional string. The string which will be used to trigger chat bot services.
+
+- **MODULE_PATHS**: Optional string array. Specifies initial paths to search for commands.
+
+- **COMMAND_PREFIXES**: Optional string array. The prefixes required to trigger bot commands.
+
+- **REQUIRE_SPACE_AFTER_PREFIX**: Optional boolean. Determines whether if a space is required after a prefix to trigger a command. e.g `! help` vs `!help`
+
+.env file.
+```
+DISCORD_TOKEN=x
+DEBUG_OUTPUT_CHANNELS=1234567890,0000000000
+DEV_IDS=x,y,z
+DATABASE_URI=x
+CHATBOT_USER_ID=a
+CHATBOT_API_KEY=b
+CHATBOT_SESSION=c
+```
+Available options:
+- **DISCORD_TOKEN**: Discord Token for the bot application.
+
+- **DEBUG_OUTPUT_CHANNELS**: Comma separated Discord channel ID's to specify bot outputs logging.
+
+- **DEV_IDS**: Comma separated discord user ID's who will be granted higher privileges. Used for bot development. 
+
+- **DATABASE_URI**: URI for a database connection. Nikku will start in no database mode if the connection fails.
+
+- **CHATBOT_USER_ID**: User ID for chatbot services.
+
+- **CHATBOT_API_KEY**: API Key for chatbot services.
+
+- **CHATBOT_SESSION**: Session ID for chatbot services.
+
+### Creating your first command.
+There are multiple ways to create a bot command. The most common way is to simply extend our command classes. Nikku provides classes such as `ExecutableCommand` to easily setup commands.
+
+Simple example: `commands/Ping.js` responds with pong.
+```
+import { ExecutableCommand } from "nikku";
+
+export class Ping extends ExecutableCommand {
+    public constructor() {
+        super({
+            commandString: "ping",
+            accessLevel: AccessLevel.UNREGISTERED,
+            argLength: 0,
+            description: "Responds with pong.",
+        });
+    }
+
+    public setCustomAction() {
+        return async (state) => {
+            state.getHandle().channel.send("pong");
+        };
+    }
+}
+```
+Now we will register this command using the `CommandImporter`. Using our example from before we will register the `/commands` folder as a command module. Nikku will search and automatically import all valid commands from a command module before loading the command for use.
+```
+import * as Nikku from "nikku";
+
+const initializer = {
+    configurationPath: "config.json",
+};
+
+const core = new Nikku.NikkuCore(initializer);
+
+const importer = new Nikku.CommandImporter();
+// Register the commands folder as a command module.
+importer.registerPath("commands");
+
+core.start();
+```
+Now invoke the command from Discord (e.g `!ping`) and your bot should respond with `pong`.
+
+### Advanced commands
+
+COMING SOON............
 
 ## Development
-
-Want to contribute or create your own build? The following sections will provide a general overview to setting up your bot and creating a command for the bot.
 
 ### Requirements
 - Node 10 or higher.
@@ -52,200 +168,11 @@ Want to contribute or create your own build? The following sections will provide
 - tslint is recommended for style consistency.
 
 ### Build
-1. Clone or Fork the repository
-2. Install dependencies and packages with `npm install`
-3. Compile TypeScript with `tsc` (If you have global installation) or `npm run tsc`. For watch mode use `tsc -w` or `npm run tscw`.
-4. Create a .env file in the project root with `touch .env` and configure it. See [Configuring .env file](#Configuring-the-env-file)
-5. Run the application with `npm start`
-
-### Configuring the .env file
-
-A .env file can be setup with the following values:
-
-Required. Discord Token for the bot application.
-```
-DISCORD_TOKEN=x
-```
-
-Optional. MongoDB URL for database options. Commands which require an database will be disabled should the connection fail.
-```
-DATABASE_URL=x
-```
-
-Optional. Comma separated discord user ID's who will be given the highest access level for commands. See [AccessLevel.ts](/src/user/AccessLevel.ts)
-```
-DEV_IDS=x,y,z
-```
-
-Optional. Comma separated channel ID's where debug logs will be sent to.
-```
-DEBUG_CHANNELS=x,y,z
-```
-
-Optional. Comma separated prefixes which are used to invoke commands.
-```
-PREFIXES=!f, !fortnite, &m
-```
-
-ChatBot Service keys. Should the following three keys be invalid, ChatBot Service will fail to initialize.
-
-Optional. API Key for ChatBot.
-```
-CHATBOT_API_KEY=x
-```
-Optional. User ID for ChatBot.
-```
-CHATBOT_USER_ID=x
-```
-
-Optional. Session ID For ChatBot.
-```
-CHATBOT_SESSION=x
-```
-
-## Creating Commands
-
-### Grouping Commands
-
-Commands placed in the [modules](/src/command/modules) directory which is parsed by the [Command Manager](/src/command/CommandManager.ts) and loaded at runtime.
-
-Commands are grouped by directories placed inside the modules directory, each directory name must be added to the COMMAND_PATHS array. Only the directory name need to be added, each file inside the registered directories will be parsed and attempt to be loaded as a command.
-
-This is not setup as an environment variable since different builds may have different module paths setup. By tracking this variable we can reduce the amount of invalid paths as different builds arise.
-
-Skip this step if your command can falls under existing groups.
-
-Othewise find the following variable inside [Config.ts](/src/config/Config.ts) and add your module path (relative to src/commands/modules/) as needed.
-```
-public static readonly COMMAND_PATHS: string[] =
-    [
-        "mrfortnite",
-        "util",
-        "user",
-        "brad",
-        "interactions",
-        "yourFilePath",
-    ];
-```
-
-### Creating a Executable Command
-
-Firstly create your command class and extend one of the existing command base classes.
-
-Here we will extend the *ExecutableCommand* class which is the base for a command that is manually invoked by a user.
-
-SampleCommand.ts
-```
-import ExecutableCommand from "command/ExecutableCommand";
-import { AccessLevel } from "user/AccessLevel";
-import Action from "action/Action";
-import OnMessageState from "state/OnMessageState";
-
-export default class SampleCommand extends ExecutableCommand {
-
-}
-```
-
-Next we will setup the constructor.
-
-The constructor super call contains the information required to run the command.
-```
-super({
-    commandString: "sample",                 // The name of the command, we can invoke it with "prefix sample" e.g "!f sample"
-    accessLevel: AccessLevel.UNREGISTERED,   // The access level of the user required to invoke this command.
-    argLength: 1,                            // The amount of argument required/expected to run this command excluding the prefix and command name.
-    description: "Sample command for demo.", // The description of this command. Used in the help command.
-    usage: "!f sample [number]",             // Usage of this command. Will be sent to the user if wrong types or invalid argument length is passed.
-});
-```
-
-Your command file should now look something like this.
-```
-import ExecutableCommand from "command/ExecutableCommand";
-import { AccessLevel } from "user/AccessLevel";
-import Action from "action/Action";
-import OnMessageState from "state/OnMessageState";
-
-export default class SampleCommand extends ExecutableCommand {
-    public constructor() {
-        super("sample", AccessLevel.UNREGISTERED, 1, "Sample command for demo.", "!f sample \"number\"");
-    }
-
-    public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState): Promise<boolean> => {
-            // What your command does will go here.
-        });
-    }
-}
-```
-
-Finally we will setup what this command actually does. Specifically the "action" of the command.
-
-The "action" of the command is a callback invoked when the command is called. Two arguments will be passed to the callback.
-
-`state` - Contains the required data to interact with the discord API.
-
-`args` - The arguments passed to the command, the array length will be equal to what is specified in the constructor. (Calling "!f sample arg1" will result in the array being ["arg1"]).
-
-The return type is an boolean which determines whether if the command was successfully executed.
-```
-public setCustomAction(): Action {
-    return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
-        // What your command does will go here.
-        return true;
-    });
-}
-```
-
-In this example we will send the first argument back to the user if it is a number.
-```
-public setCustomAction(): Action {
-    return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
-        if (isNaN(args[0])) {
-            state.getHandle().send("That's not a number!);
-            return false; // Command failed.
-        }
-        state.getHandle().send(args[0]);
-        return true; // Command succeeded.
-    });
-}
-```
-
-The final file should look something like this.
-```
-import ExecutableCommand from "command/ExecutableCommand";
-import { AccessLevel } from "user/AccessLevel";
-import Action from "action/Action";
-import OnMessageState from "state/OnMessageState";
-
-export default class SampleCommand extends ExecutableCommand {
-    public constructor() {
-        super("sample", AccessLevel.UNREGISTERED, 1, "Sample command for demo.", "!f sample \"number\"");
-    }
-
-    public setCustomAction(): Action {
-        return new Action(async (state: OnMessageState, args: string[]): Promise<boolean> => {
-            if (isNaN(args[0])) {
-                state.getHandle().channel.send("That's not a number!);
-                return false; // Command failed.
-            }
-            state.getHandle().send(args[0]);
-            return true; // Command succeeded.
-        });
-    }
-}
-```
-
-When we run the bot, we should see the logger display successful registration of the command.
-
-`CommandRegistry:info:ExecutableCommand registered "sample".`
-
-We can invoke the command in discord with `!prefix sample 1` and should see a response of `1`.
-
-### Creating a Trigger Command
-
-Coming soon.
+1. Clone or Fork the repository.
+2. Install dependencies and packages.
+3. Compile TypeScript.
+4. Use built-in example (soon) or `npm link` to develop and test.
 
 ## Licence
 
-This project is lienced under the MIT Licence. See [LICENCE](LICENCE) for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

@@ -3,16 +3,16 @@ import ExecutableCommand from "command/ExecutableCommand";
 import Action from "action/Action";
 import OnMessageState from "state/OnMessageState";
 
-const str = `In the first screen we can see we are initializing the ARP spoof to mimic \
-the router- mimic the raspberry pi as the router and then sending packets back to the server and back to \
+const str = `In the first screen we can see we are initialising the ARP spoof to mimic \
+the router - mimic the Raspberry Pi as the router and then sending packets back to the server and back to \
 the victim. And then we are setting up the drift net and the URL snarf to capture the packets and display \
 them in a readable format. As we can see the victim is browsing the BBC website homepage and then the URL \
-snarfer is capturing all the information about the packets including the website they are visiting, \
-the browser, the time and other useful information. So here we can see the information being recorded by \
-the AR-URL snarf as well as the image being detected by the drift net. As we can see the second part of the \
-project is here where we have to input the hash and the hash type and it retrieves the information from a \
-large database through an API and displays it to the screen and then we can verify it by using a MD5 \
-hasher.`;
+snarf is capturing all the information about the packets including the website they're visiting, the \
+browser, the time, and other useful information. So here we can see the information being recorded by \
+the ARP- URL snarf as well as the images being detected by the drift net.\nAs we can see the second part \
+of the project is here where we have to input the hash and the hash type and then it retrieves the \
+information from a large database through an API and displays it to the screen and then we can verify it \
+by using a MD5 hasher.`;
 
 export default class ARPSpoof extends ExecutableCommand {
     public constructor() {
