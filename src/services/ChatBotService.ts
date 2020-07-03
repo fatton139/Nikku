@@ -7,7 +7,16 @@ import OnMessageState from "state/OnMessageState";
 import StringFunc from "utils/StringFunc";
 import DBGuildPropertySchema from "database/schemas/DBGuildPropertySchema";
 import { GuildConfig } from "config/GuildBooleanConfig";
-import { isUndefined } from "util";
+
+const cleverbot = require("cleverbot-free");
+
+const responseWrapper = (ask: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        cleverbot(ask).then((response: string) => {
+            return resolve(response);
+        })
+    })
+}
 
 export default class ChatBotService {
 
@@ -16,12 +25,7 @@ export default class ChatBotService {
     private logger: winston.Logger = new Logger(this.constructor.name).getLogger();
 
     public constructor(config: typeof Config) {
-        if (!config.Service.CHATBOT_API_KEY || !config.Service.CHATBOT_USER_ID || ! config.Service.CHATBOT_SESSION) {
-            this.logger.warn("Failed to initialize chat service. Missing keys.");
-            return;
-        }
-        this.bot = new ChatBot(config.Service.CHATBOT_USER_ID, config.Service.CHATBOT_API_KEY);
-        this.bot.setNick(config.Service.CHATBOT_SESSION);
+
     }
 
     public async sendMessage(state: OnMessageState): Promise<boolean> {
@@ -33,28 +37,10 @@ export default class ChatBotService {
         try {
             const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
             const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
-            await m.channel.send(`${await this.getResponse(str)}`, {
-                tts: isUndefined(ttsEnabled) ? false : ttsEnabled,
-            });
+            await m.channel.send(await responseWrapper(str));
             return true;
         } catch (err) {
             throw err;
         }
-    }
-
-    public getResponse(message: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.bot.create((errA) => {
-                if (errA) {
-                    return reject(errA);
-                }
-                this.bot.ask(message, (errB, res) => {
-                    if (errB) {
-                        return reject(errB);
-                    }
-                    return resolve(res);
-                });
-            });
-        });
     }
 }

@@ -9,6 +9,8 @@ import { Config } from "config/Config";
 import ChatBotService from "services/ChatBotService";
 import { CommandUtil } from "utils/CommandUtil";
 
+const cleverbot = require("cleverbot-free");
+
 export default class RandomResponse extends TriggerableCommand {
 
     private botService: ChatBotService;
