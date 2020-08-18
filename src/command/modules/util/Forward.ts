@@ -19,7 +19,7 @@ export default class Forward extends TriggerableCommand {
 
     public setCustomTrigger(): Trigger {
         return new Trigger(async (state: OnMessageState): Promise<boolean> => {
-            // return true;
+            return false;
         });
     }
 
