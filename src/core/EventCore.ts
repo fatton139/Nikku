@@ -35,9 +35,16 @@ export default class EventCore {
             }
         });
         this.client.on("messageReactionAdd", async (reaction) => {
-            if (reaction.emoji.name === "PogChamp" && !reaction.me) {
+            if (reaction.emoji.name === "PogChamp") {
                 const message = reaction.message;
                 await message.react(reaction.emoji.id);
+            }
+        })
+        this.client.on("messageReactionRemove", async (reaction) => {
+            const react = reaction.message.reactions.get(`PogChamp:${process.env.POG_EMOJI_ID || "414252950677094401"}`);
+            const users = react && react.users;
+            if (users && users.array().length === 1) {
+                await reaction.remove(users.get(this.client.user.id));
             }
         })
     }
