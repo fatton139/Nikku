@@ -82,7 +82,7 @@ export default class CommandManager extends DynamicImportManager {
         }
         command.setArgs(args);
         const user = await DBUserSchema.getUserById(userId);
-        if (user && msg.getHandle().member.hasPermission("ADMINISTRATOR") && user.accessLevel < AccessLevel.ADMINISTRATOR
+        if (user && user.accessLevel < AccessLevel.ADMINISTRATOR
                 && user.accessLevel !== AccessLevel.DEVELOPER) {
             await user.setAccessLevel(AccessLevel.ADMINISTRATOR);
             msg.getHandle().reply("You are a server administrator. Your access level has been to set to **ADMINISTRATOR**.");
