@@ -34,6 +34,12 @@ export default class EventCore {
                     message.author.id, new OnMessageState(this.core, message));
             }
         });
+        this.client.on("messageReactionAdd", async (reaction) => {
+            if (reaction.emoji.name === "PogChamp" && !reaction.me) {
+                const message = reaction.message;
+                await message.react(reaction.emoji.id);
+            }
+        })
     }
 
     public handleGuildRegistration(): void {
