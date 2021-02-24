@@ -20,7 +20,9 @@ export default class RandomJoy extends TriggerableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                await state.getHandle().react("😂");
+                setTimeout(async () => {
+                    await state.getHandle().react("😂");
+                }, MathUtil.randInt(0, 20) * 1000);
                 return true;
             } catch (err) {
                 throw err;

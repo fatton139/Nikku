@@ -4,6 +4,7 @@ import Logger from "log/Logger";
 import NikkuCore from "core/NikkuCore";
 import OnMessageState from "state/OnMessageState";
 import CommandManager from "managers/CommandManager";
+import { MathUtil } from "math/MathUtil";
 
 export default class EventCore {
     private readonly logger: winston.Logger = new Logger(this.constructor.name).getLogger();
@@ -37,7 +38,9 @@ export default class EventCore {
         this.client.on("messageReactionAdd", async (reaction) => {
             if (reaction.emoji.name === "PogChamp") {
                 const message = reaction.message;
-                await message.react(reaction.emoji.id);
+                setTimeout(async () => {
+                    await message.react(reaction.emoji.id);
+                }, MathUtil.randInt(0, 60) * 1000)
             }
         })
         this.client.on("messageReactionRemove", async (reaction) => {

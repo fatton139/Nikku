@@ -20,7 +20,9 @@ export default class RandomPog extends TriggerableCommand {
     public setCustomAction(): Action {
         return new Action(async (state: OnMessageState): Promise<boolean> => {
             try {
-                await state.getHandle().react(process.env.POG_EMOJI_ID || "414252950677094401");
+                setTimeout(async () => {
+                    await state.getHandle().react(process.env.POG_EMOJI_ID || "414252950677094401");
+                }, MathUtil.randInt(0, 20) * 1000);
                 return true;
             } catch (err) {
                 throw err;
