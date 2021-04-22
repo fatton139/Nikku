@@ -36,7 +36,7 @@ export default class ChatBotService {
         }
         try {
             const guild = await DBGuildPropertySchema.getGuildById(state.getHandle().guild.id);
-            const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
+            // const ttsEnabled = await guild.getBooleanConfig(GuildConfig.BooleanConfig.Options.RESPONSE_TTS_ENABLED);
             await m.channel.send(await responseWrapper(str));
             return true;
         } catch (err) {
