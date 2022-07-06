@@ -37,7 +37,7 @@
     "dotenv": "^6.1.0",
     "ffmpeg-binaries": "^3.2.2",
     "linkifyjs": "^2.1.9",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "moment-duration-format": "^2.2.2",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
